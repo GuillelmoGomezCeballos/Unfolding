@@ -44,6 +44,7 @@ void atributes(TH1D *histo, TString xtitle="", Int_t COLOR = 1, TString ytitle="
 void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", bool doXSRatio = false){
 
   bool isDebug = false;
+  bool doCorrelateMomResLepEff = true;
 
   const int nBinPt = 36; Float_t xbinsPt[nBinPt+1] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,18,20,22,25,28,32,37,43,52,65,85,120,160,190,220,250,300,400,500,800,1500};
   const int nBinRap = 12; Float_t xbinsRap[nBinRap+1] = {0.0,0.2,0.4,0.6,0.8,1.0,1.2,1.4,1.6,1.8,2.0,2.2,2.4};
@@ -123,8 +124,18 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
 
   _file[0] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_default.root",theOutputName.Data(),alternative,theHistName.Data(),nsel,alternative)); // alternative LO/NLO
   _file[1] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_momres1.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // MonRes1
+  if(doCorrelateMomResLepEff == false){
   _file[2] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_momres2.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // MonRes2
   _file[3] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_momres3.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // MonRes3
+  }
+  else if(doCorrelateMomResLepEff == true && nsel == 0){ // swap not a mistake, it is to make momreslepeff in the same position for muons and electrons
+  _file[2] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_momreslepeff.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // MonRes3
+  _file[3] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_momres2.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // MonRes2
+  }
+  else if(doCorrelateMomResLepEff == true && nsel == 1){
+  _file[2] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_momreslepeff.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // MonRes2
+  _file[3] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_momres3.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // MonRes3
+  }
   _file[4] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_momres4.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // MonRes4
   _file[5] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_pdf.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // PDF bkg
   _file[6] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_qcd.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // QCD bkg.
@@ -172,17 +183,20 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
     //if      (histDef->GetBinCenter(i)+histDef->GetBinWidth(i)/2<=45  && systVal[0] > 1.0) systVal[0] = 1.0;
     //else if (histDef->GetBinCenter(i)+histDef->GetBinWidth(i)/2<=105 && systVal[0] > 1.0) systVal[0] = 0.5;
     if(theHistName == "PtRap3" && systVal[0] > 7.0) systVal[0] = 2.0 + gRandom->Rndm()*0.5;
-    if(systVal[0] > 6.0) systVal[0] = 5.0 + gRandom->Rndm()*1.0;
+    if(systVal[0] > 0.5) systVal[0] = 0.5 + gRandom->Rndm()*0.5;
     if(systVal[1] > 4.0 && i < 20) systVal[1] = 4.0 + gRandom->Rndm()*0.5;
     if(systVal[2] > 4.0 && i < 20) systVal[2] = 4.0 + gRandom->Rndm()*0.5;
     systVal[allNuisancesCov-2] = 100.*histDef->GetBinError(i)/histDef->GetBinContent(i); // data stat
     systVal[allNuisancesCov-1] = 100.*0.025;
 
+    if(doCorrelateMomResLepEff == true) systVal[nGenSyst+3] = 0;
+
     if(doXSRatio){
       systVal[0 ] = 0;
       systVal[7 ] = systVal[7 ] - systXSVal[0];
       systVal[10] = systVal[10] - systXSVal[1];
-      systVal[11] = systVal[11] - systXSVal[2];
+      if(doCorrelateMomResLepEff == false) systVal[11] = systVal[11] - systXSVal[2];
+      else                                 systVal[2 ] = systVal[2 ] - systXSVal[2];
       systVal[12] = systVal[12] - systXSVal[3];
       systVal[13] = systVal[13] - systXSVal[4];
       systVal[14] = systVal[14] - systXSVal[5];
@@ -253,7 +267,8 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
 
   TCanvas* c1 = new TCanvas("c1", "c1",5,5,500,500);
   c1->cd();
-  
+  if(theHistName != "Rap") c1->SetLogx();
+
   histoSystPlot[0]->SetMinimum(0.0);
   histoSystPlot[0]->Draw();
   if(!doXSRatio) histoSystPlot[1]->Draw("same,hist");

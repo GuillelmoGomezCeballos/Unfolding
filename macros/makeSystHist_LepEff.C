@@ -162,7 +162,8 @@ void makeSystHist_LepEff(int nsel = 0, int whichDY = 3, TString theHistName = "P
 
   TCanvas* c1 = new TCanvas("c1", "c1",5,5,500,500);
   c1->cd();
-  
+  if(theHistName != "Rap") c1->SetLogx();
+
   histoSystPlot[0]->SetMinimum(0.0);
   histoSystPlot[0]->Draw();
   histoSystPlot[1]->Draw("same,hist");
