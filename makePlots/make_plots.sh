@@ -12,6 +12,8 @@ root -l -b -q finalPlotUnfolding.C+'(0,1,"p_{T}","GeV","../macros/outputs/histoU
 root -l -b -q finalPlotUnfolding.C+'(0,1,"p_{T}","GeV","../macros/outputs/histoUnfoldingSystPtRap2","ratio_unf_zee_dy_ptrap2", 1,1,"PtRap2","EE")'
 root -l -b -q finalPlotUnfolding.C+'(0,1,"p_{T}","GeV","../macros/outputs/histoUnfoldingSystPtRap3","ratio_unf_zmm_dy_ptrap3", 1,1,"PtRap3","MM")'
 root -l -b -q finalPlotUnfolding.C+'(0,1,"p_{T}","GeV","../macros/outputs/histoUnfoldingSystPtRap3","ratio_unf_zee_dy_ptrap3", 1,1,"PtRap3","EE")'
+root -l -b -q finalPlotUnfolding.C+'(0,1,"p_{T}","GeV","../macros/outputs/histoUnfoldingSystPtRap4","ratio_unf_zmm_dy_ptrap4", 1,1,"PtRap4","MM")'
+root -l -b -q finalPlotUnfolding.C+'(0,1,"p_{T}","GeV","../macros/outputs/histoUnfoldingSystPtRap4","ratio_unf_zee_dy_ptrap4", 1,1,"PtRap4","EE")'
 
 #root -l -b -q ratio_test.C+'(0,1,"p_{T}","GeV","../macros/outputs/histoUnfoldingSystPt","ratio_unf_zmm_dy_pt", 1,1,"Pt","MM")'
 
@@ -22,6 +24,7 @@ root -l -b -q double_ratio_test.C+'(0,1,"p_{T}","GeV","../macros/outputs/histoUn
 root -l -b -q double_ratio_test.C+'(0,1,"p_{T}","GeV","../macros/outputs/histoUnfoldingSystPtRap1","double_ratio_unf_zll_dy_ptrap1", 1,1,"PtRap1")'
 root -l -b -q double_ratio_test.C+'(0,1,"p_{T}","GeV","../macros/outputs/histoUnfoldingSystPtRap2","double_ratio_unf_zll_dy_ptrap2", 1,1,"PtRap2")'
 root -l -b -q double_ratio_test.C+'(0,1,"p_{T}","GeV","../macros/outputs/histoUnfoldingSystPtRap3","double_ratio_unf_zll_dy_ptrap3", 1,1,"PtRap3")'
+root -l -b -q double_ratio_test.C+'(0,1,"p_{T}","GeV","../macros/outputs/histoUnfoldingSystPtRap4","double_ratio_unf_zll_dy_ptrap4", 1,1,"PtRap4")'
 
 root -l -b -q finalPlotUnfolding.C+'(0,1,"p_{T}","GeV","../macros/outputs/histoUnfolding_XSRatioSystPt","ratio_unf_normalized_zmm_dy_pt", 1,1,"Pt","MM",1)'
 root -l -b -q finalPlotUnfolding.C+'(0,1,"p_{T}","GeV","../macros/outputs/histoUnfolding_XSRatioSystPt","ratio_unf_normalized_zee_dy_pt", 1,1,"Pt","EE",1)'
@@ -37,6 +40,8 @@ root -l -b -q finalPlotUnfolding.C+'(0,1,"p_{T}","GeV","../macros/outputs/histoU
 root -l -b -q finalPlotUnfolding.C+'(0,1,"p_{T}","GeV","../macros/outputs/histoUnfolding_XSRatioSystPtRap2","ratio_unf_normalized_zee_dy_ptrap2", 1,1,"PtRap2","EE",1)'
 root -l -b -q finalPlotUnfolding.C+'(0,1,"p_{T}","GeV","../macros/outputs/histoUnfolding_XSRatioSystPtRap3","ratio_unf_normalized_zmm_dy_ptrap3", 1,1,"PtRap3","MM",1)'
 root -l -b -q finalPlotUnfolding.C+'(0,1,"p_{T}","GeV","../macros/outputs/histoUnfolding_XSRatioSystPtRap3","ratio_unf_normalized_zee_dy_ptrap3", 1,1,"PtRap3","EE",1)'
+root -l -b -q finalPlotUnfolding.C+'(0,1,"p_{T}","GeV","../macros/outputs/histoUnfolding_XSRatioSystPtRap4","ratio_unf_normalized_zmm_dy_ptrap4", 1,1,"PtRap4","MM",1)'
+root -l -b -q finalPlotUnfolding.C+'(0,1,"p_{T}","GeV","../macros/outputs/histoUnfolding_XSRatioSystPtRap4","ratio_unf_normalized_zee_dy_ptrap4", 1,1,"PtRap4","EE",1)'
 
 #root -l -b -q ratio_test.C+'(0,1,"p_{T}","GeV","../macros/outputs/histoUnfolding_XSRatioSystPt","ratio_unf_normalized_zmm_dy_pt", 1,1,"Pt","MM",1)'
 
