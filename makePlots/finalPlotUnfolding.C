@@ -78,7 +78,8 @@ void finalPlotUnfolding(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}"
   char filename3[300];
   sprintf(filename1,"_nsel%d_dy3_rebin%d_default.root",me,ReBin);//default, AMCNLO
   sprintf(filename2,"_nsel%d_dy0_rebin%d_default.root",me,ReBin);
-  sprintf(filename3,"_nsel%d_dy2_rebin%d_default.root",me,ReBin);
+  if(keyLabel0 == "Pt" || keyLabel0 == "PhiStar") sprintf(filename3,"_nsel%d_dy4_rebin%d_default.root",me,ReBin);
+  else                                            sprintf(filename3,"_nsel%d_dy2_rebin%d_default.root",me,ReBin);
   TString plotName2=plotName;
   TString plotName3=plotName;
   plotName.Append(filename1);
@@ -202,7 +203,8 @@ void finalPlotUnfolding(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}"
   /************ POWHEG *************/
   hPred3->SetMarkerStyle(23);
   hPred3->Draw("same");
-  legend->AddEntry(hPred3, "POWHEG");
+  if(keyLabel0 == "Pt" || keyLabel0 == "PhiStar") legend->AddEntry(hPred3, "GENEVA");
+  else                                            legend->AddEntry(hPred3, "POWHEG");
 
   CMS_lumi( c1, 4, 1);
   legend->Draw();
@@ -354,7 +356,8 @@ void finalPlotUnfolding(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}"
       hBand->SetBinError  (i,hNum->GetBinError(i)/hNum->GetBinContent(i)); 
   }
   units = units.ReplaceAll("BIN","");
-  atributes(hRatio,XTitle.Data(),"POWHEG/Data",units.Data());
+  if(keyLabel0 == "Pt" || keyLabel0 == "PhiStar") atributes(hRatio,XTitle.Data(),"GENEVA/Data",units.Data());
+  else						  atributes(hRatio,XTitle.Data(),"POWHEG/Data",units.Data());
   hRatio->Draw("e");
   hBand->SetFillColor(12);
   hBand->SetFillStyle(3003);
@@ -375,7 +378,7 @@ void finalPlotUnfolding(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}"
   hRatio->GetYaxis()->CenterTitle();
   eraselabel(pad1,hData->GetXaxis()->GetLabelSize());
 
-  printf("Total yields: %f - %f %f %f\n", hData->GetSumOfWeights(),hPred1->GetSumOfWeights(),hPred2->GetSumOfWeights(),hPred3->GetSumOfWeights());
+  printf("Total yields: %f - %f %f %f\n", hData->Integral("Width"),hPred1->Integral("Width"),hPred2->Integral("Width"),hPred3->Integral("Width"));
 
   char CommandToExec[300];
   sprintf(CommandToExec,"mkdir -p plots");
