@@ -236,7 +236,7 @@ for(int i=0; i<=unfoldedDistribution->GetNbinsX()+1; i++) {
 unfoldedDistribution->Draw();
 xini->Draw("same");
 xini->SetLineColor(kRed);
-printf("%f %f\n",unfoldedDistribution->Integral("width"),xini->Integral("width"));
+printf("RESULTS: %f %f\n",unfoldedDistribution->Integral("width"),xini->Integral("width"));
 
 TString theOutputFolder = Form("outputs%s_nsel%d/dy%d",theHistName.Data(),nsel,whichDY);
 

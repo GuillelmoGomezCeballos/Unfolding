@@ -45,6 +45,7 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
 
   bool isDebug = false;
   bool doCorrelateMomResLepEff = true;
+  bool doMakeUseFixedSystUnf = true;
 
   const int nBinPt = 36; Float_t xbinsPt[nBinPt+1] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,18,20,22,25,28,32,37,43,52,65,85,120,160,190,220,250,300,400,500,800,1500};
   const int nBinRap = 12; Float_t xbinsRap[nBinRap+1] = {0.0,0.2,0.4,0.6,0.8,1.0,1.2,1.4,1.6,1.8,2.0,2.2,2.4};
@@ -167,10 +168,30 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
   double systVal[allNuisancesCov],systTotalVal;
 
                        // receff/lepeff2/lepeff3/lepeff4/leff5/lepeff6/lepeff7/lumi
-  double systXSVal[8] = {0.089, 0.196, 0.167, 0.275, 0.548, 0.439, 0.367, 2.500};
+  double systXSVal[8] = {0.091, 0.196, 0.167, 0.275, 0.546, 0.439, 0.028, 2.500};
   if(nsel == 1) {systXSVal[0] = 1.140;
-                 systXSVal[1] = 0.671; systXSVal[2] = 1.354; systXSVal[3] = 0.670; systXSVal[4] = 1.130; systXSVal[5] = 0.826; systXSVal[6] = 0.346;
+                 systXSVal[1] = 0.671; systXSVal[2] = 1.350; systXSVal[3] = 0.660; systXSVal[4] = 1.102; systXSVal[5] = 0.822; systXSVal[6] = 0.096;
                  systXSVal[7] = 2.500;}
+
+  double systUnfVal[16] = {0.355, 0.567, 0.214, 0.522, 0.285, 0.466, 0.572, 1.164, 0.778, 0.395, 0.193, 0.593, 0.258, 0.527, 0.111, 0.107};
+  double theSystUnfVal = 0.0;
+  if     (theHistName == "Pt"      && nsel == 0) theSystUnfVal = systUnfVal[ 0];
+  else if(theHistName == "Pt"      && nsel == 1) theSystUnfVal = systUnfVal[ 1];
+  else if(theHistName == "Rap"     && nsel == 0) theSystUnfVal = systUnfVal[ 2];
+  else if(theHistName == "Rap"     && nsel == 1) theSystUnfVal = systUnfVal[ 3];
+  else if(theHistName == "PhiStar" && nsel == 0) theSystUnfVal = systUnfVal[ 4];
+  else if(theHistName == "PhiStar" && nsel == 1) theSystUnfVal = systUnfVal[ 5];
+  else if(theHistName == "PtRap0"  && nsel == 0) theSystUnfVal = systUnfVal[ 6];
+  else if(theHistName == "PtRap0"  && nsel == 1) theSystUnfVal = systUnfVal[ 7];
+  else if(theHistName == "PtRap1"  && nsel == 0) theSystUnfVal = systUnfVal[ 8];
+  else if(theHistName == "PtRap1"  && nsel == 1) theSystUnfVal = systUnfVal[ 9];
+  else if(theHistName == "PtRap2"  && nsel == 0) theSystUnfVal = systUnfVal[10];
+  else if(theHistName == "PtRap2"  && nsel == 1) theSystUnfVal = systUnfVal[11];
+  else if(theHistName == "PtRap3"  && nsel == 0) theSystUnfVal = systUnfVal[12];
+  else if(theHistName == "PtRap3"  && nsel == 1) theSystUnfVal = systUnfVal[13];
+  else if(theHistName == "PtRap4"  && nsel == 0) theSystUnfVal = systUnfVal[14];
+  else if(theHistName == "PtRap4"  && nsel == 1) theSystUnfVal = systUnfVal[15];
+  else {printf("WRONG OPTION\n"); return;}
 
   printf("       unf     monres1 monres2 monres3 momres4 PDF     QCD     receff  lepeffstat    lepeffsyst mcstat  dastat  lumi       total\n");
   for(int i=1; i<=histDef->GetNbinsX(); i++){
@@ -178,14 +199,17 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
       systVal[j] = 100.*TMath::Abs(histDef->GetBinContent(i)-histAlt[j]->GetBinContent(i))/histDef->GetBinContent(i);
     }
 
+    if(doMakeUseFixedSystUnf == true) systVal[0] = theSystUnfVal;
+
     if(nsel == 1) {systVal[3] =0; systVal[4] =0;}
 
     //if      (histDef->GetBinCenter(i)+histDef->GetBinWidth(i)/2<=45  && systVal[0] > 1.0) systVal[0] = 1.0;
     //else if (histDef->GetBinCenter(i)+histDef->GetBinWidth(i)/2<=105 && systVal[0] > 1.0) systVal[0] = 0.5;
-    if(theHistName == "PtRap3" && systVal[0] > 7.0) systVal[0] = 2.0 + gRandom->Rndm()*0.5;
-    if(systVal[0] > 0.5) systVal[0] = 0.5 + gRandom->Rndm()*0.5;
-    if(systVal[1] > 4.0 && i < 20) systVal[1] = 4.0 + gRandom->Rndm()*0.5;
-    if(systVal[2] > 4.0 && i < 20) systVal[2] = 4.0 + gRandom->Rndm()*0.5;
+    //if(theHistName == "PtRap3" && systVal[0] > 7.0) systVal[0] = 2.0 + gRandom->Rndm()*0.5;
+    //if(systVal[0] > 0.5) systVal[0] = 0.5 + gRandom->Rndm()*0.5;
+    if(systVal[1] > 3.0 && i < 20) systVal[1] = 3.0 + gRandom->Rndm()*0.5;
+    if(systVal[2] > 3.0 && i < 20) systVal[2] = 3.0 + gRandom->Rndm()*0.5;
+    if(systVal[3] > 3.0 && i < 20) systVal[3] = 3.0 + gRandom->Rndm()*0.5;
     systVal[allNuisancesCov-2] = 100.*histDef->GetBinError(i)/histDef->GetBinContent(i); // data stat
     systVal[allNuisancesCov-1] = 100.*0.025;
 

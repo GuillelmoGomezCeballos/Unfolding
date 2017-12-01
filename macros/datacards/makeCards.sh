@@ -3,6 +3,12 @@
 root -q -b -l testAnalysis_test.C+'(0)';
 root -q -b -l testAnalysis_test.C+'(1)';
 
+#root -q -b -l testAnalysis_test.C+'(0,3,0,"Tot")';
+#root -q -b -l testAnalysis_test.C+'(1,3,0,"Tot")';
+#combineCards.py -S datacard_Tot_mm.txt > datacard_Tot_mm.text;
+#combineCards.py -S datacard_Tot_ee.txt > datacard_Tot_ee.text;
+#combineCards.py -S datacard_Tot_mm.txt datacard_Tot_ee.txt > datacard_Tot_ll.text;
+
 combineCards.py -S datacard_Pt_mm.txt > datacard_Pt_mm.text;
 combineCards.py -S datacard_Pt_ee.txt > datacard_Pt_ee.text;
 combineCards.py -S datacard_Pt_mm.txt datacard_Pt_ee.txt > datacard_Pt_ll.text;

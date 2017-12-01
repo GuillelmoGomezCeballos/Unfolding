@@ -1,19 +1,73 @@
 #!/bin/sh
 
-if [ $# == 1 ] && [ $1 == 1 ]; then
+if [ $# == 2 ] && [ $1 == 1 ]; then
 
-  for i in `seq 0 1057`;
-    do
-      export OPTION=$i;
-      root -l -q -b testUnfold.C'("Pt","_lepeff",'${OPTION}')';
-      root -l -q -b testUnfold.C'("Rap","_lepeff",'${OPTION}')';
-      root -l -q -b testUnfold.C'("PhiStar","_lepeff",'${OPTION}')';
-      root -l -q -b testUnfold.C'("PtRap0","_lepeff",'${OPTION}')';
-      root -l -q -b testUnfold.C'("PtRap1","_lepeff",'${OPTION}')';
-      root -l -q -b testUnfold.C'("PtRap2","_lepeff",'${OPTION}')';
-      root -l -q -b testUnfold.C'("PtRap3","_lepeff",'${OPTION}')';
-      root -l -q -b testUnfold.C'("PtRap4","_lepeff",'${OPTION}')';
-    done    
+  if [ $2 == 0 ]; then
+    for i in `seq 0 250`;
+      do
+	export OPTION=$i;
+	root -l -q -b testUnfold.C'("Pt","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("Rap","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("PhiStar","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("PtRap0","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("PtRap1","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("PtRap2","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("PtRap3","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("PtRap4","_lepeff",'${OPTION}')';
+      done    
+  elif [ $2 == 1 ]; then
+    for i in `seq 251 500`;
+      do
+	export OPTION=$i;
+	root -l -q -b testUnfold.C'("Pt","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("Rap","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("PhiStar","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("PtRap0","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("PtRap1","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("PtRap2","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("PtRap3","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("PtRap4","_lepeff",'${OPTION}')';
+      done    
+  elif [ $2 == 2 ]; then
+    for i in `seq 501 750`;
+      do
+	export OPTION=$i;
+	root -l -q -b testUnfold.C'("Pt","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("Rap","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("PhiStar","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("PtRap0","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("PtRap1","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("PtRap2","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("PtRap3","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("PtRap4","_lepeff",'${OPTION}')';
+      done    
+  elif [ $2 == 3 ]; then
+    for i in `seq 751 1000`;
+      do
+	export OPTION=$i;
+	root -l -q -b testUnfold.C'("Pt","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("Rap","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("PhiStar","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("PtRap0","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("PtRap1","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("PtRap2","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("PtRap3","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("PtRap4","_lepeff",'${OPTION}')';
+      done    
+  elif [ $2 == 4 ]; then
+    for i in `seq 1001 1057`;
+      do
+	export OPTION=$i;
+	root -l -q -b testUnfold.C'("Pt","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("Rap","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("PhiStar","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("PtRap0","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("PtRap1","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("PtRap2","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("PtRap3","_lepeff",'${OPTION}')';
+	root -l -q -b testUnfold.C'("PtRap4","_lepeff",'${OPTION}')';
+      done    
+  fi
 
 elif [ $# == 1 ] && [ $1 == 2 ]; then
 
@@ -30,7 +84,7 @@ elif [ $# == 1 ] && [ $1 == 2 ]; then
       root -l -q -b testUnfold.C'("PtRap4","_sigstat",'${OPTION}')';
     done    
 
-else
+elif [ $# == 1 ] && [ $1 == 0 ]; then
 
 root -l -q -b testUnfold.C'("Pt","_default")';
 root -l -q -b testUnfold.C'("Rap","_default")';

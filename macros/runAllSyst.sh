@@ -1,5 +1,7 @@
 #!/bin/sh
 
+#grep RES log_runAllUnfold0|head -64|awk '{printf("%.5f ",100*$2/$3);if(NR%8==0)printf("\n");}'|awk '{printf("%6.3f %6.3f\n",$1-$4,$5-$8)}'
+
 export OPTION=0;
 if [ $# == 1 ] && [ $1 == 1 ]; then
    export OPTION=1;
