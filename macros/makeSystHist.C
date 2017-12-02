@@ -276,6 +276,17 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
             histoSystPlot[0]->GetBinContent(i));
   }
 
+  histoSystPlot[0]->Smooth();
+  histoSystPlot[1]->Smooth();
+  histoSystPlot[2]->Smooth();
+  histoSystPlot[3]->Smooth();
+  histoSystPlot[5]->Smooth();
+  histoSystPlot[4]->Smooth();
+  histoSystPlot[6]->Smooth();
+  histoSystPlot[7]->Smooth();
+  histoSystPlot[8]->Smooth();
+  histoSystPlot[9]->Smooth();
+
   TString XName = "Z p_{T} [GeV]";
   if     (theHistName == "Rap") XName = "|y^{Z}|";
   else if(theHistName == "PhiStar") XName = "#phi*";
