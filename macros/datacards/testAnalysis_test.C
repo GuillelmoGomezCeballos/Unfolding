@@ -20,8 +20,8 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
   Double_t lumiE = 1.025;
 
   TString path="../inputsCards200/";
-  TFile* _file0    = new TFile(Form("%shistoDY%dzll%sRecGen.root",path.Data(),DY,theHistName.Data()),  "read"); if(!_file0   ) {printf("File does not exist\n"); return;}
-  TFile* _file_alt = new TFile(Form("%shistoDY%dzll%sRecGen.root",path.Data(),alt,theHistName.Data()), "read"); if(!_file_alt) {printf("File does not exist\n"); return;}
+  TFile* _file0    = new TFile(Form("%shistoDY%dzll%sRecGen_period0.root",path.Data(),DY,theHistName.Data()),  "read"); if(!_file0   ) {printf("File does not exist\n"); return;}
+  TFile* _file_alt = new TFile(Form("%shistoDY%dzll%sRecGen_period0.root",path.Data(),alt,theHistName.Data()), "read"); if(!_file_alt) {printf("File does not exist\n"); return;}
 
   TH1D* hDA  = (TH1D*)_file0->Get(Form("histo%sRecDA_%d",theHistName.Data(),nsel));
   TH1D* hRes = (TH1D*)_file0->Get(Form("histo%sRecEM_%d",theHistName.Data(),nsel));

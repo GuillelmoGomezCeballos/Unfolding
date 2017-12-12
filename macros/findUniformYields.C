@@ -17,25 +17,25 @@ void findUniformYields(int nsel = 0,int whichDY = 1, TString theHistName = "Pt")
   double theXS = 2008.4*3;
   double theLumi = 35800.0;
   if     (whichDY == 0){
-    _file0 = TFile::Open(Form("%s/histoDY%dzll%sRecGen.root",theInputFolder.Data(),whichDY,theHistName.Data()));
-    _file1 = TFile::Open("/afs/cern.ch/work/c/ceballos/public/samples/panda/v_005_0/DYJetsToLL_M-50_LO.root");
-    _file2 = TFile::Open(Form("%s/histoDY%dzll%sRecGen.root",theInputFolder.Data(),1,theHistName.Data()));
+    _file0 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period0.root",theInputFolder.Data(),whichDY,theHistName.Data()));
+    _file1 = TFile::Open("/afs/cern.ch/work/c/ceballos/public/samples/panda/v_006_0/DYJetsToLL_M-50_LO.root");
+    _file2 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period0.root",theInputFolder.Data(),1,theHistName.Data()));
   }
   else if(whichDY == 1){
-    _file0 = TFile::Open(Form("%s/histoDY%dzll%sRecGen.root",theInputFolder.Data(),whichDY,theHistName.Data()));
-    _file1 = TFile::Open("/afs/cern.ch/work/c/ceballos/public/samples/panda/v_005_0/DYJetsToLL_M-50_NLO.root");
-    _file2 = TFile::Open(Form("%s/histoDY%dzll%sRecGen.root",theInputFolder.Data(),2,theHistName.Data()));
+    _file0 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period0.root",theInputFolder.Data(),whichDY,theHistName.Data()));
+    _file1 = TFile::Open("/afs/cern.ch/work/c/ceballos/public/samples/panda/v_006_0/DYJetsToLL_M-50_NLO.root");
+    _file2 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period0.root",theInputFolder.Data(),2,theHistName.Data()));
   }
   else if(whichDY == 2 && nsel == 0){
-    _file0 = TFile::Open(Form("%s/histoDY%dzll%sRecGen.root",theInputFolder.Data(),whichDY,theHistName.Data()));
-    _file1 = TFile::Open("/afs/cern.ch/work/c/ceballos/public/samples/panda/v_005_0/DYJetsToMM_POWHEG.root");
-    _file2 = TFile::Open(Form("%s/histoDY%dzll%sRecGen.root",theInputFolder.Data(),1,theHistName.Data()));
+    _file0 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period0.root",theInputFolder.Data(),whichDY,theHistName.Data()));
+    _file1 = TFile::Open("/afs/cern.ch/work/c/ceballos/public/samples/panda/v_006_0/DYJetsToMM_POWHEG.root");
+    _file2 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period0.root",theInputFolder.Data(),1,theHistName.Data()));
     theXS = 1975.0;
   }
   else if(whichDY == 2 && nsel == 1){
-    _file0 = TFile::Open(Form("%s/histoDY%dzll%sRecGen.root",theInputFolder.Data(),whichDY,theHistName.Data()));
-    _file1 = TFile::Open("/afs/cern.ch/work/c/ceballos/public/samples/panda/v_005_0/DYJetsToEE_POWHEG.root");
-    _file2 = TFile::Open(Form("%s/histoDY%dzll%sRecGen.root",theInputFolder.Data(),1,theHistName.Data()));
+    _file0 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period0.root",theInputFolder.Data(),whichDY,theHistName.Data()));
+    _file1 = TFile::Open("/afs/cern.ch/work/c/ceballos/public/samples/panda/v_006_0/DYJetsToEE_POWHEG.root");
+    _file2 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period0.root",theInputFolder.Data(),1,theHistName.Data()));
     theXS = 1975.0;
   }
 

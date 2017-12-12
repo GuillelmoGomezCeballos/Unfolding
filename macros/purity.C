@@ -27,7 +27,7 @@ void helper_function(int rebinX=1,int rebinY=1,int me=0){
     f= TFile::Open("inputs/histozllPtRecGen_LO.root");
     }*/
 
-  f= TFile::Open("inputs/histoDY0zllPtRecGen.root");
+  f= TFile::Open("inputs/histoDY3zllPtRecGen_period0.root");
 
   TH2D* h1=(TH2D*)f->Get(Form("histoPtRecGen_%d",me));
   h1->Rebin2D(rebinX,rebinY);

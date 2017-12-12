@@ -77,7 +77,7 @@ void finalPlotWWUnfolding(
   double theRDown[9];
   double theRUp[9];
 
-  TFile *_fileGenWW = TFile::Open("/afs/cern.ch/work/c/ceballos/public/samples/panda/v_005_0/genWW.root");
+  TFile *_fileGenWW = TFile::Open("/afs/cern.ch/work/c/ceballos/public/samples/panda/v_006_0/genWW.root");
 
   TFile *_file0 = TFile::Open(plotName.Data());
   TTree* theTree = nullptr;
