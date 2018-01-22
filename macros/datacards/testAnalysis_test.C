@@ -771,7 +771,7 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
   }
   newcardShape << Form("%f %f %f\n",histo_Res->GetSumOfWeights(),histo_VV->GetSumOfWeights(),histo_NonFid->GetSumOfWeights());
 
-  newcardShape << Form("lumi    lnN     ");
+  newcardShape << Form("lumi_13TeV    lnN     ");
   for (int i=0;i<nChan;i++){
     newcardShape << Form("%6.3f ",lumiE);
   }
@@ -795,13 +795,13 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
   }
   newcardShape << Form("- 1.0 1.0\n");
 
-  if(nsel == 0){ // only for muons
-    newcardShape << Form("MomRes2%s    shape     ",chanName.Data());
-    for (int i=0;i<nChan;i++){
-      newcardShape << Form("1.0 ");
-    }
-    newcardShape << Form("- 1.0 1.0\n");
+  newcardShape << Form("MomRes2%s    shape     ",chanName.Data());
+  for (int i=0;i<nChan;i++){
+    newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("- 1.0 1.0\n");
 
+  if(nsel == 0){ // only for muons
     newcardShape << Form("MomRes3%s    shape     ",chanName.Data());
     for (int i=0;i<nChan;i++){
       newcardShape << Form("1.0 ");

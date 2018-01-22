@@ -371,6 +371,7 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
  histPredStat ->Write();
  
  for(int i=0; i<allNuisancesCov; i++) histoSystCov[i]->Write();
+ for(int i=0; i<allNuisancesPlot; i++) histoSystPlot[i]->Write();
 
  outFilePlots->Close();
 
