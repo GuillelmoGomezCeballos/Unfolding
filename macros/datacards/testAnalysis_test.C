@@ -14,14 +14,17 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
   TString chanName = "mm";
   if(nsel == 1) chanName = "ee";
 
-  const int nChan = 7;
-  const int nReco = 14;
+  int inputValues[2] = {5, 10};
+  if(theHistName == "Tot") {inputValues[0] = 1; inputValues[1] = 1;}
+  const int nChan = inputValues[0];
+  const int nReco = inputValues[1];
 
   Double_t lumiE = 1.025;
 
-  TString path="../inputsCards200/";
-  TFile* _file0    = new TFile(Form("%shistoDY%dzll%sRecGen_period0.root",path.Data(),DY,theHistName.Data()),  "read"); if(!_file0   ) {printf("File does not exist\n"); return;}
-  TFile* _file_alt = new TFile(Form("%shistoDY%dzll%sRecGen_period0.root",path.Data(),alt,theHistName.Data()), "read"); if(!_file_alt) {printf("File does not exist\n"); return;}
+  TString path = "../inputsCards200/";
+  if(theHistName == "Tot") path = "../inputs/";
+  TFile* _file0    = new TFile(Form("%shistoDY%dzll%sRecGen_period3.root",path.Data(),DY,theHistName.Data()),  "read"); if(!_file0   ) {printf("File does not exist\n"); return;}
+  TFile* _file_alt = new TFile(Form("%shistoDY%dzll%sRecGen_period3.root",path.Data(),alt,theHistName.Data()), "read"); if(!_file_alt) {printf("File does not exist\n"); return;}
 
   TH1D* hDA  = (TH1D*)_file0->Get(Form("histo%sRecDA_%d",theHistName.Data(),nsel));
   TH1D* hRes = (TH1D*)_file0->Get(Form("histo%sRecEM_%d",theHistName.Data(),nsel));
@@ -875,48 +878,50 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
   }
   newcardShape << Form("- 1.0 -\n");
 
-  for (int i=0; i<nReco; i++) {
-    if(histo_Res->GetBinContent(i+1) > 0 && histo_Res->GetBinError(i+1)/histo_Res->GetBinContent(i+1) > 0.005){
-      newcardShape << Form("ResStat_%d%s    shape     ",i,chanName.Data());
-      for (int i=0;i<nChan;i++){
-        newcardShape << Form("- ");
-      }
-      newcardShape << Form("1.0 - -\n");
-    }
-  }
+  newcardShape << Form("* autoMCStats 1 1 1\n");
 
-  for (int i=0; i<nReco; i++) {  
-    if(histo_VV->GetBinContent(i+1) > 0 && histo_VV->GetBinError(i+1)/histo_VV->GetBinContent(i+1) > 0.005){
-      newcardShape << Form("VVStat_%d%s    shape     ",i,chanName.Data());
-      for (int i=0;i<nChan;i++){
-        newcardShape << Form("- ");
-      }
-      newcardShape << Form("- 1.0 -\n");
-    }
-  }
+  //for (int i=0; i<nReco; i++) {
+  //  if(histo_Res->GetBinContent(i+1) > 0 && histo_Res->GetBinError(i+1)/histo_Res->GetBinContent(i+1) > 0.005){
+  //    newcardShape << Form("ResStat_%d%s    shape     ",i,chanName.Data());
+  //    for (int i=0;i<nChan;i++){
+  //      newcardShape << Form("- ");
+  //    }
+  //    newcardShape << Form("1.0 - -\n");
+  //  }
+  //}
 
-  for (int i=0; i<nReco; i++) {  
-    if(histo_NonFid->GetBinContent(i+1) > 0 && histo_NonFid->GetBinError(i+1)/histo_NonFid->GetBinContent(i+1) > 0.005){
-      newcardShape << Form("NonFidStat_%d%s    shape     ",i,chanName.Data());
-      for (int i=0;i<nChan;i++){
-        newcardShape << Form("- ");
-      }
-      newcardShape << Form("- - 1.0\n");
-    }
-  }
+  //for (int i=0; i<nReco; i++) {  
+  //  if(histo_VV->GetBinContent(i+1) > 0 && histo_VV->GetBinError(i+1)/histo_VV->GetBinContent(i+1) > 0.005){
+  //    newcardShape << Form("VVStat_%d%s    shape     ",i,chanName.Data());
+  //    for (int i=0;i<nChan;i++){
+  //      newcardShape << Form("- ");
+  //    }
+  //    newcardShape << Form("- 1.0 -\n");
+  //  }
+  //}
 
-  for (int j=0; j<nChan; j++) {  
-    for (int i=0; i<nReco; i++) {  
-      if(histo_DY[j]->GetBinContent(i+1) > 0 && histo_DY[j]->GetBinError(i+1)/histo_DY[j]->GetBinContent(i+1) > 0.005){
-        newcardShape << Form("DYStat_%d_%d%s    shape     ",j,i,chanName.Data());
-        for (int k=0; k<nChan; k++) {
-          if(j==k) newcardShape << Form("1.0 ");
-          else     newcardShape << Form("- ");
-        }
-        newcardShape << Form("- - -\n");
-      }
-    }
-  }
+  //for (int i=0; i<nReco; i++) {  
+  //  if(histo_NonFid->GetBinContent(i+1) > 0 && histo_NonFid->GetBinError(i+1)/histo_NonFid->GetBinContent(i+1) > 0.005){
+  //    newcardShape << Form("NonFidStat_%d%s    shape     ",i,chanName.Data());
+  //    for (int i=0;i<nChan;i++){
+  //      newcardShape << Form("- ");
+  //    }
+  //    newcardShape << Form("- - 1.0\n");
+  //  }
+  //}
+
+  //for (int j=0; j<nChan; j++) {  
+  //  for (int i=0; i<nReco; i++) {  
+  //    if(histo_DY[j]->GetBinContent(i+1) > 0 && histo_DY[j]->GetBinError(i+1)/histo_DY[j]->GetBinContent(i+1) > 0.005){
+  //      newcardShape << Form("DYStat_%d_%d%s    shape     ",j,i,chanName.Data());
+  //      for (int k=0; k<nChan; k++) {
+  //        if(j==k) newcardShape << Form("1.0 ");
+  //        else     newcardShape << Form("- ");
+  //      }
+  //      newcardShape << Form("- - -\n");
+  //    }
+  //  }
+  //}
 
   newcardShape.close();
 
