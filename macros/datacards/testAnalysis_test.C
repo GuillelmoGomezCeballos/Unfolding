@@ -22,7 +22,7 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
   Double_t lumiE = 1.025;
 
   TString path = "../inputsCards200/";
-  if(theHistName == "Tot") path = "../inputs/";
+  if(theHistName == "Tot") path = "../inputsCards200/";
   TFile* _file0    = new TFile(Form("%shistoDY%dzll%sRecGen_period3.root",path.Data(),DY,theHistName.Data()),  "read"); if(!_file0   ) {printf("File does not exist\n"); return;}
   TFile* _file_alt = new TFile(Form("%shistoDY%dzll%sRecGen_period3.root",path.Data(),alt,theHistName.Data()), "read"); if(!_file_alt) {printf("File does not exist\n"); return;}
 
@@ -786,11 +786,11 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
   }
   newcardShape << Form("%f - - \n",1.05);
 
-  newcardShape << Form("alt    shape     ");
-  for (int i=0;i<nChan;i++){
-    newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("- - 1.0\n");
+  //newcardShape << Form("alt    shape     ");
+  //for (int i=0;i<nChan;i++){
+  //  newcardShape << Form("1.0 ");
+  //}
+  //newcardShape << Form("- - 1.0\n");
 
   newcardShape << Form("MomRes1%s    shape     ",chanName.Data());
   for (int i=0;i<nChan;i++){
