@@ -67,7 +67,7 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
   TString theOutputName = Form("outputs%s_nsel%d",theHistName.Data(),nsel);
 
   const int nGenSyst = 8;
-  const int nEffSyst = 1058;
+  const int nEffSyst = 8+480;
   const int nStaSyst = 72;
   const int nOthSyst = 2;
 
@@ -168,9 +168,9 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
   double systVal[allNuisancesCov],systTotalVal;
 
                        // receff/lepeff2/lepeff3/lepeff4/leff5/lepeff6/lepeff7/lumi
-  double systXSVal[8] = {0.091, 0.196, 0.167, 0.275, 0.546, 0.439, 0.028, 2.500};
-  if(nsel == 1) {systXSVal[0] = 1.140;
-                 systXSVal[1] = 0.671; systXSVal[2] = 1.350; systXSVal[3] = 0.661; systXSVal[4] = 1.103; systXSVal[5] = 0.823; systXSVal[6] = 0.095;
+  double systXSVal[8] = {0.048, 0.479, 0.321, 0.608, 0.318, 0.309, 0.039, 2.500};
+  if(nsel == 1) {systXSVal[0] = 1.139;
+                 systXSVal[1] = 0.795; systXSVal[2] = 0.058; systXSVal[3] = 0.580; systXSVal[4] = 0.512; systXSVal[5] = 0.875; systXSVal[6] = 0.130;
              systXSVal[7] = 2.500;}
 
   double systUnfVal[16] = {0.355, 0.567, 0.214, 0.522, 0.285, 0.466, 0.572, 1.164, 0.778, 0.395, 0.193, 0.593, 0.258, 0.527, 0.111, 0.107};

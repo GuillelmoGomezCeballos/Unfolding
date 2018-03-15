@@ -20,7 +20,7 @@ void helper_function(int me=0, int DY=3, TString theHistName = "Pt", TString pat
   printf("Filename: %s\n",filename);
 
   const int nGenSyst = 8;
-  const int nEffSyst = 1057;
+  const int nEffSyst = 7+480;
   const int nStaSyst = 72;
   const int nOthSyst = 2;
 

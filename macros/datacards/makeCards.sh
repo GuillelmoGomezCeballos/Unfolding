@@ -19,8 +19,6 @@ text2workspace.py -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel -
 --PO 'map=.*/DY_2:r_s2[1,0,10]'  \
 --PO 'map=.*/DY_3:r_s3[1,0,10]'  \
 --PO 'map=.*/DY_4:r_s4[1,0,10]'  \
---PO 'map=.*/DY_5:r_s5[1,0,10]'  \
---PO 'map=.*/DY_6:r_s6[1,0,10]'  \
 datacard_Pt_mm.text -o workspace_Pt_mm.root;
 
 text2workspace.py -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel --PO verbose  \
@@ -29,8 +27,6 @@ text2workspace.py -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel -
 --PO 'map=.*/DY_2:r_s2[1,0,10]'  \
 --PO 'map=.*/DY_3:r_s3[1,0,10]'  \
 --PO 'map=.*/DY_4:r_s4[1,0,10]'  \
---PO 'map=.*/DY_5:r_s5[1,0,10]'  \
---PO 'map=.*/DY_6:r_s6[1,0,10]'  \
 datacard_Pt_ee.text -o workspace_Pt_ee.root;
 
 text2workspace.py -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel --PO verbose  \
@@ -39,8 +35,6 @@ text2workspace.py -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel -
 --PO 'map=.*/DY_2:r_s2[1,0,10]'  \
 --PO 'map=.*/DY_3:r_s3[1,0,10]'  \
 --PO 'map=.*/DY_4:r_s4[1,0,10]'  \
---PO 'map=.*/DY_5:r_s5[1,0,10]'  \
---PO 'map=.*/DY_6:r_s6[1,0,10]'  \
 datacard_Pt_ll.text -o workspace_Pt_ll.root;
 
 #combine -M MaxLikelihoodFit datacard_Pt_mm.text -m 1 --expectSignal=1 -t -1 --saveNorm --saveWithUncertainties --rMin=-1 --rMax=2 --robustFit=1 --X-rtd FITTER_DYN_STEP 

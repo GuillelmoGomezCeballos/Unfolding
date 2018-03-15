@@ -62,7 +62,7 @@ void makeSystHist_LepEff(int nsel = 0, int whichDY = 3, TString theHistName = "P
   else if(whichDY == 2) { version = 2; alternative = 1;}
   else if(whichDY == 3) { version = 3; alternative = 0;}
 
-  const int allNuisancesCov  = 8+1050;
+  const int allNuisancesCov  = 8+480;
   const int allNuisancesPlot = 8;
 
   TH1D *histoSystCov[allNuisancesCov], *histoSystPlot[allNuisancesPlot];
@@ -120,10 +120,26 @@ void makeSystHist_LepEff(int nsel = 0, int whichDY = 3, TString theHistName = "P
 
   double systVal[allNuisancesCov],systTotalVal;
 
+                       // receff/lepeff2/lepeff3/lepeff4/leff5/lepeff6/lepeff7/lumi
+  double systXSVal[8] = {0.048, 0.479, 0.321, 0.608, 0.318, 0.309, 0.039, 2.500};
+
+  if(nsel == 1) {systXSVal[0] = 1.139;
+                 systXSVal[1] = 0.795; systXSVal[2] = 0.058; systXSVal[3] = 0.580; systXSVal[4] = 0.512; systXSVal[5] = 0.875; systXSVal[6] = 0.130;
+             systXSVal[7] = 2.500;}
+
   for(int i=1; i<=histDef->GetNbinsX(); i++){
     for(int j=0; j<allNuisancesCov; j++){
       systVal[j] = 100.0*TMath::Abs(histDef->GetBinContent(i)-histAlt[j]->GetBinContent(i))/histDef->GetBinContent(i);
       //if(systVal[j]>0.001&&j>6)printf("%f\n",systVal[j]);
+    }
+
+    if(doXSRatio){
+      systVal[2] = TMath::Abs(systVal[2] - systXSVal[1]);
+      systVal[3] = TMath::Abs(systVal[3] - systXSVal[2]);
+      systVal[4] = TMath::Abs(systVal[4] - systXSVal[3]);
+      systVal[5] = TMath::Abs(systVal[5] - systXSVal[4]);
+      systVal[6] = TMath::Abs(systVal[6] - systXSVal[5]);
+      systVal[7] = TMath::Abs(systVal[7] - systXSVal[6]);
     }
 
     double systValTotAtOnce = systVal[0];
@@ -133,7 +149,7 @@ void makeSystHist_LepEff(int nsel = 0, int whichDY = 3, TString theHistName = "P
 
     double systValSta = 0;
     for(int k=7; k<allNuisancesCov; k++) systValSta = systValSta + systVal[k]*systVal[k];
-    systValSta = sqrt(systValSta);
+    systValSta = systVal[1]/10.; //sqrt(systValSta);
 
     printf("(%2d) %7.3f %7.3f %7.3f %7.3f %7.3f %7.3f (%7.3f/%7.3f) -> (%7.3f/%7.3f/%7.3f)\n",i,systVal[2],systVal[3],systVal[4],systVal[5],systVal[6],systVal[7],
            systValStaAtOnce,systValSta,
