@@ -74,16 +74,32 @@ for key in poi_up.keys(): # Iterates through the binned analysis uncertainties
     sum_poi_down   += (1 - (poi_down[key]/poi_central[key])) **2
     sum_ratio_down += (1 - (poi_down[key]/poi_central[key])/(total_down[key]/total_central[key]))**2
 
+# Total uncertainty
+all_unc_total_up   = abs(POI_total_fit[2] - POI_total_fit[1])/POI_total_fit[1]
+all_unc_total_down = abs(POI_total_fit[0] - POI_total_fit[1])/POI_total_fit[1]
+
+all_unc_poi_up     = abs(POI_fit[2] - POI_fit[1])/POI_fit[1]
+all_unc_poi_down   = abs(POI_fit[0] - POI_fit[1])/POI_fit[1]
+
+all_unc_total = (POI_total_fit[2] - POI_total_fit[0])/2./POI_total_fit[1]
+all_unc_poi   = (POI_fit[2]       - POI_fit[0]      )/2./POI_fit[1]
+
+# Statistical uncertainty
+stat_total_up   = math.sqrt(max(all_unc_total_up  *all_unc_total_up  -sum_total_up  ,0.0))
+stat_total_down = math.sqrt(max(all_unc_total_down*all_unc_total_down-sum_total_down,0.0))
+
+stat_poi_up     = math.sqrt(max(all_unc_poi_up  *all_unc_poi_up  -sum_poi_up  ,0.0))
+stat_poi_down   = math.sqrt(max(all_unc_poi_down*all_unc_poi_down-sum_poi_down,0.0))
+
+stat_total = (stat_total_up+stat_total_down)/2
+stat_poi   = (stat_poi_up  +stat_poi_down  )/2
+
+# Systematic uncertainty
 sum_total = (math.sqrt(sum_total_up) + math.sqrt(sum_total_down))/2
 sum_poi   = (math.sqrt(sum_poi_up)   + math.sqrt(sum_poi_down)  )/2
 sum_ratio = (math.sqrt(sum_ratio_up) + math.sqrt(sum_ratio_down))/2
 
-all_unc_total = (POI_total_fit[2] - POI_total_fit[0])/2/POI_total_fit[1]
-all_unc_poi   = (POI_fit[2] - POI_fit[0])/2/POI_fit[1]
-
-stat_total = math.sqrt(max(all_unc_total*all_unc_total-sum_total*sum_total,0.0))
-stat_poi   = math.sqrt(max(all_unc_poi  *all_unc_poi  -sum_poi  *sum_poi  ,0.0))
-
+# poi statistical uncertainty plus ratio systematic uncertainty
 all_unc_ratio = math.sqrt(stat_poi*stat_poi+sum_ratio*sum_ratio)
 
 scale_total = 1

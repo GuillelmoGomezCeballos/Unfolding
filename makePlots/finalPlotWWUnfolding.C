@@ -77,21 +77,21 @@ void finalPlotWWUnfolding(
   double theRDown[9];
   double theRUp[9];
 
-  TFile *_fileGenWW = TFile::Open("/afs/cern.ch/work/c/ceballos/public/samples/panda/v_006_0/genWW.root");
+  TFile *_fileGenWW = TFile::Open("/afs/cern.ch/work/c/ceballos/public/samples/panda/v_001_0/genWW.root");
 
   TFile *_file0 = TFile::Open(plotName.Data());
   TTree* theTree = nullptr;
   _file0->GetObject("limit",theTree);
 
-  float r_s0 = -999.; theTree->SetBranchAddress( "r_s0", &r_s0);     
-  float r_s1 = -999.; theTree->SetBranchAddress( "r_s1", &r_s1);     
-  float r_s2 = -999.; theTree->SetBranchAddress( "r_s2", &r_s2);     
-  float r_s3 = -999.; theTree->SetBranchAddress( "r_s3", &r_s3);     
-  float r_s4 = -999.; theTree->SetBranchAddress( "r_s4", &r_s4);     
-  float r_s5 = -999.; theTree->SetBranchAddress( "r_s5", &r_s5);     
-  float r_s6 = -999.; theTree->SetBranchAddress( "r_s6", &r_s6);     
-  float r_s7 = -999.; theTree->SetBranchAddress( "r_s7", &r_s7);     
-  float r_s8 = -999.; theTree->SetBranchAddress( "r_s8", &r_s8);     
+  float r_s0 = -999.; theTree->SetBranchAddress( "r_s0", &r_s0);
+  float r_s1 = -999.; theTree->SetBranchAddress( "r_s1", &r_s1);
+  float r_s2 = -999.; theTree->SetBranchAddress( "r_s2", &r_s2);
+  float r_s3 = -999.; theTree->SetBranchAddress( "r_s3", &r_s3);
+  float r_s4 = -999.; theTree->SetBranchAddress( "r_s4", &r_s4);
+  float r_s5 = -999.; theTree->SetBranchAddress( "r_s5", &r_s5);
+  float r_s6 = -999.; theTree->SetBranchAddress( "r_s6", &r_s6);
+  float r_s7 = -999.; theTree->SetBranchAddress( "r_s7", &r_s7);
+  float r_s8 = -999.; theTree->SetBranchAddress( "r_s8", &r_s8);
 
   auto nevent = theTree->GetEntries();
   for (Int_t i=0;i<nevent;i++) {
