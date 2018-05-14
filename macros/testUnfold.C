@@ -60,7 +60,9 @@ if(suffix == "_momres2"){systName2 = "_MomRes";systName3 = "_2";if(nsel == 1) {s
 if(suffix == "_momres3"){systName2 = "_MomRes";systName3 = "_3";if(nsel == 1) {systName0 = "_MomRes";systName1 = "_3";}}
 if(suffix == "_momres4"){systName2 = "_MomRes";systName3 = "_4";if(nsel == 1) {systName0 = "_MomRes";systName1 = "_4";}}
 if(suffix == "_lepeff") {systName2 = "_LepEff";systName3 = Form("_%d",suffixStat); suffix = Form("_lepeff%d",suffixStat);}
-if(suffix == "_receff") {systName2 = "_RecEff";systName3 = "_0";}
+if(suffix == "_receff0") {systName2 = "_RecEff";systName3 = "_0";}
+if(suffix == "_receff1") {systName2 = "_RecEff";systName3 = "_1";}
+if(suffix == "_receff2") {systName2 = "_RecEff";systName3 = "_2";}
 if(suffix == "_momreslepeff") {systName2 = "_MomRes";systName3 = "_3";if(nsel == 1) {systName2 = "_MomRes";systName3 = "_2";systName0 = "_MomRes";systName1 = "_2";}}
 cout << Form("histo%sRecDA%s_%d%s",theHistName.Data(),systName0.Data(),nsel,systName1.Data()) << endl;
 TH1D* hDA = (TH1D*)_file0->Get(Form("histo%sRecDA%s_%d%s",theHistName.Data(),systName0.Data(),nsel,systName1.Data()));

@@ -158,14 +158,32 @@ root -l -q -b testUnfold.C'("PtRap2","_qcd")';
 root -l -q -b testUnfold.C'("PtRap3","_qcd")';
 root -l -q -b testUnfold.C'("PtRap4","_qcd")';
 
-root -l -q -b testUnfold.C'("Pt","_receff")';
-root -l -q -b testUnfold.C'("Rap","_receff")';
-root -l -q -b testUnfold.C'("PhiStar","_receff")';
-root -l -q -b testUnfold.C'("PtRap0","_receff")';
-root -l -q -b testUnfold.C'("PtRap1","_receff")';
-root -l -q -b testUnfold.C'("PtRap2","_receff")';
-root -l -q -b testUnfold.C'("PtRap3","_receff")';
-root -l -q -b testUnfold.C'("PtRap4","_receff")';
+root -l -q -b testUnfold.C'("Pt","_receff0")';
+root -l -q -b testUnfold.C'("Rap","_receff0")';
+root -l -q -b testUnfold.C'("PhiStar","_receff0")';
+root -l -q -b testUnfold.C'("PtRap0","_receff0")';
+root -l -q -b testUnfold.C'("PtRap1","_receff0")';
+root -l -q -b testUnfold.C'("PtRap2","_receff0")';
+root -l -q -b testUnfold.C'("PtRap3","_receff0")';
+root -l -q -b testUnfold.C'("PtRap4","_receff0")';
+
+root -l -q -b testUnfold.C'("Pt","_receff1")';
+root -l -q -b testUnfold.C'("Rap","_receff1")';
+root -l -q -b testUnfold.C'("PhiStar","_receff1")';
+root -l -q -b testUnfold.C'("PtRap0","_receff1")';
+root -l -q -b testUnfold.C'("PtRap1","_receff1")';
+root -l -q -b testUnfold.C'("PtRap2","_receff1")';
+root -l -q -b testUnfold.C'("PtRap3","_receff1")';
+root -l -q -b testUnfold.C'("PtRap4","_receff1")';
+
+root -l -q -b testUnfold.C'("Pt","_receff2")';
+root -l -q -b testUnfold.C'("Rap","_receff2")';
+root -l -q -b testUnfold.C'("PhiStar","_receff2")';
+root -l -q -b testUnfold.C'("PtRap0","_receff2")';
+root -l -q -b testUnfold.C'("PtRap1","_receff2")';
+root -l -q -b testUnfold.C'("PtRap2","_receff2")';
+root -l -q -b testUnfold.C'("PtRap3","_receff2")';
+root -l -q -b testUnfold.C'("PtRap4","_receff2")';
 
 root -l -q -b testUnfold.C'("Pt","_momreslepeff")';
 root -l -q -b testUnfold.C'("Rap","_momreslepeff")';

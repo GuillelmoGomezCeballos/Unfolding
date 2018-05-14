@@ -66,7 +66,7 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
   else if(whichDY == 3) { version = 3; alternative = 0;}
   TString theOutputName = Form("outputs%s_nsel%d",theHistName.Data(),nsel);
 
-  const int nGenSyst = 8;
+  const int nGenSyst = 10;
   const int nEffSyst = 8+480;
   const int nStaSyst = 72;
   const int nOthSyst = 2;
@@ -140,7 +140,9 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
   _file[4] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_momres4.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // MonRes4
   _file[5] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_pdf.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // PDF bkg
   _file[6] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_qcd.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // QCD bkg.
-  _file[7] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_receff.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // RecEff
+  _file[7] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_receff0.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // RecEff0
+  _file[8] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_receff1.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // RecEff1
+  _file[9] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_receff2.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // RecEff2
   for(int i=0; i<nGenSyst; i++){
     histAlt[i] = (TH1D*)_file[i] ->Get(Form("unfold")); assert(histAlt[i]); histAlt[i]->SetDirectory(0);
     _file[i]->Close();
@@ -168,9 +170,9 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
   double systVal[allNuisancesCov],systTotalVal;
 
                        // receff/lepeff2/lepeff3/lepeff4/leff5/lepeff6/lepeff7/lumi
-  double systXSVal[8] = {0.048, 0.479, 0.321, 0.608, 0.318, 0.309, 0.039, 2.500};
-  if(nsel == 1) {systXSVal[0] = 1.139;
-                 systXSVal[1] = 0.795; systXSVal[2] = 0.058; systXSVal[3] = 0.580; systXSVal[4] = 0.512; systXSVal[5] = 0.875; systXSVal[6] = 0.130;
+  double systXSVal[8] = {0.176, 0.479, 0.321, 0.608, 0.318, 0.309, 0.039, 2.500};
+  if(nsel == 1) {systXSVal[0] = 2.565;
+                 systXSVal[1] = 0.632; systXSVal[2] = 0.058; systXSVal[3] = 0.580; systXSVal[4] = 0.511; systXSVal[5] = 0.875; systXSVal[6] = 0.130;
              systXSVal[7] = 2.500;}
 
   double systUnfVal[16] = {0.355, 0.567, 0.214, 0.522, 0.285, 0.466, 0.572, 1.164, 0.778, 0.395, 0.193, 0.593, 0.258, 0.527, 0.111, 0.107};
@@ -215,26 +217,31 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
 
     if(doCorrelateMomResLepEff == true) systVal[nGenSyst+3] = 0;
 
+    // reco efficiencies all together
+    systVal[7 ] = sqrt(systVal[7 ]*systVal[7 ]+systVal[8 ]*systVal[8 ]+systVal[9 ]*systVal[9 ]);
+    systVal[8 ] = 0.0;
+    systVal[9 ] = 0.0;
+
     if(doXSRatio){
       systVal[0 ] = 0;
       systVal[7 ] = systVal[7 ] - systXSVal[0];
-      systVal[10] = systVal[10] - systXSVal[1];
-      if(doCorrelateMomResLepEff == false) systVal[11] = systVal[11] - systXSVal[2];
+      systVal[12] = systVal[12] - systXSVal[1];
+      if(doCorrelateMomResLepEff == false) systVal[13] = systVal[13] - systXSVal[2];
       else                                 systVal[2 ] = systVal[2 ] - systXSVal[2];
-      systVal[12] = systVal[12] - systXSVal[3];
-      systVal[13] = systVal[13] - systXSVal[4];
-      systVal[14] = systVal[14] - systXSVal[5];
-      systVal[15] = systVal[15] - systXSVal[6];
+      systVal[14] = systVal[14] - systXSVal[3];
+      systVal[15] = systVal[15] - systXSVal[4];
+      systVal[16] = systVal[16] - systXSVal[5];
+      systVal[17] = systVal[17] - systXSVal[6];
       systVal[allNuisancesCov-1] = systVal[allNuisancesCov-1] - systXSVal[7];
     }
 
     for(int j=0; j<allNuisancesCov; j++) {histoSystCov[j]->SetBinContent(i,systVal[j]/100.);}
 
-    double systEffValStaAtOnce = systVal[9];
+    double systEffValStaAtOnce = systVal[11];
     double systEffValNoStat = sqrt(systVal[nGenSyst+2]*systVal[nGenSyst+2]+systVal[nGenSyst+3]*systVal[nGenSyst+3]+systVal[nGenSyst+4]*systVal[nGenSyst+4]+
                                    systVal[nGenSyst+5]*systVal[nGenSyst+5]+systVal[nGenSyst+6]*systVal[nGenSyst+6]+systVal[nGenSyst+7]*systVal[nGenSyst+7]);
 
-    systVal[8] = 0; systVal[9] = 0; // make sure not used anymore
+    systVal[10] = 0; systVal[11] = 0; // make sure not used anymore
     double systEffValSta = 0;
     for(int k=nGenSyst+7; k<nGenSyst+nEffSyst; k++) systEffValSta = systEffValSta + systVal[k]*systVal[k];
     systEffValSta = sqrt(systEffValSta);

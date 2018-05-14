@@ -14,6 +14,10 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
   TString chanName = "mm";
   if(nsel == 1) chanName = "ee";
 
+  TString path = "../inputsCards200/";
+  if     (theHistName == "Tot") path = "../inputsCards200/";
+  else if(theHistName == "Total") {path = "../inputs/"; theHistName = "Tot";}
+
   int inputValues[2] = {5, 10};
   if(theHistName == "Tot") {inputValues[0] = 1; inputValues[1] = 1;}
   const int nChan = inputValues[0];
@@ -21,8 +25,6 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
 
   Double_t lumiE = 1.025;
 
-  TString path = "../inputsCards200/";
-  if(theHistName == "Tot") path = "../inputsCards200/";
   TFile* _file0    = new TFile(Form("%shistoDY%dzll%sRecGen_period3.root",path.Data(),DY,theHistName.Data()),  "read"); if(!_file0   ) {printf("File does not exist\n"); return;}
   TFile* _file_alt = new TFile(Form("%shistoDY%dzll%sRecGen_period3.root",path.Data(),alt,theHistName.Data()), "read"); if(!_file_alt) {printf("File does not exist\n"); return;}
 
@@ -74,9 +76,15 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
   TH1D* hDY_LepEff7  = (TH1D*)_file0->Get(Form("histo%sRecDY_LepEff_%d_7",theHistName.Data(),nsel));
   TH2D* Adet_LepEff7 = (TH2D*)_file0->Get(Form("histo%sRecGen_LepEff_%d_7",theHistName.Data(),nsel));
 
-  TH1D* hVV_RecEff  = (TH1D*)_file0->Get(Form("histo%sRecVV_RecEff_%d_0",theHistName.Data(),nsel));
-  TH1D* hDY_RecEff  = (TH1D*)_file0->Get(Form("histo%sRecDY_RecEff_%d_0",theHistName.Data(),nsel));
-  TH2D* Adet_RecEff = (TH2D*)_file0->Get(Form("histo%sRecGen_RecEff_%d_0",theHistName.Data(),nsel));
+  TH1D* hVV_RecEff0  = (TH1D*)_file0->Get(Form("histo%sRecVV_RecEff_%d_0",theHistName.Data(),nsel));
+  TH1D* hDY_RecEff0  = (TH1D*)_file0->Get(Form("histo%sRecDY_RecEff_%d_0",theHistName.Data(),nsel));
+  TH2D* Adet_RecEff0 = (TH2D*)_file0->Get(Form("histo%sRecGen_RecEff_%d_0",theHistName.Data(),nsel));
+  TH1D* hVV_RecEff1  = (TH1D*)_file0->Get(Form("histo%sRecVV_RecEff_%d_1",theHistName.Data(),nsel));
+  TH1D* hDY_RecEff1  = (TH1D*)_file0->Get(Form("histo%sRecDY_RecEff_%d_1",theHistName.Data(),nsel));
+  TH2D* Adet_RecEff1 = (TH2D*)_file0->Get(Form("histo%sRecGen_RecEff_%d_1",theHistName.Data(),nsel));
+  TH1D* hVV_RecEff2  = (TH1D*)_file0->Get(Form("histo%sRecVV_RecEff_%d_2",theHistName.Data(),nsel));
+  TH1D* hDY_RecEff2  = (TH1D*)_file0->Get(Form("histo%sRecDY_RecEff_%d_2",theHistName.Data(),nsel));
+  TH2D* Adet_RecEff2 = (TH2D*)_file0->Get(Form("histo%sRecGen_RecEff_%d_2",theHistName.Data(),nsel));
 
   TH1D* histo_Data   = (TH1D*)hDA->Clone("histo_Data");
   TH1D* histo_Res    = (TH1D*)hRes->Clone("histo_Res");
@@ -108,8 +116,12 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
   TH1D* histo_VV_LepEff6Down   = (TH1D*)hVV->Clone(Form("histo_VV_LepEff6%sDown",chanName.Data()));  histo_VV_LepEff6Down  ->Reset();
   TH1D* histo_VV_LepEff7Up     = (TH1D*)hVV->Clone(Form("histo_VV_LepEff7%sUp",chanName.Data()));    histo_VV_LepEff7Up    ->Reset();
   TH1D* histo_VV_LepEff7Down   = (TH1D*)hVV->Clone(Form("histo_VV_LepEff7%sDown",chanName.Data()));  histo_VV_LepEff7Down  ->Reset();
-  TH1D* histo_VV_RecEffUp      = (TH1D*)hVV->Clone(Form("histo_VV_RecEff%sUp",chanName.Data()));     histo_VV_RecEffUp     ->Reset();
-  TH1D* histo_VV_RecEffDown    = (TH1D*)hVV->Clone(Form("histo_VV_RecEff%sDown",chanName.Data()));   histo_VV_RecEffDown   ->Reset();
+  TH1D* histo_VV_RecEff0Up     = (TH1D*)hVV->Clone(Form("histo_VV_RecEff0%sUp",chanName.Data()));    histo_VV_RecEff0Up     ->Reset();
+  TH1D* histo_VV_RecEff0Down   = (TH1D*)hVV->Clone(Form("histo_VV_RecEff0%sDown",chanName.Data()));  histo_VV_RecEff0Down   ->Reset();
+  TH1D* histo_VV_RecEff1Up     = (TH1D*)hVV->Clone(Form("histo_VV_RecEff1%sUp",chanName.Data()));    histo_VV_RecEff1Up     ->Reset();
+  TH1D* histo_VV_RecEff1Down   = (TH1D*)hVV->Clone(Form("histo_VV_RecEff1%sDown",chanName.Data()));  histo_VV_RecEff1Down   ->Reset();
+  TH1D* histo_VV_RecEff2Up     = (TH1D*)hVV->Clone(Form("histo_VV_RecEff2%sUp",chanName.Data()));    histo_VV_RecEff2Up     ->Reset();
+  TH1D* histo_VV_RecEff2Down   = (TH1D*)hVV->Clone(Form("histo_VV_RecEff2%sDown",chanName.Data()));  histo_VV_RecEff2Down   ->Reset();
 
   TH1D* histo_NonFid = (TH1D*)hDA->Clone("histo_NonFid"); histo_NonFid->Reset();
   TH1D* histo_DY[nChan];
@@ -186,10 +198,18 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
   TH1D* histo_DY_LepEff6Down[nChan];
   TH1D* histo_DY_LepEff7Up  [nChan];
   TH1D* histo_DY_LepEff7Down[nChan];
-  TH1D* histo_NonFid_RecEffUp   = (TH1D*)hDA->Clone(Form("histo_NonFid_RecEff%sUp",chanName.Data()));	histo_NonFid_RecEffUp  ->Reset();
-  TH1D* histo_NonFid_RecEffDown = (TH1D*)hDA->Clone(Form("histo_NonFid_RecEff%sDown",chanName.Data())); histo_NonFid_RecEffDown->Reset();
-  TH1D* histo_DY_RecEffUp  [nChan];
-  TH1D* histo_DY_RecEffDown[nChan];
+  TH1D* histo_NonFid_RecEff0Up   = (TH1D*)hDA->Clone(Form("histo_NonFid_RecEff0%sUp",chanName.Data()));	  histo_NonFid_RecEff0Up  ->Reset();
+  TH1D* histo_NonFid_RecEff0Down = (TH1D*)hDA->Clone(Form("histo_NonFid_RecEff0%sDown",chanName.Data())); histo_NonFid_RecEff0Down->Reset();
+  TH1D* histo_NonFid_RecEff1Up   = (TH1D*)hDA->Clone(Form("histo_NonFid_RecEff1%sUp",chanName.Data()));	  histo_NonFid_RecEff1Up  ->Reset();
+  TH1D* histo_NonFid_RecEff1Down = (TH1D*)hDA->Clone(Form("histo_NonFid_RecEff1%sDown",chanName.Data())); histo_NonFid_RecEff1Down->Reset();
+  TH1D* histo_NonFid_RecEff2Up   = (TH1D*)hDA->Clone(Form("histo_NonFid_RecEff2%sUp",chanName.Data()));	  histo_NonFid_RecEff2Up  ->Reset();
+  TH1D* histo_NonFid_RecEff2Down = (TH1D*)hDA->Clone(Form("histo_NonFid_RecEff2%sDown",chanName.Data())); histo_NonFid_RecEff2Down->Reset();
+  TH1D* histo_DY_RecEff0Up  [nChan];
+  TH1D* histo_DY_RecEff0Down[nChan];
+  TH1D* histo_DY_RecEff1Up  [nChan];
+  TH1D* histo_DY_RecEff1Down[nChan];
+  TH1D* histo_DY_RecEff2Up  [nChan];
+  TH1D* histo_DY_RecEff2Down[nChan];
   for(int i=0; i<nChan; i++) {
     histo_DY_altUp  [i] = (TH1D*)hDA->Clone(Form("histo_DY_%d_altUp",i));   histo_DY_altUp  [i]->Reset();
     histo_DY_altDown[i] = (TH1D*)hDA->Clone(Form("histo_DY_%d_altDown",i)); histo_DY_altDown[i]->Reset();
@@ -215,8 +235,12 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
     histo_DY_LepEff6Down[i] = (TH1D*)hDA->Clone(Form("histo_DY_%d_LepEff6%sDown",i,chanName.Data())); histo_DY_LepEff6Down[i]->Reset();
     histo_DY_LepEff7Up  [i] = (TH1D*)hDA->Clone(Form("histo_DY_%d_LepEff7%sUp",i,chanName.Data()));   histo_DY_LepEff7Up  [i]->Reset();
     histo_DY_LepEff7Down[i] = (TH1D*)hDA->Clone(Form("histo_DY_%d_LepEff7%sDown",i,chanName.Data())); histo_DY_LepEff7Down[i]->Reset();
-    histo_DY_RecEffUp  [i]  = (TH1D*)hDA->Clone(Form("histo_DY_%d_RecEff%sUp",i,chanName.Data()));    histo_DY_RecEffUp   [i]->Reset();
-    histo_DY_RecEffDown[i]  = (TH1D*)hDA->Clone(Form("histo_DY_%d_RecEff%sDown",i,chanName.Data()));  histo_DY_RecEffDown [i]->Reset();
+    histo_DY_RecEff0Up  [i] = (TH1D*)hDA->Clone(Form("histo_DY_%d_RecEff0%sUp",i,chanName.Data()));   histo_DY_RecEff0Up  [i]->Reset();
+    histo_DY_RecEff0Down[i] = (TH1D*)hDA->Clone(Form("histo_DY_%d_RecEff0%sDown",i,chanName.Data())); histo_DY_RecEff0Down[i]->Reset();
+    histo_DY_RecEff1Up  [i] = (TH1D*)hDA->Clone(Form("histo_DY_%d_RecEff1%sUp",i,chanName.Data()));   histo_DY_RecEff1Up  [i]->Reset();
+    histo_DY_RecEff1Down[i] = (TH1D*)hDA->Clone(Form("histo_DY_%d_RecEff1%sDown",i,chanName.Data())); histo_DY_RecEff1Down[i]->Reset();
+    histo_DY_RecEff2Up  [i] = (TH1D*)hDA->Clone(Form("histo_DY_%d_RecEff2%sUp",i,chanName.Data()));   histo_DY_RecEff2Up  [i]->Reset();
+    histo_DY_RecEff2Down[i] = (TH1D*)hDA->Clone(Form("histo_DY_%d_RecEff2%sDown",i,chanName.Data())); histo_DY_RecEff2Down[i]->Reset();
   }
 
   if(nChan != Adet->GetNbinsY()) {printf("number of nChan and GEN bins different: %d vs. %d\n",nChan,Adet->GetNbinsY()); return;}
@@ -280,9 +304,17 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
       histo_VV_LepEff7Up  ->SetBinContent(i,TMath::Max(hVV->GetBinContent(i)+diff,0.0));
       histo_VV_LepEff7Down->SetBinContent(i,TMath::Max(hVV->GetBinContent(i)-diff,0.0));     
 
-      diff = hVV_RecEff->GetBinContent(i)-hVV->GetBinContent(i);
-      histo_VV_RecEffUp  ->SetBinContent(i,TMath::Max(hVV->GetBinContent(i)+diff,0.0));
-      histo_VV_RecEffDown->SetBinContent(i,TMath::Max(hVV->GetBinContent(i)-diff,0.0));     
+      diff = hVV_RecEff0->GetBinContent(i)-hVV->GetBinContent(i);
+      histo_VV_RecEff0Up  ->SetBinContent(i,TMath::Max(hVV->GetBinContent(i)+diff,0.0));
+      histo_VV_RecEff0Down->SetBinContent(i,TMath::Max(hVV->GetBinContent(i)-diff,0.0));     
+
+      diff = hVV_RecEff1->GetBinContent(i)-hVV->GetBinContent(i);
+      histo_VV_RecEff1Up  ->SetBinContent(i,TMath::Max(hVV->GetBinContent(i)+diff,0.0));
+      histo_VV_RecEff1Down->SetBinContent(i,TMath::Max(hVV->GetBinContent(i)-diff,0.0));     
+
+      diff = hVV_RecEff2->GetBinContent(i)-hVV->GetBinContent(i);
+      histo_VV_RecEff2Up  ->SetBinContent(i,TMath::Max(hVV->GetBinContent(i)+diff,0.0));
+      histo_VV_RecEff2Down->SetBinContent(i,TMath::Max(hVV->GetBinContent(i)-diff,0.0));     
     }
 
     // renormalizing the alternative model to the default one, we care about shape differences only
@@ -303,7 +335,9 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
     double allRecBin_LepEff5 = hDY_LepEff5->GetBinContent(i);
     double allRecBin_LepEff6 = hDY_LepEff6->GetBinContent(i);
     double allRecBin_LepEff7 = hDY_LepEff7->GetBinContent(i);
-    double allRecBin_RecEff  = hDY_RecEff->GetBinContent(i);
+    double allRecBin_RecEff0 = hDY_RecEff0->GetBinContent(i);
+    double allRecBin_RecEff1 = hDY_RecEff1->GetBinContent(i);
+    double allRecBin_RecEff2 = hDY_RecEff2->GetBinContent(i);
     double fidRecBin_def     = 0;
     double fidRecBin_alt     = 0;
     double fidRecBin_MomRes1 = 0;
@@ -317,7 +351,9 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
     double fidRecBin_LepEff5 = 0;
     double fidRecBin_LepEff6 = 0;
     double fidRecBin_LepEff7 = 0;
-    double fidRecBin_RecEff  = 0;
+    double fidRecBin_RecEff0 = 0;
+    double fidRecBin_RecEff1 = 0;
+    double fidRecBin_RecEff2 = 0;
     for(int j=1; j<=Adet->GetNbinsY(); j++) { // GEN
       fidRecBin_def     = fidRecBin_def     + Adet        ->GetBinContent(i,j);
       fidRecBin_alt     = fidRecBin_alt     + Adet_alt    ->GetBinContent(i,j);
@@ -332,7 +368,9 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
       fidRecBin_LepEff5 = fidRecBin_LepEff5 + Adet_LepEff5->GetBinContent(i,j);
       fidRecBin_LepEff6 = fidRecBin_LepEff6 + Adet_LepEff6->GetBinContent(i,j);
       fidRecBin_LepEff7 = fidRecBin_LepEff7 + Adet_LepEff7->GetBinContent(i,j);
-      fidRecBin_RecEff  = fidRecBin_RecEff  + Adet_RecEff ->GetBinContent(i,j);
+      fidRecBin_RecEff0 = fidRecBin_RecEff0 + Adet_RecEff0->GetBinContent(i,j);
+      fidRecBin_RecEff1 = fidRecBin_RecEff1 + Adet_RecEff1->GetBinContent(i,j);
+      fidRecBin_RecEff2 = fidRecBin_RecEff2 + Adet_RecEff2->GetBinContent(i,j);
       if(Adet->GetBinContent(i,j) > 0) {
         diff = Adet_alt->GetBinContent(i,j)-Adet->GetBinContent(i,j);
         histo_DY        [j-1]->SetBinError  (i,Adet->GetBinError(i,j));
@@ -386,9 +424,17 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
         histo_DY_LepEff7Up  [j-1]->SetBinContent(i,TMath::Min(TMath::Max(Adet->GetBinContent(i,j)+diff,0.0),2.0*Adet->GetBinContent(i,j)));
         histo_DY_LepEff7Down[j-1]->SetBinContent(i,TMath::Max(Adet->GetBinContent(i,j)-diff,0.0));
 
-        diff = Adet_RecEff->GetBinContent(i,j)-Adet->GetBinContent(i,j);
-        histo_DY_RecEffUp  [j-1]->SetBinContent(i,TMath::Min(TMath::Max(Adet->GetBinContent(i,j)+diff,0.0),2.0*Adet->GetBinContent(i,j)));
-        histo_DY_RecEffDown[j-1]->SetBinContent(i,TMath::Max(Adet->GetBinContent(i,j)-diff,0.0));
+        diff = Adet_RecEff0->GetBinContent(i,j)-Adet->GetBinContent(i,j);
+        histo_DY_RecEff0Up  [j-1]->SetBinContent(i,TMath::Min(TMath::Max(Adet->GetBinContent(i,j)+diff,0.0),2.0*Adet->GetBinContent(i,j)));
+        histo_DY_RecEff0Down[j-1]->SetBinContent(i,TMath::Max(Adet->GetBinContent(i,j)-diff,0.0));
+
+        diff = Adet_RecEff1->GetBinContent(i,j)-Adet->GetBinContent(i,j);
+        histo_DY_RecEff1Up  [j-1]->SetBinContent(i,TMath::Min(TMath::Max(Adet->GetBinContent(i,j)+diff,0.0),2.0*Adet->GetBinContent(i,j)));
+        histo_DY_RecEff1Down[j-1]->SetBinContent(i,TMath::Max(Adet->GetBinContent(i,j)-diff,0.0));
+
+        diff = Adet_RecEff2->GetBinContent(i,j)-Adet->GetBinContent(i,j);
+        histo_DY_RecEff2Up  [j-1]->SetBinContent(i,TMath::Min(TMath::Max(Adet->GetBinContent(i,j)+diff,0.0),2.0*Adet->GetBinContent(i,j)));
+        histo_DY_RecEff2Down[j-1]->SetBinContent(i,TMath::Max(Adet->GetBinContent(i,j)-diff,0.0));
 
       }
     }
@@ -405,7 +451,9 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
     double gendiff_LepEff5 = allRecBin_LepEff5 - fidRecBin_LepEff5;
     double gendiff_LepEff6 = allRecBin_LepEff6 - fidRecBin_LepEff6;
     double gendiff_LepEff7 = allRecBin_LepEff7 - fidRecBin_LepEff7;
-    double gendiff_RecEff  = allRecBin_RecEff  - fidRecBin_RecEff;
+    double gendiff_RecEff0 = allRecBin_RecEff0 - fidRecBin_RecEff0;
+    double gendiff_RecEff1 = allRecBin_RecEff1 - fidRecBin_RecEff1;
+    double gendiff_RecEff2 = allRecBin_RecEff2 - fidRecBin_RecEff2;
     if(gendiff_def     <= 0) {printf("Non-fiducial     def: Bin %d totally efficient %f\n",i,gendiff_def);     gendiff_def     = 0.0;}
     if(gendiff_alt     <= 0) {printf("Non-fiducial     alt: Bin %d totally efficient %f\n",i,gendiff_alt);     gendiff_alt     = 0.0;}
     if(gendiff_MomRes1 <= 0) {printf("Non-fiducial MomRes1: Bin %d totally efficient %f\n",i,gendiff_MomRes1); gendiff_MomRes1 = 0.0;}
@@ -419,7 +467,9 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
     if(gendiff_LepEff5 <= 0) {printf("Non-fiducial LepEff5: Bin %d totally efficient %f\n",i,gendiff_LepEff5); gendiff_LepEff5 = 0.0;}
     if(gendiff_LepEff6 <= 0) {printf("Non-fiducial LepEff6: Bin %d totally efficient %f\n",i,gendiff_LepEff6); gendiff_LepEff6 = 0.0;}
     if(gendiff_LepEff7 <= 0) {printf("Non-fiducial LepEff7: Bin %d totally efficient %f\n",i,gendiff_LepEff7); gendiff_LepEff7 = 0.0;}
-    if(gendiff_RecEff  <= 0) {printf("Non-fiducial  RecEff: Bin %d totally efficient %f\n",i,gendiff_RecEff);  gendiff_RecEff  = 0.0;}
+    if(gendiff_RecEff0 <= 0) {printf("Non-fiducial RecEff0: Bin %d totally efficient %f\n",i,gendiff_RecEff0); gendiff_RecEff0  = 0.0;}
+    if(gendiff_RecEff1 <= 0) {printf("Non-fiducial RecEff1: Bin %d totally efficient %f\n",i,gendiff_RecEff1); gendiff_RecEff1  = 0.0;}
+    if(gendiff_RecEff2 <= 0) {printf("Non-fiducial RecEff2: Bin %d totally efficient %f\n",i,gendiff_RecEff2); gendiff_RecEff2  = 0.0;}
     histo_NonFid->SetBinContent(i,gendiff_def);
     histo_NonFid->SetBinError(i,gendiff_def*0.01);
     if(gendiff_def > 0){
@@ -473,9 +523,17 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
       histo_NonFid_LepEff7Up  ->SetBinContent(i,TMath::Max(gendiff_def+diff,0.0));
       histo_NonFid_LepEff7Down->SetBinContent(i,TMath::Max(gendiff_def-diff,0.0));      
 
-      diff = gendiff_RecEff-gendiff_def;
-      histo_NonFid_RecEffUp  ->SetBinContent(i,TMath::Max(gendiff_def+diff,0.0));
-      histo_NonFid_RecEffDown->SetBinContent(i,TMath::Max(gendiff_def-diff,0.0));      
+      diff = gendiff_RecEff0-gendiff_def;
+      histo_NonFid_RecEff0Up  ->SetBinContent(i,TMath::Max(gendiff_def+diff,0.0));
+      histo_NonFid_RecEff0Down->SetBinContent(i,TMath::Max(gendiff_def-diff,0.0));      
+
+      diff = gendiff_RecEff1-gendiff_def;
+      histo_NonFid_RecEff1Up  ->SetBinContent(i,TMath::Max(gendiff_def+diff,0.0));
+      histo_NonFid_RecEff1Down->SetBinContent(i,TMath::Max(gendiff_def-diff,0.0));      
+
+      diff = gendiff_RecEff2-gendiff_def;
+      histo_NonFid_RecEff2Up  ->SetBinContent(i,TMath::Max(gendiff_def+diff,0.0));
+      histo_NonFid_RecEff2Down->SetBinContent(i,TMath::Max(gendiff_def-diff,0.0));      
     }
   }
 
@@ -528,8 +586,12 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
   for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_VV->GetBinContent(i)>0)printf("%5.1f ",histo_VV_LepEff6Down    ->GetBinContent(i)/histo_VV->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
   for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_VV->GetBinContent(i)>0)printf("%5.1f ",histo_VV_LepEff7Up      ->GetBinContent(i)/histo_VV->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
   for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_VV->GetBinContent(i)>0)printf("%5.1f ",histo_VV_LepEff7Down    ->GetBinContent(i)/histo_VV->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
-  for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_VV->GetBinContent(i)>0)printf("%5.1f ",histo_VV_RecEffUp       ->GetBinContent(i)/histo_VV->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
-  for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_VV->GetBinContent(i)>0)printf("%5.1f ",histo_VV_RecEffDown     ->GetBinContent(i)/histo_VV->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
+  for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_VV->GetBinContent(i)>0)printf("%5.1f ",histo_VV_RecEff0Up      ->GetBinContent(i)/histo_VV->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
+  for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_VV->GetBinContent(i)>0)printf("%5.1f ",histo_VV_RecEff0Down    ->GetBinContent(i)/histo_VV->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
+  for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_VV->GetBinContent(i)>0)printf("%5.1f ",histo_VV_RecEff1Up      ->GetBinContent(i)/histo_VV->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
+  for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_VV->GetBinContent(i)>0)printf("%5.1f ",histo_VV_RecEff1Down    ->GetBinContent(i)/histo_VV->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
+  for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_VV->GetBinContent(i)>0)printf("%5.1f ",histo_VV_RecEff2Up      ->GetBinContent(i)/histo_VV->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
+  for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_VV->GetBinContent(i)>0)printf("%5.1f ",histo_VV_RecEff2Down    ->GetBinContent(i)/histo_VV->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
   for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_VV->GetBinContent(i)>0)printf("%5.1f ",histo_VV_VVStatUp  [i-1]->GetBinContent(i)/histo_VV->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
   for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_VV->GetBinContent(i)>0)printf("%5.1f ",histo_VV_VVStatDown[i-1]->GetBinContent(i)/histo_VV->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
 
@@ -559,8 +621,12 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
   for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_NonFid->GetBinContent(i)>0)printf("%5.1f ",histo_NonFid_LepEff6Down	     ->GetBinContent(i)/histo_NonFid->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
   for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_NonFid->GetBinContent(i)>0)printf("%5.1f ",histo_NonFid_LepEff7Up	     ->GetBinContent(i)/histo_NonFid->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
   for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_NonFid->GetBinContent(i)>0)printf("%5.1f ",histo_NonFid_LepEff7Down	     ->GetBinContent(i)/histo_NonFid->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
-  for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_NonFid->GetBinContent(i)>0)printf("%5.1f ",histo_NonFid_RecEffUp           ->GetBinContent(i)/histo_NonFid->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
-  for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_NonFid->GetBinContent(i)>0)printf("%5.1f ",histo_NonFid_RecEffDown         ->GetBinContent(i)/histo_NonFid->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
+  for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_NonFid->GetBinContent(i)>0)printf("%5.1f ",histo_NonFid_RecEff0Up          ->GetBinContent(i)/histo_NonFid->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
+  for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_NonFid->GetBinContent(i)>0)printf("%5.1f ",histo_NonFid_RecEff0Down        ->GetBinContent(i)/histo_NonFid->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
+  for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_NonFid->GetBinContent(i)>0)printf("%5.1f ",histo_NonFid_RecEff1Up          ->GetBinContent(i)/histo_NonFid->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
+  for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_NonFid->GetBinContent(i)>0)printf("%5.1f ",histo_NonFid_RecEff1Down        ->GetBinContent(i)/histo_NonFid->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
+  for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_NonFid->GetBinContent(i)>0)printf("%5.1f ",histo_NonFid_RecEff2Up          ->GetBinContent(i)/histo_NonFid->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
+  for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_NonFid->GetBinContent(i)>0)printf("%5.1f ",histo_NonFid_RecEff2Down        ->GetBinContent(i)/histo_NonFid->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
   for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_NonFid->GetBinContent(i)>0)printf("%5.1f ",histo_NonFid_NonFidStatUp  [i-1]->GetBinContent(i)/histo_NonFid->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
   for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_NonFid->GetBinContent(i)>0)printf("%5.1f ",histo_NonFid_NonFidStatDown[i-1]->GetBinContent(i)/histo_NonFid->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
 
@@ -596,8 +662,12 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
     for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_DY[nc]->GetBinContent(i)>0)printf("%5.1f ",histo_DY_LepEff6Down[nc]    ->GetBinContent(i)/histo_DY[nc]->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
     for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_DY[nc]->GetBinContent(i)>0)printf("%5.1f ",histo_DY_LepEff7Up[nc]	   ->GetBinContent(i)/histo_DY[nc]->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
     for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_DY[nc]->GetBinContent(i)>0)printf("%5.1f ",histo_DY_LepEff7Down[nc]    ->GetBinContent(i)/histo_DY[nc]->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
-    for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_DY[nc]->GetBinContent(i)>0)printf("%5.1f ",histo_DY_RecEffUp[nc]       ->GetBinContent(i)/histo_DY[nc]->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
-    for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_DY[nc]->GetBinContent(i)>0)printf("%5.1f ",histo_DY_RecEffDown[nc]     ->GetBinContent(i)/histo_DY[nc]->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
+    for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_DY[nc]->GetBinContent(i)>0)printf("%5.1f ",histo_DY_RecEff0Up[nc]      ->GetBinContent(i)/histo_DY[nc]->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
+    for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_DY[nc]->GetBinContent(i)>0)printf("%5.1f ",histo_DY_RecEff0Down[nc]    ->GetBinContent(i)/histo_DY[nc]->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
+    for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_DY[nc]->GetBinContent(i)>0)printf("%5.1f ",histo_DY_RecEff1Up[nc]      ->GetBinContent(i)/histo_DY[nc]->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
+    for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_DY[nc]->GetBinContent(i)>0)printf("%5.1f ",histo_DY_RecEff1Down[nc]    ->GetBinContent(i)/histo_DY[nc]->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
+    for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_DY[nc]->GetBinContent(i)>0)printf("%5.1f ",histo_DY_RecEff2Up[nc]      ->GetBinContent(i)/histo_DY[nc]->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
+    for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_DY[nc]->GetBinContent(i)>0)printf("%5.1f ",histo_DY_RecEff2Down[nc]    ->GetBinContent(i)/histo_DY[nc]->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
     for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_DY[nc]->GetBinContent(i)>0)printf("%5.1f ",histo_DY_DYStatUp  [nc][i-1]->GetBinContent(i)/histo_DY[nc]->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
     for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_DY[nc]->GetBinContent(i)>0)printf("%5.1f ",histo_DY_DYStatDown[nc][i-1]->GetBinContent(i)/histo_DY[nc]->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
   }
@@ -613,12 +683,15 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
                             abs(histo_DY_LepEff5Up[0]->GetBinContent(1)-histo_DY[0]->GetBinContent(1))*abs(histo_DY_LepEff5Up[0]->GetBinContent(1)-histo_DY[0]->GetBinContent(1))+
                             abs(histo_DY_LepEff6Up[0]->GetBinContent(1)-histo_DY[0]->GetBinContent(1))*abs(histo_DY_LepEff6Up[0]->GetBinContent(1)-histo_DY[0]->GetBinContent(1))+
                             abs(histo_DY_LepEff7Up[0]->GetBinContent(1)-histo_DY[0]->GetBinContent(1))*abs(histo_DY_LepEff7Up[0]->GetBinContent(1)-histo_DY[0]->GetBinContent(1)))*100/histo_DY[0]->GetSumOfWeights();
-    double recEffUnc =      abs(histo_DY_RecEffUp[0] ->GetBinContent(1)-histo_DY[0]->GetBinContent(1))*100/histo_DY[0]->GetSumOfWeights();                      
+    double recEffUnc =      sqrt(abs(histo_DY_RecEff0Up[0] ->GetBinContent(1)-histo_DY[0]->GetBinContent(1))*abs(histo_DY_RecEff0Up[0] ->GetBinContent(1)-histo_DY[0]->GetBinContent(1))+
+                                 abs(histo_DY_RecEff1Up[0] ->GetBinContent(1)-histo_DY[0]->GetBinContent(1))*abs(histo_DY_RecEff1Up[0] ->GetBinContent(1)-histo_DY[0]->GetBinContent(1))+
+                                 abs(histo_DY_RecEff2Up[0] ->GetBinContent(1)-histo_DY[0]->GetBinContent(1))*abs(histo_DY_RecEff2Up[0] ->GetBinContent(1)-histo_DY[0]->GetBinContent(1)))
+                            *100/histo_DY[0]->GetSumOfWeights();                      
     double totalUnc = sqrt(momResUnc*momResUnc+lepEffUnc*lepEffUnc+recEffUnc*recEffUnc);
     double bkg = histo_Res->GetSumOfWeights()+histo_VV->GetSumOfWeights()+histo_NonFid->GetSumOfWeights();
     double theXS = (histo_Data->GetSumOfWeights()-bkg)/histo_DY[0]->GetSumOfWeights();
     printf("Unc: %.3f, %.3f, %.3f, %.3f, %.3f, %.3f, %.3f\n",
-                abs(histo_DY_RecEffUp [0]->GetBinContent(1)-histo_DY[0]->GetBinContent(1))*100/histo_DY[0]->GetSumOfWeights(),
+                recEffUnc,
                 abs(histo_DY_LepEff2Up[0]->GetBinContent(1)-histo_DY[0]->GetBinContent(1))*100/histo_DY[0]->GetSumOfWeights(),
                 abs(histo_DY_LepEff3Up[0]->GetBinContent(1)-histo_DY[0]->GetBinContent(1))*100/histo_DY[0]->GetSumOfWeights(),
                 abs(histo_DY_LepEff4Up[0]->GetBinContent(1)-histo_DY[0]->GetBinContent(1))*100/histo_DY[0]->GetSumOfWeights(),
@@ -663,8 +736,12 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
   histo_VV_LepEff6Down  ->Write();
   histo_VV_LepEff7Up	->Write();
   histo_VV_LepEff7Down  ->Write();
-  histo_VV_RecEffUp     ->Write();
-  histo_VV_RecEffDown   ->Write();
+  histo_VV_RecEff0Up     ->Write();
+  histo_VV_RecEff0Down   ->Write();
+  histo_VV_RecEff1Up     ->Write();
+  histo_VV_RecEff1Down   ->Write();
+  histo_VV_RecEff2Up     ->Write();
+  histo_VV_RecEff2Down   ->Write();
   histo_NonFid->Write();
   for(int i=0; i<nChan; i++) {
     histo_DY[i]->Write();
@@ -681,7 +758,9 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
   histo_NonFid_LepEff5Up  ->Write();
   histo_NonFid_LepEff6Up  ->Write();
   histo_NonFid_LepEff7Up  ->Write();
-  histo_NonFid_RecEffUp   ->Write();
+  histo_NonFid_RecEff0Up   ->Write();
+  histo_NonFid_RecEff1Up   ->Write();
+  histo_NonFid_RecEff2Up   ->Write();
   histo_NonFid_altDown    ->Write();
   histo_NonFid_MomRes1Down->Write();
   histo_NonFid_MomRes2Down->Write();
@@ -694,7 +773,9 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
   histo_NonFid_LepEff5Down->Write();
   histo_NonFid_LepEff6Down->Write();
   histo_NonFid_LepEff7Down->Write();
-  histo_NonFid_RecEffDown ->Write();
+  histo_NonFid_RecEff0Down ->Write();
+  histo_NonFid_RecEff1Down ->Write();
+  histo_NonFid_RecEff2Down ->Write();
   for(int i=0; i<nChan; i++) {
     histo_DY_altUp      [i]->Write();
     histo_DY_MomRes1Up  [i]->Write();
@@ -708,7 +789,9 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
     histo_DY_LepEff5Up  [i]->Write();
     histo_DY_LepEff6Up  [i]->Write();
     histo_DY_LepEff7Up  [i]->Write();
-    histo_DY_RecEffUp   [i]->Write();
+    histo_DY_RecEff0Up   [i]->Write();
+    histo_DY_RecEff1Up   [i]->Write();
+    histo_DY_RecEff2Up   [i]->Write();
     histo_DY_altDown    [i]->Write();
     histo_DY_MomRes1Down[i]->Write();
     histo_DY_MomRes2Down[i]->Write();
@@ -721,7 +804,9 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
     histo_DY_LepEff5Down[i]->Write();
     histo_DY_LepEff6Down[i]->Write();
     histo_DY_LepEff7Down[i]->Write();
-    histo_DY_RecEffDown [i]->Write();
+    histo_DY_RecEff0Down [i]->Write();
+    histo_DY_RecEff1Down [i]->Write();
+    histo_DY_RecEff2Down [i]->Write();
   }
   for(int i=0; i<nReco; i++) {  
     histo_VV_VVStatUp  [i]->Write();
@@ -786,11 +871,11 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
   }
   newcardShape << Form("%f - - \n",1.05);
 
-  //newcardShape << Form("alt    shape     ");
-  //for (int i=0;i<nChan;i++){
-  //  newcardShape << Form("1.0 ");
-  //}
-  //newcardShape << Form("- - 1.0\n");
+  newcardShape << Form("alt    shape	 ");
+  for (int i=0;i<nChan;i++){
+    newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("- - 1.0\n");
 
   newcardShape << Form("MomRes1%s    shape     ",chanName.Data());
   for (int i=0;i<nChan;i++){
@@ -860,7 +945,19 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
   }
   newcardShape << Form("- 1.0 1.0\n");
 
-  newcardShape << Form("RecEff%s    shape     ",chanName.Data());
+  newcardShape << Form("RecEff0%s    shape     ",chanName.Data());
+  for (int i=0;i<nChan;i++){
+    newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("- 1.0 1.0\n");
+
+  newcardShape << Form("RecEff1%s    shape     ",chanName.Data());
+  for (int i=0;i<nChan;i++){
+    newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("- 1.0 1.0\n");
+
+  newcardShape << Form("RecEff2%s    shape     ",chanName.Data());
   for (int i=0;i<nChan;i++){
     newcardShape << Form("1.0 ");
   }
@@ -878,7 +975,7 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
   }
   newcardShape << Form("- 1.0 -\n");
 
-  newcardShape << Form("* autoMCStats 1 1 1\n");
+  newcardShape << Form("* autoMCStats 0\n");
 
   //for (int i=0; i<nReco; i++) {
   //  if(histo_Res->GetBinContent(i+1) > 0 && histo_Res->GetBinError(i+1)/histo_Res->GetBinContent(i+1) > 0.005){
