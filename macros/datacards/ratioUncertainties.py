@@ -56,6 +56,7 @@ for nuis in settings_total['params']:
 
 sum_ratio_up   = 0 ; sum_total_up   = 0; sum_poi_up   = 0;
 sum_ratio_down = 0 ; sum_total_down = 0; sum_poi_down = 0;
+sum_ratio_avg  = 0 ; sum_total_avg  = 0; sum_poi_avg  = 0;
 
 if (args.verbose > 0): print "\nNow doing the comparison between the two json files"
 for key in poi_up.keys(): # Iterates through the binned analysis uncertainties
@@ -65,6 +66,9 @@ for key in poi_up.keys(): # Iterates through the binned analysis uncertainties
         total_up[key]=1.0
         total_central[key]=1.0
         total_down[key]=1.0
+        poi_up[key]=1.0
+        poi_central[key]=1.0
+        poi_down[key]=1.0
 
     sum_total_up += (1 - (total_up[key]/total_central[key]) ) **2
     sum_poi_up   += (1 - (poi_up[key]/poi_central[key])) **2
@@ -73,6 +77,11 @@ for key in poi_up.keys(): # Iterates through the binned analysis uncertainties
     sum_total_down += (1 - (total_down[key]/total_central[key]) ) **2
     sum_poi_down   += (1 - (poi_down[key]/poi_central[key])) **2
     sum_ratio_down += (1 - (poi_down[key]/poi_central[key])/(total_down[key]/total_central[key]))**2
+
+    sum_total_avg += ((total_up[key]-total_down[key])/2./total_central[key]) **2
+    sum_poi_avg   += ((poi_up[key]-poi_down[key])/2./poi_central[key]) **2
+    sum_ratio_avg += ((poi_up  [key]/poi_central[key])/(total_up  [key]/total_central[key])-
+                      (poi_down[key]/poi_central[key])/(total_down[key]/total_central[key]))**2/4.
 
 # Total uncertainty
 all_unc_total_up   = abs(POI_total_fit[2] - POI_total_fit[1])/POI_total_fit[1]
@@ -102,16 +111,20 @@ sum_ratio = (math.sqrt(sum_ratio_up) + math.sqrt(sum_ratio_down))/2
 # poi statistical uncertainty plus ratio systematic uncertainty
 all_unc_ratio = math.sqrt(stat_poi*stat_poi+sum_ratio*sum_ratio)
 
+print "Avg   ",round(math.sqrt(sum_total_avg),3)," , ",round(math.sqrt(sum_poi_avg),3)," , ",round(math.sqrt(sum_ratio_avg),3)
+
 scale_total = 1
 scale_poi = 1
+scale_ratio = 1
 if (args.relative == 0):
     print "===> Absolute uncertainties, absolute central values"
     scale_total = POI_total_fit[1]
     scale_poi = POI_fit[1]
+    scale_ratio = POI_fit[1]/POI_total_fit[1]
 
 else:
    print "===> Relative uncertainties, absolute central values"
 
 print "1-bin     ", POIs_total[0] ," res: ",round(POI_total_fit[1],3)           ," +/- ",round(all_unc_total*scale_total,3),"(stat = ",round(stat_total*scale_total,3),", syst = ",round(sum_total*scale_total,3),")"
 print "multi-bin ", POIs[args.poi]," res: ",round(POI_fit[1],3)                 ," +/- ",round(all_unc_poi*scale_poi  ,3),"(stat = ",round(stat_poi*scale_poi  ,3),", syst = ",round(sum_poi*scale_poi  ,3),")"
-print "Ratio     ", POIs[args.poi]," res: ",round(POI_fit[1]/POI_total_fit[1],3)," +/- ",round(all_unc_ratio*scale_poi,3),"(stat = ",round(stat_poi*scale_poi  ,3),", syst = ",round(sum_ratio*scale_poi,3),")"
+print "Ratio     ", POIs[args.poi]," res: ",round(POI_fit[1]/POI_total_fit[1],3)," +/- ",round(all_unc_ratio*scale_ratio,3),"(stat = ",round(stat_poi*scale_ratio  ,3),", syst = ",round(sum_ratio*scale_ratio,3),")"

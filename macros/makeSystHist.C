@@ -170,12 +170,12 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
   double systVal[allNuisancesCov],systTotalVal;
 
                        // receff/lepeff2/lepeff3/lepeff4/leff5/lepeff6/lepeff7/lumi
-  double systXSVal[8] = {0.176, 0.479, 0.321, 0.608, 0.318, 0.309, 0.039, 2.500};
-  if(nsel == 1) {systXSVal[0] = 2.565;
+  double systXSVal[8] = {0.115, 0.479, 0.321, 0.608, 0.318, 0.309, 0.039, 2.500};
+  if(nsel == 1) {systXSVal[0] = 0.521;
                  systXSVal[1] = 0.632; systXSVal[2] = 0.058; systXSVal[3] = 0.580; systXSVal[4] = 0.511; systXSVal[5] = 0.875; systXSVal[6] = 0.130;
              systXSVal[7] = 2.500;}
 
-  double systUnfVal[16] = {0.355, 0.567, 0.214, 0.522, 0.285, 0.466, 0.572, 1.164, 0.778, 0.395, 0.193, 0.593, 0.258, 0.527, 0.111, 0.107};
+  double systUnfVal[16] = {0.361, 0.591, 0.189, 0.548, 0.279, 0.488, 0.573, 1.181, 0.799, 0.402, 0.188, 0.607, 0.302, 0.573, 0.119, 0.106};
   double theSystUnfVal = 0.0;
   if     (theHistName == "Pt"      && nsel == 0) theSystUnfVal = systUnfVal[ 0];
   else if(theHistName == "Pt"      && nsel == 1) theSystUnfVal = systUnfVal[ 1];
