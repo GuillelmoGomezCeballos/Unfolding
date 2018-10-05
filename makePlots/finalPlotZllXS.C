@@ -65,7 +65,7 @@ void finalPlotZllXS(int nsel = 0, bool isNormalized = false,
                     TString plotName = "zPtMeasurements.root", TString outputName = "zPtMeasurements",
                     bool isLogY = true) {
 
-  gInterpreter->ExecuteMacro("/afs/cern.ch/user/c/ceballos/releases/CMSSW_7_4_7/src/Unfolding/makePlots/PaperStyle.C");
+  gInterpreter->ExecuteMacro("PaperStyle.C");
   gStyle->SetOptStat(0);
 
   TString units = "GeV";
