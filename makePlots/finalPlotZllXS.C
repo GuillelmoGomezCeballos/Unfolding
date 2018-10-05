@@ -65,6 +65,8 @@ void finalPlotZllXS(int nsel = 0, bool isNormalized = false,
                     TString plotName = "zPtMeasurements.root", TString outputName = "zPtMeasurements",
                     bool isLogY = true) {
 
+  // nsel == 0 (zll), 1 (znn), 2 (zxx)
+
   gInterpreter->ExecuteMacro("PaperStyle.C");
   gStyle->SetOptStat(0);
 
