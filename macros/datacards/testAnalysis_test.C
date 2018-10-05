@@ -871,11 +871,12 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
   }
   newcardShape << Form("%f - - \n",1.05);
 
-  newcardShape << Form("alt    shape	 ");
-  for (int i=0;i<nChan;i++){
-    newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("- - 1.0\n");
+  // Alternaive model removed at this point
+  //newcardShape << Form("alt    shape	 ");
+  //for (int i=0;i<nChan;i++){
+  //  newcardShape << Form("1.0 ");
+  //}
+  //newcardShape << Form("- - 1.0\n");
 
   newcardShape << Form("MomRes1%s    shape     ",chanName.Data());
   for (int i=0;i<nChan;i++){

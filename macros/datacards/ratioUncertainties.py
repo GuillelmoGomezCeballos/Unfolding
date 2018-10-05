@@ -12,7 +12,8 @@ parser.add_argument('--input1' , '-i1', help='input json file 1, binned analysis
 parser.add_argument('--input2' , '-i2', help='input json file 2, total analysis')
 parser.add_argument('--poi'    , type=int , default=0 , help='the poi you are looking at for the binned analysis')
 parser.add_argument('--verbose', type=int , default=0 , help='set verbose level, 0 or 1')
-parser.add_argument('--relative', type=int , default=1 , help='Show relative uncertainties, 0 or 1')
+parser.add_argument('--relative', type=int , default=0 , help='Show relative uncertainties, 0 or 1')
+parser.add_argument('--average', type=int , default=1 , help='Show average uncertainties, 0 or 1')
 args = parser.parse_args()
 
 if (args.verbose > 0): print "\nInput 1 corresponding to the binned analysis is", args.input1 
@@ -41,9 +42,9 @@ POIs_total     = [ele['name'] for ele in settings_total['POIs']] ## full list of
 total_up = {}; total_central ={}; total_down={}
 POI_total_fit = settings_total['POIs'][0]['fit']
 
-if len(POIs_total) != 1:
-    print "WARNING: Total xsec json has more than 1 poi! Something might be wrong! Exiting ..."
-    quit()
+#if len(POIs_total) != 1:
+#    print "WARNING: Total xsec json has more than 1 poi! Something might be wrong! Exiting ..."
+#    quit()
 
 if (args.verbose > 0): print "Full list of nuisances for total", POIs_total[0],"\n"
 for nuis in settings_total['params']:
@@ -82,6 +83,22 @@ for key in poi_up.keys(): # Iterates through the binned analysis uncertainties
     sum_poi_avg   += ((poi_up[key]-poi_down[key])/2./poi_central[key]) **2
     sum_ratio_avg += ((poi_up  [key]/poi_central[key])/(total_up  [key]/total_central[key])-
                       (poi_down[key]/poi_central[key])/(total_down[key]/total_central[key]))**2/4.
+    
+    # just for printing
+    sumt_total_up = (1 - (total_up[key]/total_central[key]) ) **2
+    sumt_poi_up   = (1 - (poi_up[key]/poi_central[key])) **2
+    sumt_ratio_up = (1 - (poi_up[key]/poi_central[key])/(total_up[key]/total_central[key]))**2
+
+    sumt_total_down = (1 - (total_down[key]/total_central[key]) ) **2
+    sumt_poi_down   = (1 - (poi_down[key]/poi_central[key])) **2
+    sumt_ratio_down = (1 - (poi_down[key]/poi_central[key])/(total_down[key]/total_central[key]))**2
+
+    sumt_total_avg = ((total_up[key]-total_down[key])/2./total_central[key]) **2
+    sumt_poi_avg   = ((poi_up[key]-poi_down[key])/2./poi_central[key]) **2
+    sumt_ratio_avg = ((poi_up  [key]/poi_central[key])/(total_up  [key]/total_central[key])-
+                      (poi_down[key]/poi_central[key])/(total_down[key]/total_central[key]))**2/4.
+    #if(sumt_ratio_up>0.005*0.005): print 'UP: ',math.sqrt(sumt_total_up),math.sqrt(sumt_poi_up),math.sqrt(sumt_ratio_up),key
+    #if(sumt_ratio_down>0.005*0.005): print 'DOWN: ',math.sqrt(sumt_total_down),math.sqrt(sumt_poi_down),math.sqrt(sumt_ratio_down),key
 
 # Total uncertainty
 all_unc_total_up   = abs(POI_total_fit[2] - POI_total_fit[1])/POI_total_fit[1]
@@ -96,9 +113,11 @@ all_unc_poi   = (POI_fit[2]       - POI_fit[0]      )/2./POI_fit[1]
 # Statistical uncertainty
 stat_total_up   = math.sqrt(max(all_unc_total_up  *all_unc_total_up  -sum_total_up  ,0.0))
 stat_total_down = math.sqrt(max(all_unc_total_down*all_unc_total_down-sum_total_down,0.0))
+stat_total_avg  = math.sqrt(max(all_unc_total_up  *all_unc_total_up  -sum_total_avg ,0.0))
 
 stat_poi_up     = math.sqrt(max(all_unc_poi_up  *all_unc_poi_up  -sum_poi_up  ,0.0))
 stat_poi_down   = math.sqrt(max(all_unc_poi_down*all_unc_poi_down-sum_poi_down,0.0))
+stat_poi_avg    = math.sqrt(max(all_unc_poi_down*all_unc_poi_down-sum_poi_avg ,0.0))
 
 stat_total = (stat_total_up+stat_total_down)/2
 stat_poi   = (stat_poi_up  +stat_poi_down  )/2
@@ -111,8 +130,6 @@ sum_ratio = (math.sqrt(sum_ratio_up) + math.sqrt(sum_ratio_down))/2
 # poi statistical uncertainty plus ratio systematic uncertainty
 all_unc_ratio = math.sqrt(stat_poi*stat_poi+sum_ratio*sum_ratio)
 
-print "Avg   ",round(math.sqrt(sum_total_avg),3)," , ",round(math.sqrt(sum_poi_avg),3)," , ",round(math.sqrt(sum_ratio_avg),3)
-
 scale_total = 1
 scale_poi = 1
 scale_ratio = 1
@@ -124,6 +141,19 @@ if (args.relative == 0):
 
 else:
    print "===> Relative uncertainties, absolute central values"
+
+if (args.average == 1):
+    print "===> Average uncertainties"
+    all_unc_ratio = math.sqrt(stat_poi_avg*stat_poi_avg+sum_ratio_avg)
+    stat_total = stat_total_avg
+    stat_poi   = stat_poi_avg
+    sum_total  = sum_total_avg
+    sum_poi    = sum_poi_avg
+    sum_ratio  = math.sqrt(sum_ratio_avg)
+
+else:
+   print "===> Up/Down uncertainties, Avg not used"
+   print "Avg   ",round(math.sqrt(sum_total_avg),3)," , ",round(math.sqrt(sum_poi_avg),3)," , ",round(math.sqrt(sum_ratio_avg),3)
 
 print "1-bin     ", POIs_total[0] ," res: ",round(POI_total_fit[1],3)           ," +/- ",round(all_unc_total*scale_total,3),"(stat = ",round(stat_total*scale_total,3),", syst = ",round(sum_total*scale_total,3),")"
 print "multi-bin ", POIs[args.poi]," res: ",round(POI_fit[1],3)                 ," +/- ",round(all_unc_poi*scale_poi  ,3),"(stat = ",round(stat_poi*scale_poi  ,3),", syst = ",round(sum_poi*scale_poi  ,3),")"
