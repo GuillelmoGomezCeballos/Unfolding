@@ -73,43 +73,36 @@ void finalPlotZllXS(int nsel = 0, bool isNormalized = false,
   TString units = "GeV";
   TString XTitle = "p_{T}";
   TString theYTitle = "#sigma / GeV [pb]";
-  if(isNormalized) theYTitle = "1/#sigma d#sigma/dp_{T} [ GeV^{-1}]";
   TString legendText = "";
 
-  //double TotalLumi = 35900.0;
-  double normalization[2];
+  TString normName = "";
+  if(isNormalized) {
+    theYTitle = "1/#sigma d#sigma/dp_{T} [ GeV^{-1}]";
+    outputName = outputName + "_normalized";
+    normName = "_norm";
+  }
 
   TFile* file1 = new TFile(plotName, "read");  if(!file1) {printf("File %s does not exist\n",plotName.Data()); return;}
-  TH1D* hDDilHighPtLL	  = (TH1D*)file1->Get(Form("hDDilHighPtLL"));
-  TH1D* hDDilHighPtNN	  = (TH1D*)file1->Get(Form("hDDilHighPtNN"));
-  TH1D* hDDilHighPtXX	  = (TH1D*)file1->Get(Form("hDDilHighPtXX"));
-  TH1D* hDTheoHighPt	  = (TH1D*)file1->Get(Form("hDTheoHighPt"));
-  TH1D* hDDilHighPtLL_inc = (TH1D*)file1->Get(Form("hDDilHighPtLL_inc"));
-  TH1D* hDDilHighPtNN_inc = (TH1D*)file1->Get(Form("hDDilHighPtNN_inc"));
-  TH1D* hDDilHighPtXX_inc = (TH1D*)file1->Get(Form("hDDilHighPtXX_inc"));
-  TH1D* hDTheoHighPt_inc  = (TH1D*)file1->Get(Form("hDTheoHighPt_inc"));
+  TH1D* hDDilHighPtLL	  = (TH1D*)file1->Get(Form("hDDilHighPtLL%s",normName.Data()));
+  TH1D* hDDilHighPtNN	  = (TH1D*)file1->Get(Form("hDDilHighPtNN%s",normName.Data()));
+  TH1D* hDDilHighPtXX	  = (TH1D*)file1->Get(Form("hDDilHighPtXX%s",normName.Data()));
+  TH1D* hDTheoHighPt	  = (TH1D*)file1->Get(Form("hDTheoHighPt%s" ,normName.Data()));
 
   TH1D* hData;
-  TH1D* hData_inc;
   TH1D* hPred1 = hDTheoHighPt;
-  TH1D* hPred1_inc = hDTheoHighPt_inc;
 
-  if(isNormalized) outputName = outputName + "_normalized";
   if     (nsel == 0){
     hData     = hDDilHighPtLL;
-    hData_inc = hDDilHighPtLL_inc;
     legendText = "Z #rightarrow ll data";
     outputName = outputName + "_zll";
   }
   else if(nsel == 1){
     hData     = hDDilHighPtNN;
-    hData_inc = hDDilHighPtNN_inc;
     legendText = "Z #rightarrow #nu#nu data";
     outputName = outputName + "_znn";
   }
   else if(nsel == 2){
     hData     = hDDilHighPtXX;
-    hData_inc = hDDilHighPtXX_inc;
     legendText = "Z #rightarrow ll/#nu#nu data";
     outputName = outputName + "_zxx";
   }
@@ -177,11 +170,6 @@ void finalPlotZllXS(int nsel = 0, bool isNormalized = false,
 
   hPred1->SetTitle("");
   hData ->SetTitle("");
-  normalization[0] = 1.0; normalization[1] = 1.0;
-  if(isNormalized) {normalization[0] = hPred1_inc->GetSumOfWeights(); normalization[1] = hData_inc->GetSumOfWeights();};
-  hPred1->Scale(1./normalization[0]);
-  hData ->Scale(1./normalization[1]);
-
   hData ->Scale(1,"width");
   hPred1->Scale(1,"width");
 
