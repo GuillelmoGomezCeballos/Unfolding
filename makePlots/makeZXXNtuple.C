@@ -2,15 +2,17 @@ void makeZXXNtuple(){
 
   const int nValues = 5;
   Float_t xbinsHighPt[nValues+1] = {200,300,400,500,800,1500};
-  TH1D *hDDilHighPtLL     = new TH1D("hDDilHighPtLL", "hDDilHighPtLL", nValues, xbinsHighPt);
-  TH1D *hDDilHighPtNN     = new TH1D("hDDilHighPtNN", "hDDilHighPtNN", nValues, xbinsHighPt);
-  TH1D *hDDilHighPtXX     = new TH1D("hDDilHighPtXX", "hDDilHighPtXX", nValues, xbinsHighPt);
-  TH1D *hDTheoHighPt      = new TH1D("hDTheoHighPt" , "hDTheoHighPt" , nValues, xbinsHighPt);
+  TH1D *hDDilHighPtLL     = new TH1D("hDDilHighPtLL"     , "hDDilHighPtLL"     , nValues, xbinsHighPt);
+  TH1D *hDDilHighPtNN     = new TH1D("hDDilHighPtNN"     , "hDDilHighPtNN"     , nValues, xbinsHighPt);
+  TH1D *hDDilHighPtXX     = new TH1D("hDDilHighPtXX"     , "hDDilHighPtXX"     , nValues, xbinsHighPt);
+  TH1D *hDTheoHighPt      = new TH1D("hDTheoHighPt"      , "hDTheoHighPt"      , nValues, xbinsHighPt);
+  TH1D *hDTheoHighPtNoEWK = new TH1D("hDTheoHighPtNoEWK" , "hDTheoHighPtNoEWK" , nValues, xbinsHighPt);
 
-  TH1D *hDDilHighPtLL_norm = new TH1D("hDDilHighPtLL_norm", "hDDilHighPtLL_norm", nValues, xbinsHighPt);
-  TH1D *hDDilHighPtNN_norm = new TH1D("hDDilHighPtNN_norm", "hDDilHighPtNN_norm", nValues, xbinsHighPt);
-  TH1D *hDDilHighPtXX_norm = new TH1D("hDDilHighPtXX_norm", "hDDilHighPtXX_norm", nValues, xbinsHighPt);
-  TH1D *hDTheoHighPt_norm  = new TH1D("hDTheoHighPt_norm" , "hDTheoHighPt_norm" , nValues, xbinsHighPt);
+  TH1D *hDDilHighPtLL_norm      = new TH1D("hDDilHighPtLL_norm"     , "hDDilHighPtLL_norm"     , nValues, xbinsHighPt);
+  TH1D *hDDilHighPtNN_norm      = new TH1D("hDDilHighPtNN_norm"     , "hDDilHighPtNN_norm"     , nValues, xbinsHighPt);
+  TH1D *hDDilHighPtXX_norm      = new TH1D("hDDilHighPtXX_norm"     , "hDDilHighPtXX_norm"     , nValues, xbinsHighPt);
+  TH1D *hDTheoHighPt_norm       = new TH1D("hDTheoHighPt_norm"      , "hDTheoHighPt_norm"      , nValues, xbinsHighPt);
+  TH1D *hDTheoHighPtNoEWK_norm  = new TH1D("hDTheoHighPtNoEWK_norm" , "hDTheoHighPtNoEWK_norm" , nValues, xbinsHighPt);
 
   double rsZLL[nValues]	  = {1.107,1.033,1.111,1.090,1.155};
   double rsZLLUp[nValues] = {0.041,0.040,0.048,0.055,0.118};
@@ -32,25 +34,36 @@ void makeZXXNtuple(){
   double xs_norm[nValues]   = {0.807406,0.142768,0.033275,0.015323,0.001224};
   double xs_normUp[nValues] = {0.00553,0.01722,0.03625,0.05324,0.12347};
 
-  for(int i=0; i<nValues; i++){
-    xs[i] = xs[i] / 1000.;
-    hDDilHighPtLL->SetBinContent(i+1, rsZLL  [i]*xs[i]);
-    hDDilHighPtLL->SetBinError  (i+1, rsZLLUp[i]*xs[i]);
-    hDDilHighPtNN->SetBinContent(i+1, rsZNN  [i]*xs[i]);
-    hDDilHighPtNN->SetBinError  (i+1, rsZNNUp[i]*xs[i]);
-    hDDilHighPtXX->SetBinContent(i+1, rsZXX  [i]*xs[i]);
-    hDDilHighPtXX->SetBinError  (i+1, rsZXXUp[i]*xs[i]);
-    hDTheoHighPt ->SetBinContent(i+1,		 xs[i]);
-    hDTheoHighPt ->SetBinError  (i+1,	 xsUp[i]*xs[i]);
+  double xs_noEWK[nValues]        = {2308.32,402.61,96.95,47.11,4.01};
+  double xs_noEWKUp[nValues]      = {0.156,0.177,0.198,0.215,0.285};
 
-    hDDilHighPtLL_norm->SetBinContent(i+1, rsZLL_norm  [i]*xs_norm[i]);
-    hDDilHighPtLL_norm->SetBinError  (i+1, rsZLLUp_norm[i]*xs_norm[i]);
-    hDDilHighPtNN_norm->SetBinContent(i+1, rsZNN_norm  [i]*xs_norm[i]);
-    hDDilHighPtNN_norm->SetBinError  (i+1, rsZNNUp_norm[i]*xs_norm[i]);
-    hDDilHighPtXX_norm->SetBinContent(i+1, rsZXX_norm  [i]*xs_norm[i]);
-    hDDilHighPtXX_norm->SetBinError  (i+1, rsZXXUp_norm[i]*xs_norm[i]);
-    hDTheoHighPt_norm ->SetBinContent(i+1, 	           xs_norm[i]);
-    hDTheoHighPt_norm ->SetBinError  (i+1,    xs_normUp[i]*xs_norm[i]);
+  double xs_noEWK_norm[nValues]   = {0.807384,0.140821,0.033910,0.016478,0.001403};
+  double xs_noEWK_normUp[nValues] = {0.00553,0.01722,0.03625,0.05324,0.12347};
+
+  for(int i=0; i<nValues; i++){
+    xs[i]       = xs[i]       / 1000.;
+    xs_noEWK[i] = xs_noEWK[i] / 1000.;
+    hDDilHighPtLL     ->SetBinContent(i+1,   rsZLL  [i]*xs[i]);
+    hDDilHighPtLL     ->SetBinError  (i+1,   rsZLLUp[i]*xs[i]);
+    hDDilHighPtNN     ->SetBinContent(i+1,   rsZNN  [i]*xs[i]);
+    hDDilHighPtNN     ->SetBinError  (i+1,   rsZNNUp[i]*xs[i]);
+    hDDilHighPtXX     ->SetBinContent(i+1,   rsZXX  [i]*xs[i]);
+    hDDilHighPtXX     ->SetBinError  (i+1,   rsZXXUp[i]*xs[i]);
+    hDTheoHighPt      ->SetBinContent(i+1,		 xs[i]);
+    hDTheoHighPt      ->SetBinError  (i+1,	 xsUp[i]*xs[i]);
+    hDTheoHighPtNoEWK ->SetBinContent(i+1,         xs_noEWK[i]);
+    hDTheoHighPtNoEWK ->SetBinError  (i+1, xsUp[i]*xs_noEWK[i]);
+
+    hDDilHighPtLL_norm     ->SetBinContent(i+1,    rsZLL_norm  [i]*xs_norm[i]);
+    hDDilHighPtLL_norm     ->SetBinError  (i+1,    rsZLLUp_norm[i]*xs_norm[i]);
+    hDDilHighPtNN_norm     ->SetBinContent(i+1,    rsZNN_norm  [i]*xs_norm[i]);
+    hDDilHighPtNN_norm     ->SetBinError  (i+1,    rsZNNUp_norm[i]*xs_norm[i]);
+    hDDilHighPtXX_norm     ->SetBinContent(i+1,    rsZXX_norm  [i]*xs_norm[i]);
+    hDDilHighPtXX_norm     ->SetBinError  (i+1,    rsZXXUp_norm[i]*xs_norm[i]);
+    hDTheoHighPt_norm      ->SetBinContent(i+1, 	           xs_norm[i]);
+    hDTheoHighPt_norm      ->SetBinError  (i+1,       xs_normUp[i]*xs_norm[i]);
+    hDTheoHighPtNoEWK_norm ->SetBinContent(i+1,              xs_noEWK_norm[i]);
+    hDTheoHighPtNoEWK_norm ->SetBinError  (i+1, xs_normUp[i]*xs_noEWK_norm[i]);
   }
 
   TFile myOutputFile("zPtMeasurements.root","RECREATE");
@@ -58,9 +71,11 @@ void makeZXXNtuple(){
     hDDilHighPtNN      ->Write();
     hDDilHighPtXX      ->Write();
     hDTheoHighPt       ->Write();
-    hDDilHighPtLL_norm ->Write();
-    hDDilHighPtNN_norm->Write();
-    hDDilHighPtXX_norm->Write();
-    hDTheoHighPt_norm->Write();
+    hDTheoHighPtNoEWK  ->Write();
+    hDDilHighPtLL_norm    ->Write();
+    hDDilHighPtNN_norm    ->Write();
+    hDDilHighPtXX_norm    ->Write();
+    hDTheoHighPt_norm     ->Write();
+    hDTheoHighPtNoEWK_norm->Write();
   myOutputFile.Close();
 }

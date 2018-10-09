@@ -83,13 +83,15 @@ void finalPlotZllXS(int nsel = 0, bool isNormalized = false,
   }
 
   TFile* file1 = new TFile(plotName, "read");  if(!file1) {printf("File %s does not exist\n",plotName.Data()); return;}
-  TH1D* hDDilHighPtLL	  = (TH1D*)file1->Get(Form("hDDilHighPtLL%s",normName.Data()));
-  TH1D* hDDilHighPtNN	  = (TH1D*)file1->Get(Form("hDDilHighPtNN%s",normName.Data()));
-  TH1D* hDDilHighPtXX	  = (TH1D*)file1->Get(Form("hDDilHighPtXX%s",normName.Data()));
-  TH1D* hDTheoHighPt	  = (TH1D*)file1->Get(Form("hDTheoHighPt%s" ,normName.Data()));
+  TH1D* hDDilHighPtLL	  = (TH1D*)file1->Get(Form("hDDilHighPtLL%s"     ,normName.Data()));
+  TH1D* hDDilHighPtNN	  = (TH1D*)file1->Get(Form("hDDilHighPtNN%s"     ,normName.Data()));
+  TH1D* hDDilHighPtXX	  = (TH1D*)file1->Get(Form("hDDilHighPtXX%s"     ,normName.Data()));
+  TH1D* hDTheoHighPt	  = (TH1D*)file1->Get(Form("hDTheoHighPt%s"      ,normName.Data()));
+  TH1D* hDTheoHighPtNoEWK = (TH1D*)file1->Get(Form("hDTheoHighPtNoEWK%s" ,normName.Data()));
 
   TH1D* hData;
   TH1D* hPred1 = hDTheoHighPt;
+  TH1D* hPred2 = hDTheoHighPtNoEWK;
 
   if     (nsel == 0){
     hData     = hDDilHighPtLL;
@@ -164,29 +166,37 @@ void finalPlotZllXS(int nsel = 0, bool isNormalized = false,
   hData->SetMarkerSize(1.5);
   hData->SetMarkerStyle(4);
 
-  hPred1->SetLineColor(kBlack);
+  hPred1->SetLineColor(kRed);
   hPred1->SetMarkerStyle(3);
-  hPred1->SetMarkerColor(kBlack);
+  hPred1->SetMarkerColor(kRed);
 
-  hPred1->SetTitle("");
+  hPred2->SetLineColor(kBlue);
+  hPred2->SetMarkerStyle(4);
+  hPred2->SetMarkerColor(kBlue);
+
   hData ->SetTitle("");
+  hPred1->SetTitle("");
+  hPred2->SetTitle("");
   hData ->Scale(1,"width");
   hPred1->Scale(1,"width");
+  hPred2->Scale(1,"width");
 
   if(isLogY == true) hPred1->GetYaxis()->SetRangeUser(hPred1->GetMinimum()/10,hPred1->GetMaximum()*500);
   else               hPred1->GetYaxis()->SetRangeUser(0.0,hPred1->GetMaximum()*1.5);
   hPred1->Draw();
+  hPred2->Draw("same");
   hData->Draw("ep,same");
 
   gStyle->SetOptStat(0);
-  TLegend* legend = new TLegend(0.70,0.80,0.80,0.90);
+  TLegend* legend = new TLegend(0.40,0.80,0.80,0.90);
   legend->SetBorderSize(     0);
   legend->SetFillColor (     0);
   legend->SetTextAlign (    12);
   legend->SetTextFont  (    42);
   legend->SetTextSize  (0.03);
   legend->AddEntry(hData,legendText.Data());
-  legend->AddEntry(hPred1, "aMC@NLO");
+  legend->AddEntry(hPred1, "aMC@NLO with EWK corr.");
+  legend->AddEntry(hPred2, "aMC@NLO without EWK corr.");
 
   CMS_lumi( c1, 4, 1);
   legend->Draw();
