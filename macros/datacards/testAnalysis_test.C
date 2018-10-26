@@ -11,8 +11,8 @@
 
 void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "Pt"){
 
-  TString chanName = "mm";
-  if(nsel == 1) chanName = "ee";
+  TString chanName = "mm"; TString chanNameGen = "MM";
+  if(nsel == 1) {chanName = "ee"; chanNameGen = "EE";}
 
   TString path = "../inputsCards200/";
   if     (theHistName == "Tot") path = "../inputsCards200/";
@@ -558,6 +558,82 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
     }
   }
 
+  // PDF and QCD scale uncertainties
+  TString inputGenName = "/afs/cern.ch/work/c/ceballos/public/samples/panda/v_001_0/genZpt_NLO.root";
+  TFile *_inputGenFile = TFile::Open(inputGenName.Data());
+
+  TH1D *hDIDilHighPt        = (TH1D*)_inputGenFile->Get(Form("hDDilHighPt%s",chanNameGen.Data()));
+  TH1D *hDIDilHighPt_PDF    = (TH1D*)_inputGenFile->Get(Form("hDDilHighPt%s_PDF",chanNameGen.Data()));
+  TH1D *hDIDilHighPt_QCD    = (TH1D*)_inputGenFile->Get(Form("hDDilHighPt%s_QCD",chanNameGen.Data()));
+  TH1D *hDIDilHighPtInc     = (TH1D*)_inputGenFile->Get(Form("hDDilHighPtInc%s",chanNameGen.Data()));
+  TH1D *hDIDilHighPtInc_PDF = (TH1D*)_inputGenFile->Get(Form("hDDilHighPtInc%s_PDF",chanNameGen.Data()));
+  TH1D *hDIDilHighPtInc_QCD = (TH1D*)_inputGenFile->Get(Form("hDDilHighPtInc%s_QCD",chanNameGen.Data()));
+
+  // Unc / default (tight)
+  hDIDilHighPt_PDF   ->Divide(hDIDilHighPt   );
+  hDIDilHighPt_QCD   ->Divide(hDIDilHighPt   );
+  // Unc / default (loose)
+  hDIDilHighPtInc_PDF->Divide(hDIDilHighPtInc);
+  hDIDilHighPtInc_QCD->Divide(hDIDilHighPtInc);
+  // Unc / default -> tight / loose
+  hDIDilHighPt_PDF->Divide(hDIDilHighPtInc_PDF);
+  hDIDilHighPt_QCD->Divide(hDIDilHighPtInc_QCD);
+
+  double uncDYPDF[nChan],uncDYQCD[nChan];
+  for(int i=1; i<=hDIDilHighPt_PDF->GetNbinsX(); i++){
+    printf("(%d) pdf/qcd = %5.3f / %5.3f\n",i,hDIDilHighPt_PDF->GetBinContent(i),hDIDilHighPt_QCD->GetBinContent(i));
+    uncDYPDF[i-1] = hDIDilHighPt_QCD->GetBinContent(i);
+    uncDYQCD[i-1] = hDIDilHighPt_PDF->GetBinContent(i);
+  }
+
+  TH1D* histo_DY_PDFUp  [nChan]; TH1D* histo_NonFid_PDFUp;
+  TH1D* histo_DY_PDFDown[nChan]; TH1D* histo_NonFid_PDFDown;
+  for(int j=0; j<nChan; j++) {  
+    histo_DY_PDFUp  [j] = (TH1D*)hVV->Clone(Form("histo_DY_%d_PDF_DY%dUp",j,j));   histo_DY_PDFUp  [j]->Reset();
+    histo_DY_PDFDown[j] = (TH1D*)hVV->Clone(Form("histo_DY_%d_PDF_DY%dDown",j,j)); histo_DY_PDFDown[j]->Reset();
+  }
+  histo_NonFid_PDFUp   = (TH1D*)hVV->Clone(Form("histo_NonFid_PDF_NonFidUp"));   histo_NonFid_PDFUp  ->Reset();
+  histo_NonFid_PDFDown = (TH1D*)hVV->Clone(Form("histo_NonFid_PDF_NonFidDown")); histo_NonFid_PDFDown->Reset();
+
+  TH1D* histo_DY_QCDscaleUp  [nChan]; TH1D* histo_NonFid_QCDscaleUp;
+  TH1D* histo_DY_QCDscaleDown[nChan]; TH1D* histo_NonFid_QCDscaleDown;
+  for(int j=0; j<nChan; j++) {  
+    histo_DY_QCDscaleUp  [j] = (TH1D*)hVV->Clone(Form("histo_DY_%d_QCDscale_DY%dUp",j,j));   histo_DY_QCDscaleUp  [j]->Reset();
+    histo_DY_QCDscaleDown[j] = (TH1D*)hVV->Clone(Form("histo_DY_%d_QCDscale_DY%dDown",j,j)); histo_DY_QCDscaleDown[j]->Reset();
+  }
+  histo_NonFid_QCDscaleUp   = (TH1D*)hVV->Clone(Form("histo_NonFid_QCDscale_NonFidUp"));   histo_NonFid_QCDscaleUp  ->Reset();
+  histo_NonFid_QCDscaleDown = (TH1D*)hVV->Clone(Form("histo_NonFid_QCDscale_NonFidDown")); histo_NonFid_QCDscaleDown->Reset();
+
+  for(int i=1; i<=histo_Data->GetNbinsX(); i++){
+      histo_NonFid_PDFUp  ->SetBinContent(i,histo_NonFid->GetBinContent(i)*uncDYPDF[0]);
+      histo_NonFid_PDFDown->SetBinContent(i,histo_NonFid->GetBinContent(i)/uncDYPDF[0]);
+      histo_NonFid_QCDscaleUp  ->SetBinContent(i,histo_NonFid->GetBinContent(i)*uncDYQCD[0]);
+      histo_NonFid_QCDscaleDown->SetBinContent(i,histo_NonFid->GetBinContent(i)/uncDYQCD[0]);
+  }
+  for(int j=0; j<nChan; j++) {  
+    for(int i=1; i<=histo_Data->GetNbinsX(); i++){
+      histo_DY_PDFUp  [j]->SetBinContent(i,histo_DY[j]->GetBinContent(i)*uncDYPDF[j]);
+      histo_DY_PDFDown[j]->SetBinContent(i,histo_DY[j]->GetBinContent(i)/uncDYPDF[j]);
+      histo_DY_QCDscaleUp  [j]->SetBinContent(i,histo_DY[j]->GetBinContent(i)*uncDYQCD[j]);
+      histo_DY_QCDscaleDown[j]->SetBinContent(i,histo_DY[j]->GetBinContent(i)/uncDYQCD[j]);
+    }
+  }
+
+  printf("uncertainties PDF: \n");
+  for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_NonFid->GetBinContent(i)>0)printf("%5.1f ",histo_NonFid_PDFUp  ->GetBinContent(i)/histo_NonFid->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
+  for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_NonFid->GetBinContent(i)>0)printf("%5.1f ",histo_NonFid_PDFDown->GetBinContent(i)/histo_NonFid->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
+  for(int nc=0; nc<nChan; nc++){
+    for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_DY[nc]->GetBinContent(i)>0)printf("%5.1f ",histo_DY_PDFUp  [nc]->GetBinContent(i)/histo_DY[nc]->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
+    for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_DY[nc]->GetBinContent(i)>0)printf("%5.1f ",histo_DY_PDFDown[nc]->GetBinContent(i)/histo_DY[nc]->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
+  }
+  printf("uncertainties QCDscale: \n");
+  for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_NonFid->GetBinContent(i)>0)printf("%5.1f ",histo_NonFid_QCDscaleUp  ->GetBinContent(i)/histo_NonFid->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
+  for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_NonFid->GetBinContent(i)>0)printf("%5.1f ",histo_NonFid_QCDscaleDown->GetBinContent(i)/histo_NonFid->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
+  for(int nc=0; nc<nChan; nc++){
+    for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_DY[nc]->GetBinContent(i)>0)printf("%5.1f ",histo_DY_QCDscaleUp  [nc]->GetBinContent(i)/histo_DY[nc]->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
+    for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_DY[nc]->GetBinContent(i)>0)printf("%5.1f ",histo_DY_QCDscaleDown[nc]->GetBinContent(i)/histo_DY[nc]->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
+  }
+
   printf("uncertainties VV: ");
   for(int i=1; i<=histo_Data->GetNbinsX(); i++) printf("%.1f ",histo_VV->GetBinContent(i)); printf("\n");
   for(int i=1; i<=histo_Data->GetNbinsX(); i++) {if(histo_VV->GetBinContent(i)>0)printf("%5.1f ",histo_VV_vvNormPDFUp    ->GetBinContent(i)/histo_VV->GetBinContent(i)*100);else printf("100.0 ");} printf("\n");
@@ -743,6 +819,18 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
   histo_VV_RecEff2Up     ->Write();
   histo_VV_RecEff2Down   ->Write();
   histo_NonFid->Write();
+
+  for(int j=0; j<nChan; j++) {  
+    histo_DY_PDFUp  [j]->Write();
+    histo_DY_PDFDown[j]->Write();
+    histo_DY_QCDscaleUp  [j]->Write();
+    histo_DY_QCDscaleDown[j]->Write();
+  }
+  histo_NonFid_PDFUp   ->Write();
+  histo_NonFid_PDFDown ->Write();
+  histo_NonFid_QCDscaleUp  ->Write();
+  histo_NonFid_QCDscaleDown->Write();
+
   for(int i=0; i<nChan; i++) {
     histo_DY[i]->Write();
   }
@@ -1020,6 +1108,39 @@ void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "P
   //    }
   //  }
   //}
+
+  if (theHistName == "Pt") {
+
+    newcardShape << Form("PDF_NonFid    shape     ");
+    for (int i=0;i<nChan;i++){
+      newcardShape << Form("- ");
+    }
+    newcardShape << Form("- - 1.0\n");
+
+    newcardShape << Form("QCDscale_NonFid    shape     ");
+    for (int i=0;i<nChan;i++){
+      newcardShape << Form("- ");
+    }
+    newcardShape << Form("- - 1.0\n");
+
+    for (int i=0;i<nChan;i++){
+      newcardShape << Form("PDF_DY%d    shape     ",i);
+	for (int k=0; k<nChan; k++) {
+          if(i==k) newcardShape << Form("1.0 ");
+          else     newcardShape << Form("- ");
+      }
+      newcardShape << Form("- - -\n");
+    }
+
+    for (int i=0;i<nChan;i++){
+      newcardShape << Form("QCDscale_DY%d    shape     ",i);
+	for (int k=0; k<nChan; k++) {
+          if(i==k) newcardShape << Form("1.0 ");
+          else     newcardShape << Form("- ");
+      }
+      newcardShape << Form("- - -\n");
+    }
+  }
 
   newcardShape.close();
 
