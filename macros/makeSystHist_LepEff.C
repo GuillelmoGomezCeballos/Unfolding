@@ -121,10 +121,9 @@ void makeSystHist_LepEff(int nsel = 0, int whichDY = 3, TString theHistName = "P
   double systVal[allNuisancesCov],systTotalVal;
 
                        // receff/lepeff2/lepeff3/lepeff4/leff5/lepeff6/lepeff7/lumi
-  double systXSVal[8] = {0.048, 0.479, 0.321, 0.608, 0.318, 0.309, 0.039, 2.500};
-
-  if(nsel == 1) {systXSVal[0] = 1.139;
-                 systXSVal[1] = 0.795; systXSVal[2] = 0.058; systXSVal[3] = 0.580; systXSVal[4] = 0.512; systXSVal[5] = 0.875; systXSVal[6] = 0.130;
+  double systXSVal[8] = {0.378, 0.479, 0.320, 0.607, 0.318, 0.309, 0.039, 2.500};
+  if(nsel == 1) {systXSVal[0] = 0.933;
+                 systXSVal[1] = 0.630; systXSVal[2] = 0.058; systXSVal[3] = 0.578; systXSVal[4] = 0.510; systXSVal[5] = 0.873; systXSVal[6] = 0.129;
              systXSVal[7] = 2.500;}
 
   for(int i=1; i<=histDef->GetNbinsX(); i++){

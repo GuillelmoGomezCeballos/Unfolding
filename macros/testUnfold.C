@@ -28,19 +28,19 @@ void helper_function(int nsel=0,int whichDY=0, int rebin=1, TString theHistName 
     _file0 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period3.root",theInputFolder.Data(),whichDY,theHistName.Data()));
     _file1 = TFile::Open("/afs/cern.ch/work/c/ceballos/public/samples/panda/v_001_0/DYJetsToLL_M-50_NLO.root");
     _file2 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period3.root",theInputFolder.Data(),2,theHistName.Data()));
-    theXS = 2008.4*3;
+    theXS = 2075.14*3;
   }
   else if(whichDY == 2 && nsel == 0){
     _file0 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period3.root",theInputFolder.Data(),whichDY,theHistName.Data()));
     _file1 = TFile::Open("/afs/cern.ch/work/c/ceballos/public/samples/panda/v_001_0/DYJetsToMM_POWHEG.root");
     _file2 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period3.root",theInputFolder.Data(),1,theHistName.Data()));
-    theXS = 1975.0;
+    theXS = 1975.0*2075.14/2008.4;
   }
   else if(whichDY == 2 && nsel == 1){
     _file0 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period3.root",theInputFolder.Data(),whichDY,theHistName.Data()));
     _file1 = TFile::Open("/afs/cern.ch/work/c/ceballos/public/samples/panda/v_001_0/DYJetsToEE_POWHEG.root");
     _file2 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period3.root",theInputFolder.Data(),1,theHistName.Data()));
-    theXS = 1975.0;
+    theXS = 1975.0*2075.14/2008.4;
   }
   else if(whichDY == 3){
     _file0 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period3.root",theInputFolder.Data(),whichDY,theHistName.Data()));
@@ -63,6 +63,7 @@ if(suffix == "_lepeff") {systName2 = "_LepEff";systName3 = Form("_%d",suffixStat
 if(suffix == "_receff0") {systName2 = "_RecEff";systName3 = "_0";}
 if(suffix == "_receff1") {systName2 = "_RecEff";systName3 = "_1";}
 if(suffix == "_receff2") {systName2 = "_RecEff";systName3 = "_2";}
+if(suffix == "_receff3") {systName2 = "_RecEff";systName3 = "_3";}
 if(suffix == "_momreslepeff") {systName2 = "_MomRes";systName3 = "_3";if(nsel == 1) {systName2 = "_MomRes";systName3 = "_2";systName0 = "_MomRes";systName1 = "_2";}}
 cout << Form("histo%sRecDA%s_%d%s",theHistName.Data(),systName0.Data(),nsel,systName1.Data()) << endl;
 TH1D* hDA = (TH1D*)_file0->Get(Form("histo%sRecDA%s_%d%s",theHistName.Data(),systName0.Data(),nsel,systName1.Data()));
@@ -263,6 +264,8 @@ outFilePlots->Close();
 void testUnfold(TString theHistName = "Pt", TString suffix = "", int suffixLepStat = -1, int rebin=1){
   for (int i=0;i<=1;i++){
     for (int j=0;j<=3;j++){
+  //for (int i=0;i<=0;i++){
+  //  for (int j=0;j<=0;j++){
       helper_function(i,j,rebin,theHistName.Data(),suffix.Data(),suffixLepStat);
 
     }

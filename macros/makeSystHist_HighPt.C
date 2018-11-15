@@ -66,7 +66,7 @@ void makeSystHist_HighPt(int nsel = 0, int whichDY = 3, TString theHistName = "P
   else if(whichDY == 3) { version = 3; alternative = 0;}
   TString theOutputName = Form("outputs%s_nsel%d_ptllcut",theHistName.Data(),nsel);
 
-  const int nGenSyst = 10;
+  const int nGenSyst = 11;
   const int nEffSyst = 8+480;
   const int nStaSyst = 72;
   const int nOthSyst = 2;
@@ -143,6 +143,7 @@ void makeSystHist_HighPt(int nsel = 0, int whichDY = 3, TString theHistName = "P
   _file[7] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_receff0.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // RecEff0
   _file[8] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_receff1.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // RecEff1
   _file[9] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_receff2.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // RecEff2
+  _file[10]= TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_receff3.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // RecEff2
   for(int i=0; i<nGenSyst; i++){
     histAlt[i] = (TH1D*)_file[i] ->Get(Form("unfold")); assert(histAlt[i]); histAlt[i]->SetDirectory(0);
     _file[i]->Close();
@@ -170,9 +171,9 @@ void makeSystHist_HighPt(int nsel = 0, int whichDY = 3, TString theHistName = "P
   double systVal[allNuisancesCov],systTotalVal;
 
                        // receff/lepeff2/lepeff3/lepeff4/leff5/lepeff6/lepeff7/lumi
-  double systXSVal[8] = {0.042, 0.729, 2.911, 2.293, 1.307, 0.491, 0.234, 2.500};
-  if(nsel == 1) {systXSVal[0] = 1.565;
-                 systXSVal[1] = 0.876; systXSVal[2] = 0.179; systXSVal[3] = 1.067; systXSVal[4] = 0.986; systXSVal[5] = 2.018; systXSVal[6] = 0.088;
+  double systXSVal[8] = {0.732, 0.730, 2.910, 2.289, 1.307, 0.489, 0.229, 2.500};
+  if(nsel == 1) {systXSVal[0] = 1.742;
+                 systXSVal[1] = 0.877; systXSVal[2] = 0.179; systXSVal[3] = 1.067; systXSVal[4] = 0.984; systXSVal[5] = 2.016; systXSVal[6] = 0.090;
              systXSVal[7] = 2.500;}
 
   double systUnfVal[16] = {0.355, 0.567, 0.214, 0.522, 0.285, 0.466, 0.572, 1.164, 0.778, 0.395, 0.193, 0.593, 0.258, 0.527, 0.111, 0.107};
@@ -218,20 +219,20 @@ void makeSystHist_HighPt(int nsel = 0, int whichDY = 3, TString theHistName = "P
     if(doCorrelateMomResLepEff == true) systVal[nGenSyst+3] = 0;
 
     // reco efficiencies all together
-    systVal[7 ] = sqrt(systVal[7 ]*systVal[7 ]+systVal[8 ]*systVal[8 ]+systVal[9 ]*systVal[9 ]);
+    systVal[7 ] = sqrt(systVal[7 ]*systVal[7 ]+systVal[8 ]*systVal[8 ]+systVal[9 ]*systVal[9 ]+systVal[10]*systVal[10]);
     systVal[8 ] = 0.0;
     systVal[9 ] = 0.0;
 
     if(doXSRatio){
       systVal[0 ] = 0;
       systVal[7 ] = systVal[7 ] - systXSVal[0];
-      systVal[12] = systVal[12] - systXSVal[1];
-      if(doCorrelateMomResLepEff == false) systVal[13] = systVal[13] - systXSVal[2];
+      systVal[13] = systVal[13] - systXSVal[1];
+      if(doCorrelateMomResLepEff == false) systVal[14] = systVal[14] - systXSVal[2];
       else                                 systVal[2 ] = systVal[2 ] - systXSVal[2];
-      systVal[14] = systVal[14] - systXSVal[3];
-      systVal[15] = systVal[15] - systXSVal[4];
-      systVal[16] = systVal[16] - systXSVal[5];
-      systVal[17] = systVal[17] - systXSVal[6];
+      systVal[15] = systVal[15] - systXSVal[3];
+      systVal[16] = systVal[16] - systXSVal[4];
+      systVal[17] = systVal[17] - systXSVal[5];
+      systVal[18] = systVal[18] - systXSVal[6];
       systVal[allNuisancesCov-1] = systVal[allNuisancesCov-1] - systXSVal[7];
     }
 
@@ -241,7 +242,7 @@ void makeSystHist_HighPt(int nsel = 0, int whichDY = 3, TString theHistName = "P
     double systEffValNoStat = sqrt(systVal[nGenSyst+2]*systVal[nGenSyst+2]+systVal[nGenSyst+3]*systVal[nGenSyst+3]+systVal[nGenSyst+4]*systVal[nGenSyst+4]+
                                    systVal[nGenSyst+5]*systVal[nGenSyst+5]+systVal[nGenSyst+6]*systVal[nGenSyst+6]+systVal[nGenSyst+7]*systVal[nGenSyst+7]);
 
-    systVal[10] = 0; systVal[11] = 0; // make sure not used anymore
+    systVal[11] = 0; systVal[12] = 0; // make sure not used anymore
     double systEffValSta = 0;
     for(int k=nGenSyst+7; k<nGenSyst+nEffSyst; k++) systEffValSta = systEffValSta + systVal[k]*systVal[k];
     systEffValSta = sqrt(systEffValSta);

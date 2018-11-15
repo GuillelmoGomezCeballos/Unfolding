@@ -67,7 +67,7 @@ void finalPlotUnfolding(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}"
   gInterpreter->ExecuteMacro("PaperStyle.C");
   gStyle->SetOptStat(0);
 
-  double TotalLumi = 35900.0;
+  double TotalLumi = 35800.0;
   double normalization[2];
 
   int me=0;
