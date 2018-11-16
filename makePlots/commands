@@ -1,0 +1,14 @@
+#Rapidity
+root -l -b -q finalPlotUnfolding_rapidity.C+'(0,1,"p_{T}","GeV","outputs_update/histoUnfoldingSystRap","ratio_unf_zmm_dy_pt", 1,1,"Rap","MM")'
+root -l -b -q finalPlotUnfolding_rapidity.C+'(1,1,"p_{T}","GeV","outputs_update/histoUnfoldingSystRap","ratio_unf_zmm_dy_pt", 1,1,"Rap","EE")'
+
+#pt
+root -l -b -q finalPlotUnfolding.C+'(0,1,"p_{T}","GeV","outputs_update/histoUnfoldingSystPt","ratio_unf_zmm_dy_pt", 1,1,"Pttest","MM")'
+root -l -b -q finalPlotUnfolding.C+'(1,1,"p_{T}","GeV","outputs_update/histoUnfoldingSystPt","ratio_unf_zmm_dy_pt", 1,1,"Pttest","EE")'
+
+phi*
+root -l -b -q finalPlotUnfolding_phi.C+'(1,1,"#phi_{#eta}*","","outputs_update/histoUnfoldingSystPhiStar","ratio_unf_zmm_dy_phistar", 1,1,"PhiStar","EE")'
+
+
+ptrap:
+root -l -b -q finalPlotUnfolding_powheg.C+'(0,1,"p_{T}","GeV","outputs_update/histoUnfoldingSystPtRap0","ratio_unf_zmm_dy_ptrap0", 1,1,"PtRap0","MM")'
