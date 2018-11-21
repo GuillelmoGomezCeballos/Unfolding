@@ -1,60 +1,116 @@
-void makeWWNtuple(){
+#if !defined(__CINT__) || defined(__MAKECINT__)
+#include <TROOT.h>                  // access to gROOT, entry point to ROOT system
+#include <TSystem.h>                // interface to OS
+#include <TMath.h>                  // Math
+#include <vector>                   // STL vector class
+#include <iostream>                 // standard I/O
+#include <iomanip>                  // functions to format standard I/O
+#include <fstream>                  // functions for file I/O
+#include <string>                   // C++ string class
+#include <sstream>                  // class for parsing strings
+#include <TFile.h>                  // File handle
+#include <TH1D.h>                   // 1D histogram class
+#endif
 
-  for(int nsel=0; nsel<4; nsel++) {
-    TString outNtuplename = "test.root";
-    if     (nsel == 0){
-      outNtuplename = "higgsCombinetest_ww_mll.MultiDimFit.mH120_normalized.root";
-    }
-    else if(nsel == 1){
-      outNtuplename = "higgsCombinetest_ww_ptl1.MultiDimFit.mH120_normalized.root";
-    }
-    else if(nsel == 2){
-      outNtuplename = "higgsCombinetest_ww_ptl2.MultiDimFit.mH120_normalized.root";
-    }
-    else if(nsel == 3){
-      outNtuplename = "higgsCombinetest_ww_phill.MultiDimFit.mH120_normalized.root";
-    }
+void makeWWResult(TString type, TString the0J = "", bool isNormalized = false){
 
-    TFile *outtuple = TFile::Open(outNtuplename.Data(),"recreate");
-    TNtuple *nt = new TNtuple("limit","limit","r_s0:r_s1:r_s2:r_s3:r_s4:r_s5:r_s6:r_s7:r_s8");
+  const int nBinWWMLL = 14;
+  Float_t xbinsWWMLL[nBinWWMLL+1];
+    xbinsWWMLL[ 0] =  20;      xbinsWWMLL[ 1] =  55;      xbinsWWMLL[ 2] =  75;      xbinsWWMLL[ 3] =  85;      xbinsWWMLL[ 4] =   95;
+    xbinsWWMLL[ 5] = 110;      xbinsWWMLL[ 6] = 125;      xbinsWWMLL[ 7] = 140;      xbinsWWMLL[ 8] = 160;      xbinsWWMLL[ 9] =  185;
+    xbinsWWMLL[10] = 220;      xbinsWWMLL[11] = 280;      xbinsWWMLL[12] = 380;      xbinsWWMLL[13] = 600;      xbinsWWMLL[14] = 1500;
 
-    double rs[9],rsUp[9],rsDown[9];
+  const int nBinWWDPHILL = 9;
+  Float_t xbinsWWDPHILL[nBinWWDPHILL+1];
+    xbinsWWDPHILL[ 0] =   0*TMath::Pi()/180.;      xbinsWWDPHILL[ 1] =  20*TMath::Pi()/180.;      xbinsWWDPHILL[ 2] =  40*TMath::Pi()/180.;      xbinsWWDPHILL[ 3] =  60*TMath::Pi()/180.;      xbinsWWDPHILL[ 4] =  80*TMath::Pi()/180.;
+    xbinsWWDPHILL[ 5] = 100*TMath::Pi()/180.;      xbinsWWDPHILL[ 6] = 120*TMath::Pi()/180.;      xbinsWWDPHILL[ 7] = 140*TMath::Pi()/180.;      xbinsWWDPHILL[ 8] = 160*TMath::Pi()/180.;      xbinsWWDPHILL[ 9] = 180*TMath::Pi()/180.;
 
-    double rsMLL[9]        = {0.873,0.913,1.152,0.917,1.010,1.002,1.012,0.958,0.871};
-    double rsMLLUp[9]      = {0.077,0.062,0.047,0.059,0.061,0.057,0.052,0.059,0.059};
-    double rsMLLDown[9]    = {0.077,0.062,0.047,0.059,0.061,0.057,0.052,0.059,0.059};
-    double rsPTL1[9]       = {0.873,0.913,1.152,0.917,1.010,1.002,1.012,0.958,0.871};//fake
-    double rsPTL1Up[9]     = {0.077,0.062,0.047,0.059,0.061,0.057,0.052,0.059,0.059};//fake
-    double rsPTL1Down[9]   = {0.077,0.062,0.047,0.059,0.061,0.057,0.052,0.059,0.059};//fake
-    double rsPTL2[9]       = {0.984,0.938,0.998,1.094,0.900,1.135,0.996,0.996,0.688};
-    double rsPTL2Up[9]     = {0.079,0.044,0.040,0.046,0.067,0.064,0.045,0.045,0.143};
-    double rsPTL2Down[9]   = {0.079,0.044,0.040,0.046,0.067,0.064,0.045,0.045,0.143};
-    double rsDPHILL[9]     = {0.873,0.913,1.152,0.917,1.010,1.002,1.012,0.958,0.871};//fake
-    double rsDPHILLUp[9]   = {0.077,0.062,0.047,0.059,0.061,0.057,0.052,0.059,0.059};//fake
-    double rsDPHILLDown[9] = {0.077,0.062,0.047,0.059,0.061,0.057,0.052,0.059,0.059};//fake
+  const int nBinWWPTL1 = 14;
+  Float_t xbinsWWPTL1[nBinWWPTL1+1];
+    xbinsWWPTL1[ 0] =  25;      xbinsWWPTL1[ 1] =  40;      xbinsWWPTL1[ 2] =  50;      xbinsWWPTL1[ 3] =  60;      xbinsWWPTL1[ 4] =  70;
+    xbinsWWPTL1[ 5] =  80;      xbinsWWPTL1[ 6] =  90;      xbinsWWPTL1[ 7] = 100;      xbinsWWPTL1[ 8] = 110;      xbinsWWPTL1[ 9] = 130;      
+    xbinsWWPTL1[10] = 150;      xbinsWWPTL1[11] = 175;      xbinsWWPTL1[12] = 220;      xbinsWWPTL1[13] = 300;      xbinsWWPTL1[14] = 400;
 
-    for(int i=0; i<9; i++){
-      if     (nsel == 0){
-	rs[i] = rsMLL[i];  rsUp[i] = rsMLLUp[i]; rsDown[i] = rsMLLDown[i]; 
-      }
-      else if(nsel == 1){
-	rs[i] = rsPTL1[i];  rsUp[i] = rsPTL1Up[i]; rsDown[i] = rsPTL1Down[i]; 
-      }
-      else if(nsel == 2){
-	rs[i] = rsPTL2[i];  rsUp[i] = rsPTL2Up[i]; rsDown[i] = rsPTL2Down[i]; 
-      }
-      else if(nsel == 3){
-	rs[i] = rsDPHILL[i];  rsUp[i] = rsDPHILLUp[i]; rsDown[i] = rsDPHILLDown[i]; 
-      }
+  const int nBinWWPTL2 = 8;
+  Float_t xbinsWWPTL2[nBinWWPTL2+1];
+    xbinsWWPTL2[ 0] =  25;      xbinsWWPTL2[ 1] =  30;      xbinsWWPTL2[ 2] =  35;      xbinsWWPTL2[ 3] =  40;      xbinsWWPTL2[ 4] =  45;
+    xbinsWWPTL2[ 5] =  50;      xbinsWWPTL2[ 6] =  75;      xbinsWWPTL2[ 7] = 100;      xbinsWWPTL2[ 8] = 150;
 
-      rsUp[i]   = rs[i] + rsUp[i];
-      rsDown[i] = rs[i] - rsDown[i];
-    }
+  const int nBinWWPTLL = 15;
+  Float_t xbinsWWPTLL[nBinWWPTLL+1];
+    xbinsWWPTLL[ 0] =  30;      xbinsWWPTLL[ 1] =  35;      xbinsWWPTLL[ 2] =  40;      xbinsWWPTLL[ 3] =  45;      xbinsWWPTLL[ 4] =  50;
+    xbinsWWPTLL[ 5] =  55;      xbinsWWPTLL[ 6] =  60;      xbinsWWPTLL[ 7] =  65;      xbinsWWPTLL[ 8] =  70;      xbinsWWPTLL[ 9] =  75;
+    xbinsWWPTLL[10] =  80;      xbinsWWPTLL[11] =  90;      xbinsWWPTLL[12] = 105;      xbinsWWPTLL[13] = 140;      xbinsWWPTLL[14] = 200;
+    xbinsWWPTLL[15] = 300;
 
-    nt->Fill(rs[0],rs[1],rs[2],rs[3],rs[4],rs[5],rs[6],rs[7],rs[8]);
-    nt->Fill(rsUp[0],rsUp[1],rsUp[2],rsUp[3],rsUp[4],rsUp[5],rsUp[6],rsUp[7],rsUp[8]);
-    nt->Fill(rsDown[0],rsDown[1],rsDown[2],rsDown[3],rsDown[4],rsDown[5],rsDown[6],rsDown[7],rsDown[8]);
-    nt->Write();
-    outtuple->Close();
+  const int nBinWWNJET = 3;
+  Float_t xbinsWWNJET[nBinWWNJET+1];
+    xbinsWWNJET[ 0] =-0.5;      xbinsWWNJET[ 1] = 0.5;      xbinsWWNJET[ 2] = 1.5;      xbinsWWNJET[ 3] = 2.5;
+
+  TString xsfname("input_files/");
+  TH1D* histoResult;
+  if     (type == "MLL")    {histoResult = new TH1D(Form("hDWWMLL%s",the0J.Data()),    Form("hDWWMLL%s",the0J.Data()),    nBinWWMLL,    xbinsWWMLL   ); xsfname = xsfname + Form("WWMLL%s",the0J.Data());}
+  else if(type == "DPHILL") {histoResult = new TH1D(Form("hDWWDPHILL%s",the0J.Data()), Form("hDWWDPHILL%s",the0J.Data()), nBinWWDPHILL, xbinsWWDPHILL); xsfname = xsfname + Form("WWDPHILL%s",the0J.Data());}
+  else if(type == "PTL1")   {histoResult = new TH1D(Form("hDWWPTL1%s",the0J.Data()),   Form("hDWWPTL1%s",the0J.Data()),   nBinWWPTL1,   xbinsWWPTL1  ); xsfname = xsfname + Form("WWPTL1%s",the0J.Data());}
+  else if(type == "PTL2")   {histoResult = new TH1D(Form("hDWWPTL2%s",the0J.Data()),   Form("hDWWPTL2%s",the0J.Data()),   nBinWWPTL2,   xbinsWWPTL2  ); xsfname = xsfname + Form("WWPTL2%s",the0J.Data());}
+  else if(type == "PTLL")   {histoResult = new TH1D(Form("hDWWPTLL%s",the0J.Data()),   Form("hDWWPTLL%s",the0J.Data()),   nBinWWPTLL,   xbinsWWPTLL  ); xsfname = xsfname + Form("WWPTLL%s",the0J.Data());}
+  else if(type == "NJET")   {histoResult = new TH1D(Form("hDWWNJET"),                 Form("hDWWNJET"),                   nBinWWNJET,   xbinsWWNJET  ); xsfname = xsfname + "WWNJET";}
+  else {printf("WRONG TYPE\n"); return;}
+
+  if(isNormalized) xsfname = xsfname + "_normalized.txt";
+  else             xsfname = xsfname + ".txt";
+
+  int count = 0;
+  ifstream ifs;
+  ifs.open(xsfname.Data());
+  assert(ifs.is_open());
+  string line;
+  while(getline(ifs,line)) {
+    Double_t r,rup,rdown;
+    stringstream ss(line);
+    ss >> r >> rup >> rdown;
+    count++;
+    histoResult->SetBinContent(count, r);
+    histoResult->SetBinError  (count, (rup+rdown)/2.0);
   }
+  ifs.close();
+
+  if(histoResult->GetNbinsX() != count) {printf("DIFFERENT NUMBER OF BINS IN HISTOGRAM AND INPUT FILE: %d %d\n",histoResult->GetNbinsX(),count); return;}
+
+  TString outNtuplename = Form("input_files/xs_WW%s%s_normalized%d.root",type.Data(),the0J.Data(),isNormalized);
+  TFile *outtuple = TFile::Open(outNtuplename.Data(),"recreate");
+  outtuple->cd();
+  histoResult->Write();
+  outtuple->Close();
+}
+
+void makeWWNtuple(){
+ makeWWResult("MLL", ""    , false);
+ makeWWResult("MLL", "0JET", false);
+ makeWWResult("MLL", ""    , true);
+ makeWWResult("MLL", "0JET", true);
+
+ makeWWResult("DPHILL", ""    , false);
+ makeWWResult("DPHILL", "0JET", false);
+ makeWWResult("DPHILL", ""    , true);
+ makeWWResult("DPHILL", "0JET", true);
+
+ makeWWResult("PTL1", ""    , false);
+ makeWWResult("PTL1", "0JET", false);
+ makeWWResult("PTL1", ""    , true);
+ makeWWResult("PTL1", "0JET", true);
+
+ makeWWResult("PTL2", ""    , false);
+ makeWWResult("PTL2", "0JET", false);
+ makeWWResult("PTL2", ""    , true);
+ makeWWResult("PTL2", "0JET", true);
+
+ makeWWResult("PTLL", ""    , false);
+ makeWWResult("PTLL", "0JET", false);
+ makeWWResult("PTLL", ""    , true);
+ makeWWResult("PTLL", "0JET", true);
+
+ makeWWResult("NJET", ""    , false);
+ makeWWResult("NJET", ""    , true);
+
 }

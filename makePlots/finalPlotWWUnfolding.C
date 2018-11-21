@@ -38,7 +38,7 @@ void atributes(TH1D *histo, TString xtitle = "", TString ytitle = "Fraction", TS
   }
   histo->GetXaxis()->SetLabelFont  (   42);
   histo->GetXaxis()->SetLabelOffset(0.015);
-  histo->GetXaxis()->SetLabelSize  (0.140);
+  histo->GetXaxis()->SetLabelSize  (0.110);
   histo->GetXaxis()->SetNdivisions (  505);
   histo->GetXaxis()->SetTitleFont  (   42);
   histo->GetXaxis()->SetTitleOffset( 0.95);
@@ -59,96 +59,52 @@ void atributes(TH1D *histo, TString xtitle = "", TString ytitle = "Fraction", TS
   histo->SetMarkerStyle(kFullCircle);
 }
 
-void finalPlotWWUnfolding(
-                TString XTitle = "m_{ll}", TString units = "GeV", 
-                TString plotName = "../../cards/cards_ww/0/output_fits/higgsCombineww_mll.MultiDimFit.mH120.root", 
-                TString outputName = "unf_ww_mll", bool isLogY = false, 
-                TString keyLabel0 = "MLL", bool isNormalized = false) {
+void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) {
+
+  TString XTitle = "X";
+  TString units = "GeV";
+  bool isLogY = false;
+  bool isLogX = false;
+
+  if     (keyLabel0 == "MLL"    || keyLabel0 == "MLL0JET")    {XTitle = "m_{ll}"; isLogX = true;}
+  else if(keyLabel0 == "DPHILL" || keyLabel0 == "DPHILL0JET") {XTitle = "#Delta#phi_{ll}";}
+  else if(keyLabel0 == "PTL1"   || keyLabel0 == "PTL10JET")   {XTitle = "p_{T}^{max}"; isLogX = true;}
+  else if(keyLabel0 == "PTL2"   || keyLabel0 == "PTL20JET")   {XTitle = "p_{T}^{min}"; isLogX = true;}
+  else if(keyLabel0 == "PTLL"   || keyLabel0 == "PTLL0JET")   {XTitle = "p_{T}^{ll}"; isLogX = true;}
+  else if(keyLabel0 == "NJET"   || keyLabel0 == "NJET0JET")   {XTitle = "n_{jets}";}
 
   gInterpreter->ExecuteMacro("PaperStyle.C");
   gStyle->SetOptStat(0);
 
   bool isDebug = true;
 
-  double TotalLumi = 1.0;
-  double normalization[2];
-  
-  double theR[9];
-  double theRDown[9];
-  double theRUp[9];
-
   TFile *_fileGenWW = TFile::Open("/afs/cern.ch/work/c/ceballos/public/samples/panda/v_001_0/genWW.root");
+  TH1D* hPred1     = (TH1D*)_fileGenWW->Get(Form("hDWW%s",keyLabel0.Data()));
+  TH1D* hPred1_PDF = (TH1D*)_fileGenWW->Get(Form("hDWW%s_PDF",keyLabel0.Data()));
+  TH1D* hPred1_QCD = (TH1D*)_fileGenWW->Get(Form("hDWW%s_QCD",keyLabel0.Data()));
 
+  TString plotName = Form("input_files/xs_WW%s_normalized%d.root", keyLabel0.Data(), isNormalized);
   TFile *_file0 = TFile::Open(plotName.Data());
-  TTree* theTree = nullptr;
-  _file0->GetObject("limit",theTree);
+  TH1D* hData = (TH1D*)_file0->Get(Form("hDWW%s",keyLabel0.Data()));
+  
+  double totalUnc[2] = {TMath::Abs(1-hPred1_PDF->GetSumOfWeights()/hPred1->GetSumOfWeights()),
+                        TMath::Abs(1-hPred1_QCD->GetSumOfWeights()/hPred1->GetSumOfWeights())};
 
-  float r_s0 = -999.; theTree->SetBranchAddress( "r_s0", &r_s0);
-  float r_s1 = -999.; theTree->SetBranchAddress( "r_s1", &r_s1);
-  float r_s2 = -999.; theTree->SetBranchAddress( "r_s2", &r_s2);
-  float r_s3 = -999.; theTree->SetBranchAddress( "r_s3", &r_s3);
-  float r_s4 = -999.; theTree->SetBranchAddress( "r_s4", &r_s4);
-  float r_s5 = -999.; theTree->SetBranchAddress( "r_s5", &r_s5);
-  float r_s6 = -999.; theTree->SetBranchAddress( "r_s6", &r_s6);
-  float r_s7 = -999.; theTree->SetBranchAddress( "r_s7", &r_s7);
-  float r_s8 = -999.; theTree->SetBranchAddress( "r_s8", &r_s8);
-
-  auto nevent = theTree->GetEntries();
-  for (Int_t i=0;i<nevent;i++) {
-     theTree->GetEntry(i);
-     if      (i==0){
-       theR[0] = r_s0;
-       theR[1] = r_s1;
-       theR[2] = r_s2;
-       theR[3] = r_s3;
-       theR[4] = r_s4;
-       theR[5] = r_s5;
-       theR[6] = r_s6;
-       theR[7] = r_s7;
-       theR[8] = r_s8;
-     }
-     else {
-       if     (theR[0] < r_s0) theRUp  [0] = r_s0;
-       else if(theR[0] > r_s0) theRDown[0] = r_s0;
-       if     (theR[1] < r_s1) theRUp  [1] = r_s1;
-       else if(theR[1] > r_s1) theRDown[1] = r_s1;
-       if     (theR[2] < r_s2) theRUp  [2] = r_s2;
-       else if(theR[2] > r_s2) theRDown[2] = r_s2;
-       if     (theR[3] < r_s3) theRUp  [3] = r_s3;
-       else if(theR[3] > r_s3) theRDown[3] = r_s3;
-       if     (theR[4] < r_s4) theRUp  [4] = r_s4;
-       else if(theR[4] > r_s4) theRDown[4] = r_s4;
-       if     (theR[5] < r_s5) theRUp  [5] = r_s5;
-       else if(theR[5] > r_s5) theRDown[5] = r_s5;
-       if     (theR[6] < r_s6) theRUp  [6] = r_s6;
-       else if(theR[6] > r_s6) theRDown[6] = r_s6;
-       if     (theR[7] < r_s7) theRUp  [7] = r_s7;
-       else if(theR[7] > r_s7) theRDown[7] = r_s7;
-       if     (theR[8] < r_s8) theRUp  [8] = r_s8;
-       else if(theR[8] > r_s8) theRDown[8] = r_s8;
-     }
-  }
-  if(isDebug) for(int i=0; i<9; i++){printf("inputs: %f %f %f\n",1/theR[i],theRUp[i]-theR[i],theR[i]-theRDown[i]);}
-
-  TH1D* hPred1; TH1D* hPred1_PDF; TH1D* hPred1_QCD;
-  hPred1     = (TH1D*)_fileGenWW->Get(Form("hDWW%s",keyLabel0.Data()));
-  hPred1_PDF = (TH1D*)_fileGenWW->Get(Form("hDWW%s_PDF",keyLabel0.Data()));
-  hPred1_QCD = (TH1D*)_fileGenWW->Get(Form("hDWW%s_QCD",keyLabel0.Data()));
-  TH1D* hData = (TH1D*)hPred1->Clone("hData"); hData->Reset();
   for(Int_t i=1;i<=hPred1->GetNbinsX();++i){
-    double avgErr = (TMath::Abs(theRUp[i-1]-theR[i-1])+TMath::Abs(theRDown[i-1]-theR[i-1]))/2./theR[i-1];
-    double diff[3] = {hPred1->GetBinError(i), hPred1_PDF->GetBinContent(i)-hPred1->GetBinContent(i),hPred1_QCD->GetBinContent(i)-hPred1->GetBinContent(i)};
+    double diff[3] = {hPred1->GetBinError(i)/hPred1->GetBinContent(i),
+                      TMath::Abs(1-hPred1_PDF->GetBinContent(i)/hPred1->GetBinContent(i)),
+                      TMath::Abs(1-hPred1_QCD->GetBinContent(i)/hPred1->GetBinContent(i))};
 
     if(isNormalized) {
-      diff[1] = 0; diff[2] = 0;
-      avgErr = sqrt(TMath::Max(avgErr*avgErr-totalXSUnc*totalXSUnc,0.0));
+      diff[1] = TMath::Abs(1-(hPred1_PDF->GetBinContent(i)/hPred1_PDF->GetSumOfWeights())/(hPred1->GetBinContent(i)/hPred1->GetSumOfWeights()));
+      diff[2] = TMath::Abs(1-(hPred1_QCD->GetBinContent(i)/hPred1_QCD->GetSumOfWeights())/(hPred1->GetBinContent(i)/hPred1->GetSumOfWeights()));
     }
 
-    hData->SetBinContent(i,theR[i-1]*hPred1->GetBinContent(i));
-    hData->SetBinError  (i,avgErr*hPred1->GetBinContent(i));
+    hData->SetBinContent(i,hData->GetBinContent(i)*hPred1->GetBinContent(i));
+    hData->SetBinError  (i,hData->GetBinError  (i)*hPred1->GetBinContent(i));
 
-    hPred1->SetBinError(i,sqrt(diff[0]*diff[0]+diff[1]*diff[1]+diff[2]*diff[2]));
-    if(isDebug) printf("hPredSyst (%2d) %5.2f %5.2f %5.2f -> %5.2f\n",i,100*diff[0]/hPred1->GetBinContent(i),100*diff[1]/hPred1->GetBinContent(i),100*diff[2]/hPred1->GetBinContent(i),100*hPred1->GetBinError(i)/hPred1->GetBinContent(i));
+    hPred1->SetBinError(i,sqrt(diff[0]*diff[0]+diff[1]*diff[1]+diff[2]*diff[2])*hPred1->GetBinContent(i));
+    if(isDebug) printf("hPredSyst (%2d) %5.2f %5.2f %5.2f -> %5.2f\n",i,100*diff[0],100*diff[1],100*diff[2],100*hPred1->GetBinError(i)/hPred1->GetBinContent(i));
   }
 
   hData ->Scale(1,"width");
@@ -174,6 +130,7 @@ void finalPlotWWUnfolding(
   pad1->cd();
   gStyle->SetOptStat(0);
   if(isLogY == true) pad1->SetLogy();
+  if(isLogX == true) {pad1->SetLogx(); pad2->SetLogx();}
 
   // draw pad1
   if(strcmp(units.Data(),"")==0){
@@ -188,10 +145,13 @@ void finalPlotWWUnfolding(
 
   TString theYTitle = "#sigma / GeV [pb]";
   if     (isNormalized && keyLabel0 == "MLL")    theYTitle = "1/#sigma d#sigma/dm_{ll}";
+  else if(isNormalized && keyLabel0 == "DPHILL") theYTitle = "1/#sigma d#sigma/d#Delta#phi_{ll}";
   else if(isNormalized && keyLabel0 == "PTL1")   theYTitle = "1/#sigma d#sigma/dp_{T}^{max}";
   else if(isNormalized && keyLabel0 == "PTL2")   theYTitle = "1/#sigma d#sigma/dp_{T}^{mix}";
-  else if(isNormalized && keyLabel0 == "DPHILL") theYTitle = "1/#sigma d#sigma/d#Delta#phi_{ll}";
+  else if(isNormalized && keyLabel0 == "PTLL")   theYTitle = "1/#sigma d#sigma/dp_{T}^{ll}";
+  else if(isNormalized && keyLabel0 == "NJET")   theYTitle = "1/#sigma d#sigma/dn_{jets}";
   else if(                keyLabel0 == "DPHILL") theYTitle = "#sigma / dg. [pb]";
+  else if(                keyLabel0 == "NJET")   theYTitle = "#sigma [pb]";
 
   hPred1->GetYaxis()->SetTitle(theYTitle.Data());
   hPred1->GetYaxis()->SetLabelFont  (   42);
@@ -220,7 +180,7 @@ void finalPlotWWUnfolding(
 
   hPred1->SetTitle("");
   hData ->SetTitle("");
-  normalization[0] = TotalLumi; normalization[1] = TotalLumi;
+  double normalization[2] = {1.0, 1.0};
   if(isNormalized) {normalization[0] = hPred1->GetSumOfWeights(); normalization[1] = hData->GetSumOfWeights();};
   hPred1->Scale(1./normalization[0]);
   hData ->Scale(1./normalization[1]);
@@ -237,11 +197,11 @@ void finalPlotWWUnfolding(
   legend->SetTextAlign (    12);
   legend->SetTextFont  (    42);
   legend->SetTextSize  (0.04);
-  legend->AddEntry(hData,"Unfolded data");
+  legend->AddEntry(hData,  "Data");
   legend->AddEntry(hPred1, "POWHEG");
-
-  CMS_lumi( c1, 4, 11 );
   legend->Draw();
+
+  CMS_lumi( pad1, 4, 11 );
 
   pad2->cd();
   gStyle->SetOptStat(0);
@@ -302,7 +262,7 @@ void finalPlotWWUnfolding(
   Double_t dy = TMath::Max(TMath::Abs(hRatio->GetMaximum()),
                            TMath::Abs(hRatio->GetMinimum())) + theLines[1];
   // Double_t dy = TMath::Max(TMath::Abs(TMath::Abs(hRatio->GetMaximum())-1),TMath::Abs(TMath::Abs(hRatio->GetMinimum()))-1);
-  hRatio->GetYaxis()->SetRangeUser(0.201,1.799);
+  hRatio->GetYaxis()->SetRangeUser(0.201,1.999);
   hRatio->GetYaxis()->CenterTitle();
   eraselabel(pad1,hData->GetXaxis()->GetLabelSize());
 
@@ -312,6 +272,7 @@ void finalPlotWWUnfolding(
   sprintf(CommandToExec,"mkdir -p plotsww");
   gSystem->Exec(CommandToExec);  
 
+  TString outputName = Form("unf_WW%s_normalized%d",keyLabel0.Data(),isNormalized);
   if(strcmp(outputName.Data(),"") != 0){
     TString myOutputFile;
     myOutputFile = Form("plotsww/%s.eps",outputName.Data());
