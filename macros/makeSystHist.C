@@ -11,7 +11,7 @@
 #include <iostream>
 #include <fstream>
 
-void atributes(TH1D *histo, TString xtitle="", Int_t COLOR = 1, TString ytitle="Fraction", Int_t style = 1){
+void atributes(TH1D *histo, TString xtitle="", Int_t COLOR = 1, TString ytitle="Fraction", Int_t style = 1, Bool_t increaseSize = kFALSE){
 
   histo->ResetAttLine();
   histo->ResetAttFill();
@@ -26,8 +26,14 @@ void atributes(TH1D *histo, TString xtitle="", Int_t COLOR = 1, TString ytitle="
   histo->GetXaxis()->SetLabelSize  (0.050);
   histo->GetXaxis()->SetNdivisions (  505);
   histo->GetXaxis()->SetTitleFont  (   42);
-  histo->GetXaxis()->SetTitleOffset(  1.5);
+  if(xtitle == "Z p_{T} [GeV]")
+  histo->GetXaxis()->SetTitleOffset( 1.80);
+  else
+  histo->GetXaxis()->SetTitleOffset( 1.50);
+  if(!increaseSize)
   histo->GetXaxis()->SetTitleSize  (0.035);
+  else
+  histo->GetXaxis()->SetTitleSize  (0.043);
 
   histo->GetYaxis()->SetTitle(ytitle);
   histo->GetYaxis()->SetLabelFont  (   42);
@@ -72,7 +78,7 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
   const int nOthSyst = 2;
 
   const int allNuisancesCov  = nGenSyst+nEffSyst+nStaSyst+nOthSyst;
-  const int allNuisancesPlot = 10;
+  const int allNuisancesPlot = 9;
 
   TH1D *histoSystCov[allNuisancesCov], *histoSystPlot[allNuisancesPlot];
   if       (theHistName == "Pt"){
@@ -252,14 +258,13 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
     for(int k=nGenSyst+nEffSyst; k<nGenSyst+nEffSyst+nStaSyst; k++) systMCValSta = systMCValSta + systVal[k]*systVal[k];
     systMCValSta = sqrt(systMCValSta);
 
-    histoSystPlot[1]->SetBinContent(i,systVal[0]); // unfolding
+    histoSystPlot[1]->SetBinContent(i,sqrt(systVal[0]*systVal[0]+systMCValSta*systMCValSta)); // unfolding + mc stat
     histoSystPlot[2]->SetBinContent(i,sqrt(systVal[1]*systVal[1]+systVal[2]*systVal[2]+systVal[3]*systVal[3]+systVal[4]*systVal[4])); // momres
     histoSystPlot[3]->SetBinContent(i,sqrt(systVal[5]*systVal[5]+systVal[6]*systVal[6])); // Bkg.
     histoSystPlot[5]->SetBinContent(i,systVal[7]); // RecEff
     histoSystPlot[4]->SetBinContent(i,sqrt(systEffValNoStat*systEffValNoStat+systEffValSta*systEffValSta)); // LepEff
-    histoSystPlot[6]->SetBinContent(i,systMCValSta); // mc stat
-    histoSystPlot[7]->SetBinContent(i,systVal[allNuisancesCov-2]); // data stat
-    histoSystPlot[8]->SetBinContent(i,systVal[allNuisancesCov-1]); // lumi
+    histoSystPlot[6]->SetBinContent(i,systVal[allNuisancesCov-2]); // data stat
+    histoSystPlot[7]->SetBinContent(i,systVal[allNuisancesCov-1]); // lumi
 
     histoSystPlot[0]->SetBinContent(i,sqrt(histoSystPlot[1]->GetBinContent(i)*histoSystPlot[1]->GetBinContent(i)+
                                            histoSystPlot[2]->GetBinContent(i)*histoSystPlot[2]->GetBinContent(i)+
@@ -267,17 +272,15 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
                                            histoSystPlot[5]->GetBinContent(i)*histoSystPlot[5]->GetBinContent(i)+
                                            histoSystPlot[4]->GetBinContent(i)*histoSystPlot[4]->GetBinContent(i)+
                                            histoSystPlot[6]->GetBinContent(i)*histoSystPlot[6]->GetBinContent(i)+
-                                           histoSystPlot[7]->GetBinContent(i)*histoSystPlot[7]->GetBinContent(i)+
-                                           histoSystPlot[8]->GetBinContent(i)*histoSystPlot[8]->GetBinContent(i)
+                                           histoSystPlot[7]->GetBinContent(i)*histoSystPlot[7]->GetBinContent(i)
                                            ));
 
-    histoSystPlot[9]->SetBinContent(i,sqrt(histoSystPlot[1]->GetBinContent(i)*histoSystPlot[1]->GetBinContent(i)+
+    histoSystPlot[8]->SetBinContent(i,sqrt(histoSystPlot[1]->GetBinContent(i)*histoSystPlot[1]->GetBinContent(i)+
                                            histoSystPlot[2]->GetBinContent(i)*histoSystPlot[2]->GetBinContent(i)+
                                            histoSystPlot[3]->GetBinContent(i)*histoSystPlot[3]->GetBinContent(i)+
                                            histoSystPlot[5]->GetBinContent(i)*histoSystPlot[5]->GetBinContent(i)+
                                            histoSystPlot[4]->GetBinContent(i)*histoSystPlot[4]->GetBinContent(i)+
-                                           histoSystPlot[6]->GetBinContent(i)*histoSystPlot[6]->GetBinContent(i)+
-                                           histoSystPlot[7]->GetBinContent(i)*histoSystPlot[7]->GetBinContent(i)
+                                           histoSystPlot[6]->GetBinContent(i)*histoSystPlot[6]->GetBinContent(i)
                                            ));//except for lumi
     printf("(%2d) %7.3f %7.3f %7.3f %7.3f %7.3f %7.3f %7.3f %7.3f %7.3f(%7.3f) %7.3f %7.3f %7.3f %7.3f -> %7.3f\n",i,
             systVal[0],systVal[1],systVal[2],systVal[3],systVal[4],systVal[5],systVal[6],systVal[7],
@@ -294,37 +297,39 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
   histoSystPlot[6]->Smooth();
   histoSystPlot[7]->Smooth();
   histoSystPlot[8]->Smooth();
-  histoSystPlot[9]->Smooth();
 
+  Bool_t increaseSize = kFALSE;
   TString XName = "Z p_{T} [GeV]";
   if     (theHistName == "Rap") XName = "|y^{Z}|";
-  else if(theHistName == "PhiStar") XName = "#phi*";
-  atributes(histoSystPlot[0],XName.Data(), 1,"Uncertainty (%)", 1);
-  atributes(histoSystPlot[1],XName.Data(), 2,"Uncertainty (%)", 1);
-  atributes(histoSystPlot[2],XName.Data(), 4,"Uncertainty (%)", 1);
-  atributes(histoSystPlot[3],XName.Data(), 5,"Uncertainty (%)", 1);
-  atributes(histoSystPlot[4],XName.Data(), 6,"Uncertainty (%)", 1);
-  atributes(histoSystPlot[5],XName.Data(), 7,"Uncertainty (%)", 1);
-  atributes(histoSystPlot[6],XName.Data(), 8,"Uncertainty (%)", 1);
-  atributes(histoSystPlot[7],XName.Data(),11,"Uncertainty (%)", 1);
-  atributes(histoSystPlot[8],XName.Data(),46,"Uncertainty (%)", 1);
+  else if(theHistName == "PhiStar") {XName = "#phi*"; increaseSize = kTRUE;}
+  atributes(histoSystPlot[0],XName.Data(), 1,"Uncertainty (%)", 1, increaseSize);
+  atributes(histoSystPlot[1],XName.Data(), 2,"Uncertainty (%)", 1, increaseSize);
+  atributes(histoSystPlot[2],XName.Data(), 4,"Uncertainty (%)", 1, increaseSize);
+  atributes(histoSystPlot[3],XName.Data(), 5,"Uncertainty (%)", 1, increaseSize);
+  atributes(histoSystPlot[4],XName.Data(), 6,"Uncertainty (%)", 1, increaseSize);
+  atributes(histoSystPlot[5],XName.Data(), 7,"Uncertainty (%)", 1, increaseSize);
+  atributes(histoSystPlot[6],XName.Data(), 8,"Uncertainty (%)", 1, increaseSize);
+  atributes(histoSystPlot[7],XName.Data(),11,"Uncertainty (%)", 1, increaseSize);
+  atributes(histoSystPlot[8],XName.Data(),46,"Uncertainty (%)", 1, increaseSize);
 
   TCanvas* c1 = new TCanvas("c1", "c1",5,5,500,500);
   c1->cd();
   if(theHistName != "Rap") c1->SetLogx();
 
   histoSystPlot[0]->SetMinimum(0.0);
+  if     (theHistName == "Rap")     histoSystPlot[0]->SetMaximum( 6.0);
+  else if(theHistName == "PhiStar") histoSystPlot[0]->SetMaximum( 6.0);
+  else                              histoSystPlot[0]->SetMaximum(16.0);
   histoSystPlot[0]->Draw();
-  if(!doXSRatio) histoSystPlot[1]->Draw("same,hist");
+  histoSystPlot[1]->Draw("same,hist");
   histoSystPlot[2]->Draw("same,hist");
   histoSystPlot[3]->Draw("same,hist");
   histoSystPlot[4]->Draw("same,hist");
   histoSystPlot[5]->Draw("same,hist");
   histoSystPlot[6]->Draw("same,hist");
-  histoSystPlot[7]->Draw("same,hist");
-  if(!doXSRatio) histoSystPlot[8]->Draw("same,hist");
+  if(!doXSRatio) histoSystPlot[7]->Draw("same,hist");
 
- TLatex * CMSLabel = new TLatex (0.15, 0.93, "#bf{CMS} Preliminary");
+ TLatex * CMSLabel = new TLatex (0.15, 0.93, "#bf{CMS}");
  CMSLabel->SetNDC ();
  CMSLabel->SetTextAlign (10);
  CMSLabel->SetTextFont (42);
@@ -336,20 +341,19 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
  _lumiLabel->SetTextFont (42);
  _lumiLabel->SetTextSize (0.04);
  _lumiLabel->Draw ("same") ;
- TLegend* leg = new TLegend(0.20,0.60,0.50,0.85);                                                    
+ TLegend* leg = new TLegend(0.20,0.60,0.50,0.90);                                                    
  leg ->SetFillStyle(0);
  leg ->SetFillColor(kWhite);
  leg ->SetBorderSize(0);
  leg->SetTextSize(0.035);                                                                         
- leg->AddEntry(histoSystPlot[0],"Total Unc.","l");
- if(!doXSRatio) leg->AddEntry(histoSystPlot[1],"Unfolding","l");
- leg->AddEntry(histoSystPlot[2],"Mom. Res.","l");
- leg->AddEntry(histoSystPlot[3],"Bkg.","l");
+ leg->AddEntry(histoSystPlot[0],"Total uncertainty","l");
+ leg->AddEntry(histoSystPlot[1],"Unfolding","l");
+ leg->AddEntry(histoSystPlot[2],"Momentum resolution","l");
+ leg->AddEntry(histoSystPlot[3],"Background","l");
  leg->AddEntry(histoSystPlot[4],"Identification","l");
  leg->AddEntry(histoSystPlot[5],"Reconstruction","l");
- leg->AddEntry(histoSystPlot[6],"MC Stat.","l");
- leg->AddEntry(histoSystPlot[7],"Statistical","l");
- if(!doXSRatio) leg->AddEntry(histoSystPlot[8],"Luminosity","l");
+ leg->AddEntry(histoSystPlot[6],"Statistical","l");
+ if(!doXSRatio) leg->AddEntry(histoSystPlot[7],"Luminosity","l");
  leg->Draw();
 
  TString theXSRatioName = "";
@@ -360,7 +364,7 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
 
  for(int i=1; i<=histDef->GetNbinsX(); i++){
    histDef      ->SetBinError(i,histDef->GetBinContent(i)*histoSystPlot[0]->GetBinContent(i)/100.);
-   histDefNoLumi->SetBinError(i,histDef->GetBinContent(i)*histoSystPlot[9]->GetBinContent(i)/100.);
+   histDefNoLumi->SetBinError(i,histDef->GetBinContent(i)*histoSystPlot[8]->GetBinContent(i)/100.);
  }
  for(Int_t i=1;i<=histPred->GetNbinsX();++i){
    double diff[3] = {histPred->GetBinError(i), histPred_PDF->GetBinContent(i)-histPred->GetBinContent(i), histPred_QCD->GetBinContent(i)-histPred->GetBinContent(i)};

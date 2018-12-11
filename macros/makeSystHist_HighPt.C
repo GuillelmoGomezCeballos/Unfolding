@@ -11,7 +11,7 @@
 #include <iostream>
 #include <fstream>
 
-void atributes(TH1D *histo, TString xtitle="", Int_t COLOR = 1, TString ytitle="Fraction", Int_t style = 1){
+void atributes(TH1D *histo, TString xtitle="", Int_t COLOR = 1, TString ytitle="Fraction", Int_t style = 1, Bool_t increaseSize = kFALSE){
 
   histo->ResetAttLine();
   histo->ResetAttFill();
@@ -27,7 +27,10 @@ void atributes(TH1D *histo, TString xtitle="", Int_t COLOR = 1, TString ytitle="
   histo->GetXaxis()->SetNdivisions (  505);
   histo->GetXaxis()->SetTitleFont  (   42);
   histo->GetXaxis()->SetTitleOffset(  1.5);
+  if(!increaseSize)
   histo->GetXaxis()->SetTitleSize  (0.035);
+  else
+  histo->GetXaxis()->SetTitleSize  (0.040);
 
   histo->GetYaxis()->SetTitle(ytitle);
   histo->GetYaxis()->SetLabelFont  (   42);
@@ -41,6 +44,7 @@ void atributes(TH1D *histo, TString xtitle="", Int_t COLOR = 1, TString ytitle="
   histo->SetMarkerStyle(kFullDotLarge);
   histo->SetLineStyle(style);
 }
+
 void makeSystHist_HighPt(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", bool doXSRatio = false){
 
   bool isDebug = false;
@@ -295,18 +299,19 @@ void makeSystHist_HighPt(int nsel = 0, int whichDY = 3, TString theHistName = "P
   histoSystPlot[8]->Smooth();
   histoSystPlot[9]->Smooth();
 
+  Bool_t increaseSize = kFALSE;
   TString XName = "Z p_{T} [GeV]";
   if     (theHistName == "Rap") XName = "|y^{Z}|";
-  else if(theHistName == "PhiStar") XName = "#phi*";
-  atributes(histoSystPlot[0],XName.Data(), 1,"Uncertainty (%)", 1);
-  atributes(histoSystPlot[1],XName.Data(), 2,"Uncertainty (%)", 1);
-  atributes(histoSystPlot[2],XName.Data(), 4,"Uncertainty (%)", 1);
-  atributes(histoSystPlot[3],XName.Data(), 5,"Uncertainty (%)", 1);
-  atributes(histoSystPlot[4],XName.Data(), 6,"Uncertainty (%)", 1);
-  atributes(histoSystPlot[5],XName.Data(), 7,"Uncertainty (%)", 1);
-  atributes(histoSystPlot[6],XName.Data(), 8,"Uncertainty (%)", 1);
-  atributes(histoSystPlot[7],XName.Data(),11,"Uncertainty (%)", 1);
-  atributes(histoSystPlot[8],XName.Data(),46,"Uncertainty (%)", 1);
+  else if(theHistName == "PhiStar") {XName = "#phi*"; increaseSize = kTRUE;}
+  atributes(histoSystPlot[0],XName.Data(), 1,"Uncertainty (%)", 1, increaseSize);
+  atributes(histoSystPlot[1],XName.Data(), 2,"Uncertainty (%)", 1, increaseSize);
+  atributes(histoSystPlot[2],XName.Data(), 4,"Uncertainty (%)", 1, increaseSize);
+  atributes(histoSystPlot[3],XName.Data(), 5,"Uncertainty (%)", 1, increaseSize);
+  atributes(histoSystPlot[4],XName.Data(), 6,"Uncertainty (%)", 1, increaseSize);
+  atributes(histoSystPlot[5],XName.Data(), 7,"Uncertainty (%)", 1, increaseSize);
+  atributes(histoSystPlot[6],XName.Data(), 8,"Uncertainty (%)", 1, increaseSize);
+  atributes(histoSystPlot[7],XName.Data(),11,"Uncertainty (%)", 1, increaseSize);
+  atributes(histoSystPlot[8],XName.Data(),46,"Uncertainty (%)", 1, increaseSize);
 
   TCanvas* c1 = new TCanvas("c1", "c1",5,5,500,500);
   c1->cd();
@@ -339,14 +344,14 @@ void makeSystHist_HighPt(int nsel = 0, int whichDY = 3, TString theHistName = "P
  leg ->SetFillStyle(0);
  leg ->SetFillColor(kWhite);
  leg ->SetBorderSize(0);
- leg->SetTextSize(0.035);                                                                         
- leg->AddEntry(histoSystPlot[0],"Total Unc.","l");
+ leg->SetTextSize(0.030);                                                                         
+ leg->AddEntry(histoSystPlot[0],"Total uncertainty","l");
  if(!doXSRatio) leg->AddEntry(histoSystPlot[1],"Unfolding","l");
- leg->AddEntry(histoSystPlot[2],"Mom. Res.","l");
+ leg->AddEntry(histoSystPlot[2],"Momentum resolution","l");
  leg->AddEntry(histoSystPlot[3],"Bkg.","l");
  leg->AddEntry(histoSystPlot[4],"Identification","l");
  leg->AddEntry(histoSystPlot[5],"Reconstruction","l");
- leg->AddEntry(histoSystPlot[6],"MC Stat.","l");
+ leg->AddEntry(histoSystPlot[6],"MC sample size","l");
  leg->AddEntry(histoSystPlot[7],"Statistical","l");
  if(!doXSRatio) leg->AddEntry(histoSystPlot[8],"Luminosity","l");
  leg->Draw();
