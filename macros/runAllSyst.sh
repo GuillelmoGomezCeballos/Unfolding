@@ -9,64 +9,23 @@ fi
 
 echo "running OPTION: "${OPTION};
 
-root -l -q -b MITStyle.C makeSystHist.C'(0,0,"Pt",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(0,0,"Rap",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(0,0,"PhiStar",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(0,0,"PtRap0",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(0,0,"PtRap1",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(0,0,"PtRap2",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(0,0,"PtRap3",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(0,0,"PtRap4",'${OPTION}')';
+for lep in {0..2}
+do
+for gen in {0..3}
+do
 
-root -l -q -b MITStyle.C makeSystHist.C'(1,0,"Pt",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(1,0,"Rap",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(1,0,"PhiStar",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(1,0,"PtRap0",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(1,0,"PtRap1",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(1,0,"PtRap2",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(1,0,"PtRap3",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(1,0,"PtRap4",'${OPTION}')';
+root -l -q -b MITStyle.C makeSystHist.C'('${lep}','${gen}',"Pt",'${OPTION}')';
+root -l -q -b MITStyle.C makeSystHist.C'('${lep}','${gen}',"Rap",'${OPTION}')';
+root -l -q -b MITStyle.C makeSystHist.C'('${lep}','${gen}',"PhiStar",'${OPTION}')';
+root -l -q -b MITStyle.C makeSystHist.C'('${lep}','${gen}',"PtRap0",'${OPTION}')';
+root -l -q -b MITStyle.C makeSystHist.C'('${lep}','${gen}',"PtRap1",'${OPTION}')';
+root -l -q -b MITStyle.C makeSystHist.C'('${lep}','${gen}',"PtRap2",'${OPTION}')';
+root -l -q -b MITStyle.C makeSystHist.C'('${lep}','${gen}',"PtRap3",'${OPTION}')';
+root -l -q -b MITStyle.C makeSystHist.C'('${lep}','${gen}',"PtRap4",'${OPTION}')';
 
-root -l -q -b MITStyle.C makeSystHist.C'(0,2,"Pt",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(0,2,"Rap",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(0,2,"PhiStar",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(0,2,"PtRap0",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(0,2,"PtRap1",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(0,2,"PtRap2",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(0,2,"PtRap3",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(0,2,"PtRap4",'${OPTION}')';
+root -l -q -b MITStyle.C makeSystHist_LepEff.C'('${lep}','${gen}',"Pt",'${OPTION}')';
+root -l -q -b MITStyle.C makeSystHist_LepEff.C'('${lep}','${gen}',"Rap",'${OPTION}')';
+root -l -q -b MITStyle.C makeSystHist_LepEff.C'('${lep}','${gen}',"PhiStar",'${OPTION}')';
 
-root -l -q -b MITStyle.C makeSystHist.C'(1,2,"Pt",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(1,2,"Rap",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(1,2,"PhiStar",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(1,2,"PtRap0",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(1,2,"PtRap1",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(1,2,"PtRap2",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(1,2,"PtRap3",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(1,2,"PtRap4",'${OPTION}')';
-
-root -l -q -b MITStyle.C makeSystHist.C'(0,3,"Pt",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(0,3,"Rap",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(0,3,"PhiStar",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(0,3,"PtRap0",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(0,3,"PtRap1",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(0,3,"PtRap2",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(0,3,"PtRap3",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(0,3,"PtRap4",'${OPTION}')';
-
-root -l -q -b MITStyle.C makeSystHist.C'(1,3,"Pt",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(1,3,"Rap",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(1,3,"PhiStar",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(1,3,"PtRap0",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(1,3,"PtRap1",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(1,3,"PtRap2",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(1,3,"PtRap3",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist.C'(1,3,"PtRap4",'${OPTION}')';
-
-root -l -q -b MITStyle.C makeSystHist_LepEff.C'(0,3,"Pt",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist_LepEff.C'(0,3,"Rap",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist_LepEff.C'(0,3,"PhiStar",'${OPTION}')';
-
-root -l -q -b MITStyle.C makeSystHist_LepEff.C'(1,3,"Pt",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist_LepEff.C'(1,3,"Rap",'${OPTION}')';
-root -l -q -b MITStyle.C makeSystHist_LepEff.C'(1,3,"PhiStar",'${OPTION}')';
+done
+done

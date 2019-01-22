@@ -9,19 +9,19 @@
 #include <iostream>
 #include <fstream>
 
-const bool useAutoStat = false;
-
-void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "Pt"){
+void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "Pt", bool useAutoStat = false){
 
   TString chanName = "mm"; TString chanNameGen = "MM";
   if(nsel == 1) {chanName = "ee"; chanNameGen = "EE";}
   bool applyQCDscalePDFUnc = true;
 
+  int inputValues[2] = {5, 10};
+
   TString path = "../inputsCards200/";
   if     (theHistName == "Tot") {path = "../inputsCards200/"; applyQCDscalePDFUnc = false;}
   else if(theHistName == "Total") {path = "../inputs/"; theHistName = "Tot"; applyQCDscalePDFUnc = false;}
+  else if(theHistName == "PtAll") {path = "../inputs/"; theHistName = "Pt"; applyQCDscalePDFUnc = false; inputValues[0] = 36; inputValues[1] = 72;}
 
-  int inputValues[2] = {5, 10};
   if(theHistName == "Tot") {inputValues[0] = 1; inputValues[1] = 1;}
   const int nChan = inputValues[0];
   const int nReco = inputValues[1];

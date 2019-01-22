@@ -143,6 +143,10 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
   _file[2] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_momreslepeff.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // MonRes2
   _file[3] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_momres3.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // MonRes3
   }
+  else if(doCorrelateMomResLepEff == true && nsel == 2){
+  _file[2] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_momreslepeff.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // MonRes3
+  _file[3] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_momres2.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // MonRes2
+  }
   _file[4] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_momres4.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // MonRes4
   _file[5] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_pdf.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // PDF bkg
   _file[6] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_qcd.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // QCD bkg.
@@ -168,7 +172,8 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
   }
 
   TString label="MM";
-  if (nsel==1){label="EE";}
+  if      (nsel==1){label="EE";}
+  else if (nsel==2){label="LL";}
   TH1D* histPred     = (TH1D*)_fileDef->Get(Form("hDDil%s%s",theHistName.Data(),label.Data()));
   TH1D* histPredStat = (TH1D*)histPred->Clone(Form("hDDil%s%s_Stat",theHistName.Data(),label.Data()));
   TH1D* histPred_PDF = (TH1D*)_fileDef->Get(Form("hDDil%s%s_PDF",theHistName.Data(),label.Data()));
@@ -176,30 +181,67 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
 
   double systVal[allNuisancesCov],systTotalVal;
 
-                       // receff/lepeff2/lepeff3/lepeff4/leff5/lepeff6/lepeff7/lumi
-  double systXSVal[8] = {0.378, 0.479, 0.320, 0.607, 0.318, 0.309, 0.039, 2.500};
-  if(nsel == 1) {systXSVal[0] = 0.933;
-                 systXSVal[1] = 0.630; systXSVal[2] = 0.058; systXSVal[3] = 0.578; systXSVal[4] = 0.510; systXSVal[5] = 0.873; systXSVal[6] = 0.129;
-             systXSVal[7] = 2.500;}
+                        // receff/lepeff2/lepeff3/lepeff4/leff5/lepeff6/lepeff7/lumi
+  double systXSValMM[8] = {0.378, 0.479, 0.320, 0.607, 0.318, 0.309, 0.039, 2.500};
+  double systXSValEE[8] = {0.933, 0.630, 0.058, 0.578, 0.510, 0.873, 0.129, 2.500};
+  double systXSVal[8];
+  for(int ns=0; ns<8; ns++){
+    if     (nsel == 0) systXSVal[ns] = systXSValMM[ns];
+    else if(nsel == 1) systXSVal[ns] = systXSValEE[ns];
+    else if(nsel == 2) systXSVal[ns] = (systXSValMM[ns]+systXSValEE[ns])/2.0;
+  }
 
-  double systUnfVal[16] = {0.361, 0.591, 0.189, 0.548, 0.279, 0.488, 0.573, 1.181, 0.799, 0.402, 0.188, 0.607, 0.302, 0.573, 0.119, 0.106};
+  double systUnfVal[24] = {
+0.140,
+0.140,
+0.140,
+0.150,
+0.150,
+0.150,
+0.130,
+0.130,
+0.130,
+0.160,
+0.160,
+0.160,
+0.110,
+0.110,
+0.110,
+0.130,
+0.130,
+0.130,
+0.140,
+0.140,
+0.140,
+0.130,
+0.130,
+0.130
+};
   double theSystUnfVal = 0.0;
   if     (theHistName == "Pt"      && nsel == 0) theSystUnfVal = systUnfVal[ 0];
   else if(theHistName == "Pt"      && nsel == 1) theSystUnfVal = systUnfVal[ 1];
-  else if(theHistName == "Rap"     && nsel == 0) theSystUnfVal = systUnfVal[ 2];
-  else if(theHistName == "Rap"     && nsel == 1) theSystUnfVal = systUnfVal[ 3];
-  else if(theHistName == "PhiStar" && nsel == 0) theSystUnfVal = systUnfVal[ 4];
-  else if(theHistName == "PhiStar" && nsel == 1) theSystUnfVal = systUnfVal[ 5];
-  else if(theHistName == "PtRap0"  && nsel == 0) theSystUnfVal = systUnfVal[ 6];
-  else if(theHistName == "PtRap0"  && nsel == 1) theSystUnfVal = systUnfVal[ 7];
-  else if(theHistName == "PtRap1"  && nsel == 0) theSystUnfVal = systUnfVal[ 8];
-  else if(theHistName == "PtRap1"  && nsel == 1) theSystUnfVal = systUnfVal[ 9];
-  else if(theHistName == "PtRap2"  && nsel == 0) theSystUnfVal = systUnfVal[10];
-  else if(theHistName == "PtRap2"  && nsel == 1) theSystUnfVal = systUnfVal[11];
-  else if(theHistName == "PtRap3"  && nsel == 0) theSystUnfVal = systUnfVal[12];
-  else if(theHistName == "PtRap3"  && nsel == 1) theSystUnfVal = systUnfVal[13];
-  else if(theHistName == "PtRap4"  && nsel == 0) theSystUnfVal = systUnfVal[14];
-  else if(theHistName == "PtRap4"  && nsel == 1) theSystUnfVal = systUnfVal[15];
+  else if(theHistName == "Pt"      && nsel == 2) theSystUnfVal = systUnfVal[ 2];
+  else if(theHistName == "Rap"     && nsel == 0) theSystUnfVal = systUnfVal[ 3];
+  else if(theHistName == "Rap"     && nsel == 1) theSystUnfVal = systUnfVal[ 4];
+  else if(theHistName == "Rap"     && nsel == 2) theSystUnfVal = systUnfVal[ 5];
+  else if(theHistName == "PhiStar" && nsel == 0) theSystUnfVal = systUnfVal[ 6];
+  else if(theHistName == "PhiStar" && nsel == 1) theSystUnfVal = systUnfVal[ 7];
+  else if(theHistName == "PhiStar" && nsel == 2) theSystUnfVal = systUnfVal[ 8];
+  else if(theHistName == "PtRap0"  && nsel == 0) theSystUnfVal = systUnfVal[ 9];
+  else if(theHistName == "PtRap0"  && nsel == 1) theSystUnfVal = systUnfVal[10];
+  else if(theHistName == "PtRap0"  && nsel == 2) theSystUnfVal = systUnfVal[11];
+  else if(theHistName == "PtRap1"  && nsel == 0) theSystUnfVal = systUnfVal[12];
+  else if(theHistName == "PtRap1"  && nsel == 1) theSystUnfVal = systUnfVal[13];
+  else if(theHistName == "PtRap1"  && nsel == 2) theSystUnfVal = systUnfVal[14];
+  else if(theHistName == "PtRap2"  && nsel == 0) theSystUnfVal = systUnfVal[15];
+  else if(theHistName == "PtRap2"  && nsel == 1) theSystUnfVal = systUnfVal[16];
+  else if(theHistName == "PtRap2"  && nsel == 2) theSystUnfVal = systUnfVal[17];
+  else if(theHistName == "PtRap3"  && nsel == 0) theSystUnfVal = systUnfVal[18];
+  else if(theHistName == "PtRap3"  && nsel == 1) theSystUnfVal = systUnfVal[19];
+  else if(theHistName == "PtRap3"  && nsel == 2) theSystUnfVal = systUnfVal[20];
+  else if(theHistName == "PtRap4"  && nsel == 0) theSystUnfVal = systUnfVal[21];
+  else if(theHistName == "PtRap4"  && nsel == 1) theSystUnfVal = systUnfVal[22];
+  else if(theHistName == "PtRap4"  && nsel == 2) theSystUnfVal = systUnfVal[23];
   else {printf("WRONG OPTION\n"); return;}
 
   printf("       unf     monres1 monres2 monres3 momres4 PDF     QCD     receff  lepeffstat    lepeffsyst mcstat  dastat  lumi       total\n");

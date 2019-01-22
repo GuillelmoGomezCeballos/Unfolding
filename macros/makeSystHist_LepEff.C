@@ -125,10 +125,14 @@ void makeSystHist_LepEff(int nsel = 0, int whichDY = 3, TString theHistName = "P
   double systVal[allNuisancesCov],systTotalVal;
 
                        // receff/lepeff2/lepeff3/lepeff4/leff5/lepeff6/lepeff7/lumi
-  double systXSVal[8] = {0.378, 0.479, 0.320, 0.607, 0.318, 0.309, 0.039, 2.500};
-  if(nsel == 1) {systXSVal[0] = 0.933;
-                 systXSVal[1] = 0.630; systXSVal[2] = 0.058; systXSVal[3] = 0.578; systXSVal[4] = 0.510; systXSVal[5] = 0.873; systXSVal[6] = 0.129;
-             systXSVal[7] = 2.500;}
+  double systXSValMM[8] = {0.378, 0.479, 0.320, 0.607, 0.318, 0.309, 0.039, 2.500};
+  double systXSValEE[8] = {0.933, 0.630, 0.058, 0.578, 0.510, 0.873, 0.129, 2.500};
+  double systXSVal[8];
+  for(int ns=0; ns<8; ns++){
+    if     (nsel == 0) systXSVal[ns] = systXSValMM[ns];
+    else if(nsel == 1) systXSVal[ns] = systXSValEE[ns];
+    else if(nsel == 2) systXSVal[ns] = (systXSValMM[ns]+systXSValEE[ns])/2.0;
+  }
 
   for(int i=1; i<=histDef->GetNbinsX(); i++){
     for(int j=0; j<allNuisancesCov; j++){
@@ -179,7 +183,6 @@ void makeSystHist_LepEff(int nsel = 0, int whichDY = 3, TString theHistName = "P
   atributes(histoSystPlot[5],XName.Data(), 7,"Uncertainty (%)", 1, increaseSize);
   atributes(histoSystPlot[6],XName.Data(), 8,"Uncertainty (%)", 1, increaseSize);
   atributes(histoSystPlot[7],XName.Data(),11,"Uncertainty (%)", 1, increaseSize);
-  atributes(histoSystPlot[8],XName.Data(),46,"Uncertainty (%)", 1, increaseSize);
 
   TCanvas* c1 = new TCanvas("c1", "c1",5,5,500,500);
   c1->cd();
@@ -212,7 +215,7 @@ void makeSystHist_LepEff(int nsel = 0, int whichDY = 3, TString theHistName = "P
  leg ->SetFillColor(kWhite);
  leg ->SetBorderSize(0);
  leg->SetTextSize(0.030);                                                                         
- leg->AddEntry(histoSystPlot[0],"Total efficienci uncertainty","l");
+ leg->AddEntry(histoSystPlot[0],"Total efficiency uncertainty","l");
  leg->AddEntry(histoSystPlot[1],"Statistical","l");
  leg->AddEntry(histoSystPlot[2],"FSR modeling","l");
  leg->AddEntry(histoSystPlot[3],"Resolution modeling","l");

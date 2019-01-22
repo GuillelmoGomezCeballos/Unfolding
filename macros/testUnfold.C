@@ -8,11 +8,16 @@
 #include <fstream>
 #include "TUnfold.h"
 
-// nsel = 0 (mm) 1 (ee)
+// nsel = 0 (mm) 1 (ee) 2 (ll)
 // whichDY = 0 (MG), 1 (aMCNLO), 2 (POWHEG), 3 (aMCNLO Pt)
-void helper_function(int nsel=0,int whichDY=0, int rebin=1, TString theHistName = "Pt", TString suffix = "", int suffixStat = -1){
-  printf("TORUN: nsel = %d whichDY = %d rebin = %d theHistName = %s  suffix = %s, suffixStat = %d\n",nsel,whichDY,rebin,theHistName.Data(),suffix.Data(),suffixStat);
+void helper_function(int nselFixed=0,int whichDY=0, int rebin=1, TString theHistName = "Pt", TString suffix = "", int suffixStat = -1){
+  printf("TORUN: nsel = %d whichDY = %d rebin = %d theHistName = %s  suffix = %s, suffixStat = %d\n",nselFixed,whichDY,rebin,theHistName.Data(),suffix.Data(),suffixStat);
   TString theInputFolder = "inputs";
+
+  int nsel = nselFixed;
+  if(nselFixed == 2) {
+    nsel = 0;
+  }
 
   TFile *_file0;
   TFile *_file1;
@@ -30,17 +35,11 @@ void helper_function(int nsel=0,int whichDY=0, int rebin=1, TString theHistName 
     _file2 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period3.root",theInputFolder.Data(),2,theHistName.Data()));
     theXS = 2075.14*3;
   }
-  else if(whichDY == 2 && nsel == 0){
+  else if(whichDY == 2){
     _file0 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period3.root",theInputFolder.Data(),whichDY,theHistName.Data()));
-    _file1 = TFile::Open("/afs/cern.ch/work/c/ceballos/public/samples/panda/v_001_0/DYJetsToMM_POWHEG.root");
+    _file1 = TFile::Open("/afs/cern.ch/work/c/ceballos/public/samples/panda/v_001_0/DYJetsToLL_POWHEG.root");
     _file2 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period3.root",theInputFolder.Data(),1,theHistName.Data()));
-    theXS = 1975.0*2075.14/2008.4;
-  }
-  else if(whichDY == 2 && nsel == 1){
-    _file0 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period3.root",theInputFolder.Data(),whichDY,theHistName.Data()));
-    _file1 = TFile::Open("/afs/cern.ch/work/c/ceballos/public/samples/panda/v_001_0/DYJetsToEE_POWHEG.root");
-    _file2 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period3.root",theInputFolder.Data(),1,theHistName.Data()));
-    theXS = 1975.0*2075.14/2008.4;
+    theXS = 1975.0*2075.14/2008.4*2;
   }
   else if(whichDY == 3){
     _file0 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period3.root",theInputFolder.Data(),whichDY,theHistName.Data()));
@@ -68,10 +67,20 @@ if(suffix == "_momreslepeff") {systName2 = "_MomRes";systName3 = "_3";if(nsel ==
 cout << Form("histo%sRecDA%s_%d%s",theHistName.Data(),systName0.Data(),nsel,systName1.Data()) << endl;
 TH1D* hDA = (TH1D*)_file0->Get(Form("histo%sRecDA%s_%d%s",theHistName.Data(),systName0.Data(),nsel,systName1.Data()));
 TH1D* hEM = (TH1D*)_file0->Get(Form("histo%sRecEM%s_%d%s",theHistName.Data(),systName0.Data(),nsel,systName1.Data()));
+if(nselFixed == 2){
+  TH1D* hDA2 = (TH1D*)_file0->Get(Form("histo%sRecDA%s_%d%s",theHistName.Data(),systName0.Data(),1,systName1.Data()));
+  TH1D* hEM2 = (TH1D*)_file0->Get(Form("histo%sRecEM%s_%d%s",theHistName.Data(),systName0.Data(),1,systName1.Data()));
+  hDA->Add(hDA2);
+  hEM->Add(hEM2);
+}
 
 if     (suffix == "_qcd") systName0 = "_QCD";
 else if(suffix == "_pdf") systName0 = "_PDF";
 TH1D* hVV = (TH1D*)_file0->Get(Form("histo%sRecVV%s_%d%s",theHistName.Data(),systName0.Data(),nsel,systName1.Data()));
+if(nselFixed == 2){
+  TH1D* hVV2 = (TH1D*)_file0->Get(Form("histo%sRecVV%s_%d%s",theHistName.Data(),systName0.Data(),1,systName1.Data()));
+  hVV->Add(hVV2);
+}
 
 hDA->Add(hEM,-1.0);
 hDA->Add(hVV,-1.0);
@@ -79,9 +88,14 @@ for(int i=0; i<=hDA->GetNbinsX()+1; i++) {
   if(hDA->GetBinContent(i) < 0) hDA->SetBinContent(i,0.0);
 }
 
-TH1D* hDY = (TH1D*)_file0->Get(Form("histo%sRecDY%s_%d%s",theHistName.Data(),systName2.Data(),nsel,systName3.Data()));
-
+TH1D* hDY  = (TH1D*)_file0->Get(Form("histo%sRecDY%s_%d%s",theHistName.Data(),systName2.Data(),nsel,systName3.Data()));
 TH2D* Adet = (TH2D*)_file0->Get(Form("histo%sRecGen%s_%d%s",theHistName.Data(),systName2.Data(),nsel,systName3.Data()));
+if(nselFixed == 2){
+  TH1D* hDY2  = (TH1D*)_file0->Get(Form("histo%sRecDY%s_%d%s",theHistName.Data(),systName2.Data(),1,systName3.Data()));
+  TH2D* Adet2 = (TH2D*)_file0->Get(Form("histo%sRecGen%s_%d%s",theHistName.Data(),systName2.Data(),1,systName3.Data()));
+  hDY ->Add(hDY2 );
+  Adet->Add(Adet2);  
+}
 
 if     (suffix == "_sigstat") {
   suffix = Form("_sigstat%d",suffixStat);
@@ -100,12 +114,24 @@ if     (suffix == "_sigstat") {
 
 if(suffix == "_momreslepeff") {
   systName2 = "_LepEff";systName3 = Form("_%d",3);
-  TH1D* hDYSyst = (TH1D*)_file0->Get(Form("histo%sRecDY%s_%d%s",theHistName.Data(),systName2.Data(),nsel,systName3.Data()));
+  TH1D* hDYSyst  = (TH1D*)_file0->Get(Form("histo%sRecDY%s_%d%s",theHistName.Data(),systName2.Data(),nsel,systName3.Data()));
   TH2D* AdetSyst = (TH2D*)_file0->Get(Form("histo%sRecGen%s_%d%s",theHistName.Data(),systName2.Data(),nsel,systName3.Data()));
+  if(nselFixed == 2){
+    TH1D* hDYSyst2  = (TH1D*)_file0->Get(Form("histo%sRecDY%s_%d%s",theHistName.Data(),systName2.Data(),1,systName3.Data()));
+    TH2D* AdetSyst2 = (TH2D*)_file0->Get(Form("histo%sRecGen%s_%d%s",theHistName.Data(),systName2.Data(),1,systName3.Data()));
+    hDYSyst ->Add(hDYSyst2 );
+    AdetSyst->Add(AdetSyst2);
+  }
 
   systName2 = "";systName3 = "";
-  TH1D* hDYDef = (TH1D*)_file0->Get(Form("histo%sRecDY%s_%d%s",theHistName.Data(),systName2.Data(),nsel,systName3.Data()));
+  TH1D* hDYDef  = (TH1D*)_file0->Get(Form("histo%sRecDY%s_%d%s",theHistName.Data(),systName2.Data(),nsel,systName3.Data()));
   TH2D* AdetDef = (TH2D*)_file0->Get(Form("histo%sRecGen%s_%d%s",theHistName.Data(),systName2.Data(),nsel,systName3.Data()));
+  if(nselFixed == 2){
+    TH1D* hDYDef2  = (TH1D*)_file0->Get(Form("histo%sRecDY%s_%d%s",theHistName.Data(),systName2.Data(),1,systName3.Data()));
+    TH2D* AdetDef2 = (TH2D*)_file0->Get(Form("histo%sRecGen%s_%d%s",theHistName.Data(),systName2.Data(),1,systName3.Data()));
+    hDYDef ->Add(hDYDef2 );
+    AdetDef->Add(AdetDef2);
+  }
 
   double diff;
   for(int i=0; i<=hDY->GetNbinsX()+1; i++) {
@@ -123,14 +149,32 @@ if(suffix == "_momreslepeff") {
 TString inputFileHist = Form("hDDil%sMM",theHistName.Data());
 if(nsel == 1) inputFileHist = Form("hDDil%sEE",theHistName.Data());
 TH1D* xini  = (TH1D*)_file1->Get(inputFileHist.Data());
+if(nselFixed == 2){
+  TString inputFileHist2 = Form("hDDil%sEE",theHistName.Data());
+  TH1D* xini2  = (TH1D*)_file1->Get(inputFileHist2.Data());
+  xini->Add(xini2);
+  xini->SetNameTitle(Form("hDDil%sLL",theHistName.Data()), Form("hDDil%sLL",theHistName.Data()));
+}
 
 TString inputFilePDFHist = Form("hDDil%sMM_PDF",theHistName.Data());
 if(nsel == 1) inputFilePDFHist = Form("hDDil%sEE_PDF",theHistName.Data());
 TH1D* hDDilPDF = (TH1D*)_file1->Get(inputFilePDFHist.Data());
+if(nselFixed == 2){
+  TString inputFilePDFHist2 = Form("hDDil%sEE_PDF",theHistName.Data());
+  TH1D* hDDilPDF2 = (TH1D*)_file1->Get(inputFilePDFHist2.Data());
+  hDDilPDF->Add(hDDilPDF2);
+  hDDilPDF->SetNameTitle(Form("hDDil%sLL_PDF",theHistName.Data()), Form("hDDil%sLL_PDF",theHistName.Data()));
+}
 
 TString inputFileQCDHist = Form("hDDil%sMM_QCD",theHistName.Data());
 if(nsel == 1) inputFileQCDHist = Form("hDDil%sEE_QCD",theHistName.Data());
 TH1D* hDDilQCD = (TH1D*)_file1->Get(inputFileQCDHist.Data());
+if(nselFixed == 2){
+  TString inputFileQCDHist2 = Form("hDDil%sEE_QCD",theHistName.Data());
+  TH1D* hDDilQCD2 = (TH1D*)_file1->Get(inputFileQCDHist2.Data());
+  hDDilQCD->Add(hDDilQCD2);
+  hDDilQCD->SetNameTitle(Form("hDDil%sLL_QCD",theHistName.Data()), Form("hDDil%sLL_QCD",theHistName.Data()));
+}
 
 if(whichDY == 1 || whichDY == 2){
   TH1D* hDNEvt  = (TH1D*)_file1->Get("hDTotalMCWeight");
@@ -236,18 +280,25 @@ for(int i=0; i<=unfoldedDistribution->GetNbinsX()+1; i++) {
   if(unfoldedDistribution->GetBinContent(i) < 0) unfoldedDistribution->SetBinContent(i,0.00001);
 }
 
+if(nselFixed == 2){
+  unfoldedDistribution->Scale(0.5);
+  xini->Scale(0.5);
+  hDDilPDF->Scale(0.5);
+  hDDilQCD->Scale(0.5);
+}
+
 unfoldedDistribution->Draw();
 xini->Draw("same");
 xini->SetLineColor(kRed);
 printf("RESULTS: %f %f\n",unfoldedDistribution->Integral("width"),xini->Integral("width"));
 
-TString theOutputFolder = Form("outputs%s_nsel%d/dy%d",theHistName.Data(),nsel,whichDY);
+TString theOutputFolder = Form("outputs%s_nsel%d/dy%d",theHistName.Data(),nselFixed,whichDY);
 
 char CommandToExec[300];
 sprintf(CommandToExec,"mkdir -p %s",theOutputFolder.Data());
 gSystem->Exec(CommandToExec);  
 char output[100];
-sprintf(output,"%s/histoUnfolding%s_nsel%d_dy%d_rebin%d%s.root",theOutputFolder.Data(),theHistName.Data(),nsel,whichDY,rebin,suffix.Data());
+sprintf(output,"%s/histoUnfolding%s_nsel%d_dy%d_rebin%d%s.root",theOutputFolder.Data(),theHistName.Data(),nselFixed,whichDY,rebin,suffix.Data());
 
 TFile* outFilePlots = new TFile(output,"recreate");
 outFilePlots->cd();
@@ -262,7 +313,7 @@ outFilePlots->Close();
 }
 
 void testUnfold(TString theHistName = "Pt", TString suffix = "", int suffixLepStat = -1, int rebin=1){
-  for (int i=0;i<=1;i++){
+  for (int i=0;i<=2;i++){
     for (int j=0;j<=3;j++){
   //for (int i=0;i<=0;i++){
   //  for (int j=0;j<=0;j++){
