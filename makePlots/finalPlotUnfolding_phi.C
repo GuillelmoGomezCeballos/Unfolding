@@ -165,13 +165,13 @@ void finalPlotUnfolding_phi(int nsel = 0, int ReBin = 1, TString XTitle = "N_{je
 
   if(nsel==0)
     {
-      sprintf(xlabel,"#phi_{#eta}* (#mu^{+}#mu^{-})");
-      sprintf(ylabel,"d#sigma/#phi_{#eta}* [pb]");
+      sprintf(xlabel,"#phi* (#mu^{+}#mu^{-})");
+      sprintf(ylabel,"d#sigma/#phi* [pb]");
     }
   else
     {
-      sprintf(xlabel,"#phi_{#eta}* (e^{+}e^{-})");
-      sprintf(ylabel,"d#sigma/#phi_{#eta}* [pb]");
+      sprintf(xlabel,"#phi* (e^{+}e^{-})");
+      sprintf(ylabel,"d#sigma/#phi* [pb]");
     }
  
   TCanvas *c1 = MakeCanvas("c1","c1",800,800);
@@ -281,8 +281,8 @@ void finalPlotUnfolding_phi(int nsel = 0, int ReBin = 1, TString XTitle = "N_{je
   CPlot plotZmmPt("zmm_phi","",xlabel,ylabel);
   plotZmmPt.AddHist1D(hData,"Data","PE2",1,1,20);
   plotZmmPt.AddHist1D(hPred1,"aMC@NLO","PE",linecolorAMCAtNlo,1,markerstyleAMCAtNLO);
-  plotZmmPt.AddHist1D(hPred2,"Powheg","PE",linecolorPowheg,1,markerstylePowheg);
-  plotZmmPt.AddHist1D(hPred3,"Minlo","PE",linecolorFEWZ,1,markerstyleFEWZ);
+  plotZmmPt.AddHist1D(hPred2,"POWHEG","PE",linecolorPowheg,1,markerstylePowheg);
+  plotZmmPt.AddHist1D(hPred3,"MINLO","PE",linecolorFEWZ,1,markerstyleFEWZ);
   plotZmmPt.AddHist1D(hData,"PE2",1,1,20);
   plotZmmPt.AddHist1D(hData,"P",1,1,20);
  
@@ -332,7 +332,7 @@ void finalPlotUnfolding_phi(int nsel = 0, int ReBin = 1, TString XTitle = "N_{je
 
   TH1D *ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_POWHEG_COMP =  myratio(hPred2,hData);
     
-  CPlot plotZmmPtDiffSplit_POWHEG("zmmPtSplit","","","Powheg/Data");
+  CPlot plotZmmPtDiffSplit_POWHEG("zmmPtSplit","","","POWHEG/Data");
   plotZmmPtDiffSplit_POWHEG.AddHist1D( hZmmPtDiffDummySplit);
   plotZmmPtDiffSplit_POWHEG.AddHist1D(ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_POWHEG_COMP,"0E",linecolorPowheg,1,markerstylePowheg);
   plotZmmPtDiffSplit_POWHEG.AddHist1D(hZmmPtDiffDummySplit,"E2",TColor::GetColor("#828282"),20,1);
@@ -345,7 +345,7 @@ void finalPlotUnfolding_phi(int nsel = 0, int ReBin = 1, TString XTitle = "N_{je
   TH1D *ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_FEWZ_COMP =  myratio(hPred3,hData);
   hZmmPtDiffDummySplit->GetXaxis()->SetLabelSize(30);
   
-  CPlot plotZmmPtDiffSplit_FEWZ("zmmPtSplit","",xlabel,"Minlo/Data");
+  CPlot plotZmmPtDiffSplit_FEWZ("zmmPtSplit","",xlabel,"MINLO/Data");
   plotZmmPtDiffSplit_FEWZ.AddHist1D(hZmmPtDiffDummySplit);
   plotZmmPtDiffSplit_FEWZ.AddHist1D(ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_FEWZ_COMP,"0E",linecolorFEWZ,1,markerstyleFEWZ);
   plotZmmPtDiffSplit_FEWZ.AddHist1D(hZmmPtDiffDummySplit,"E2",TColor::GetColor("#828282"),20,1);

@@ -300,13 +300,13 @@ void finalPlotUnfolding_powheg(int nsel = 0, int ReBin = 1, TString XTitle = "N_
   const TString format("all");
   
   
-  CPlot plotZmmPt("zee_shower","",xlabel,ylabel);
+  CPlot plotZmmPt("zmm_shower","",xlabel,ylabel);
   plotZmmPt.SetXRange(0.3,1500);
   plotZmmPt.AddHist1D(hZmmPtDiffDummySplit2);
   plotZmmPt.AddHist1D(hData,"Data","PE2",1,1,20);
   plotZmmPt.AddHist1D(hPred1,"aMC@NLO","PE",linecolorAMCAtNlo,1,markerstyleAMCAtNLO);
-  plotZmmPt.AddHist1D(hPred2,"Powheg","PE",linecolorPowheg,1,markerstylePowheg);
-  plotZmmPt.AddHist1D(hPred3,"Minlo","PE",linecolorFEWZ,1,markerstyleFEWZ);
+  plotZmmPt.AddHist1D(hPred2,"POWHEG","PE",linecolorPowheg,1,markerstylePowheg);
+  plotZmmPt.AddHist1D(hPred3,"MINLO","PE",linecolorFEWZ,1,markerstyleFEWZ);
   plotZmmPt.AddHist1D(hData,"PE2",1,1,20);
   plotZmmPt.AddHist1D(hData,"P",1,1,20);
  
@@ -339,7 +339,7 @@ void finalPlotUnfolding_powheg(int nsel = 0, int ReBin = 1, TString XTitle = "N_
   
   TH1D *ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_AMCATNLO_COMP =  myratio(hPred1,hData);
 
-  CPlot plotZmmPtDiffSplit_AMCATNLO("zee_double_ratio_rap4","","","aMC@NLO/Data");
+  CPlot plotZmmPtDiffSplit_AMCATNLO("zmm_shower_ratio","","","aMC@NLO/Data");
   plotZmmPtDiffSplit_AMCATNLO.AddHist1D( hZmmPtDiffDummySplit);
   plotZmmPtDiffSplit_AMCATNLO.AddHist1D(ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_AMCATNLO_COMP,"0E",linecolorAMCAtNlo,1,markerstyleAMCAtNLO);
   plotZmmPtDiffSplit_AMCATNLO.AddHist1D(hZmmPtDiffDummySplit,"E2",TColor::GetColor("#828282"),20,1);
@@ -357,7 +357,7 @@ void finalPlotUnfolding_powheg(int nsel = 0, int ReBin = 1, TString XTitle = "N_
 
   TH1D *ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_POWHEG_COMP =  myratio(hPred2,hData);
     
-  CPlot plotZmmPtDiffSplit_POWHEG("zmmPtSplit","","","Powheg/Data");
+  CPlot plotZmmPtDiffSplit_POWHEG("zmmPtSplit","","","POWHEG/Data");
   plotZmmPtDiffSplit_POWHEG.AddHist1D( hZmmPtDiffDummySplit);
   plotZmmPtDiffSplit_POWHEG.AddHist1D(ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_POWHEG_COMP,"0E",linecolorPowheg,1,markerstylePowheg);
   plotZmmPtDiffSplit_POWHEG.AddHist1D(hZmmPtDiffDummySplit,"E2",TColor::GetColor("#828282"),20,1);
@@ -370,7 +370,7 @@ void finalPlotUnfolding_powheg(int nsel = 0, int ReBin = 1, TString XTitle = "N_
   TH1D *ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_FEWZ_COMP =  myratio(hPred3,hData);
   hZmmPtDiffDummySplit->GetXaxis()->SetLabelSize(30);
   
-  CPlot plotZmmPtDiffSplit_FEWZ("zmmPtSplit","",xlabel,"Minlo/Data");
+  CPlot plotZmmPtDiffSplit_FEWZ("zmmPtSplit","",xlabel,"MINLO/Data");
   plotZmmPtDiffSplit_FEWZ.AddHist1D(hZmmPtDiffDummySplit);
   plotZmmPtDiffSplit_FEWZ.AddHist1D(ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_FEWZ_COMP,"0E",linecolorFEWZ,1,markerstyleFEWZ);
   plotZmmPtDiffSplit_FEWZ.AddHist1D(hZmmPtDiffDummySplit,"E2",TColor::GetColor("#828282"),20,1);
