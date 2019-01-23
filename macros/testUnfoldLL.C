@@ -12,7 +12,7 @@
 // whichDY = 0 (MG), 1 (aMCNLO), 2 (POWHEG), 3 (aMCNLO Pt)
 void helper_function(int nsel=0,int whichDY=0, int rebin=1, TString theHistName = "Pt", TString suffix = "", int suffixStat = -1){
   printf("TORUN: nsel = %d whichDY = %d rebin = %d theHistName = %s  suffix = %s, suffixStat = %d\n",nsel,whichDY,rebin,theHistName.Data(),suffix.Data(),suffixStat);
-  TString theInputFolder = "inputs";
+  TString theInputFolder = "inputsLL";
 
   TFile *_file0;
   TFile *_file1;
@@ -59,13 +59,13 @@ if(suffix == "_receff1") {systName2 = "_RecEff";systName3 = "_1";}
 if(suffix == "_receff2") {systName2 = "_RecEff";systName3 = "_2";}
 if(suffix == "_receff3") {systName2 = "_RecEff";systName3 = "_3";}
 if(suffix == "_momreslepeff") {systName2 = "_MomRes";systName3 = "_3";if(nsel == 1) {systName2 = "_MomRes";systName3 = "_2";systName0 = "_MomRes";systName1 = "_2";}}
-cout << Form("histo%sRecDA%s_%d%s",theHistName.Data(),systName0.Data(),nsel,systName1.Data()) << endl;
-TH1D* hDA = (TH1D*)_file0->Get(Form("histo%sRecDA%s_%d%s",theHistName.Data(),systName0.Data(),nsel,systName1.Data()));
-TH1D* hEM = (TH1D*)_file0->Get(Form("histo%sRecEM%s_%d%s",theHistName.Data(),systName0.Data(),nsel,systName1.Data()));
+cout << Form("histoLL%sRecDA%s_%d%s",theHistName.Data(),systName0.Data(),nsel,systName1.Data()) << endl;
+TH1D* hDA = (TH1D*)_file0->Get(Form("histoLL%sRecDA%s_%d%s",theHistName.Data(),systName0.Data(),nsel,systName1.Data()));
+TH1D* hEM = (TH1D*)_file0->Get(Form("histoLL%sRecEM%s_%d%s",theHistName.Data(),systName0.Data(),nsel,systName1.Data()));
 
 if     (suffix == "_qcd") systName0 = "_QCD";
 else if(suffix == "_pdf") systName0 = "_PDF";
-TH1D* hVV = (TH1D*)_file0->Get(Form("histo%sRecVV%s_%d%s",theHistName.Data(),systName0.Data(),nsel,systName1.Data()));
+TH1D* hVV = (TH1D*)_file0->Get(Form("histoLL%sRecVV%s_%d%s",theHistName.Data(),systName0.Data(),nsel,systName1.Data()));
 
 hDA->Add(hEM,-1.0);
 hDA->Add(hVV,-1.0);
@@ -73,8 +73,8 @@ for(int i=0; i<=hDA->GetNbinsX()+1; i++) {
   if(hDA->GetBinContent(i) < 0) hDA->SetBinContent(i,0.0);
 }
 
-TH1D* hDY  = (TH1D*)_file0->Get(Form("histo%sRecDY%s_%d%s",theHistName.Data(),systName2.Data(),nsel,systName3.Data()));
-TH2D* Adet = (TH2D*)_file0->Get(Form("histo%sRecGen%s_%d%s",theHistName.Data(),systName2.Data(),nsel,systName3.Data()));
+TH1D* hDY  = (TH1D*)_file0->Get(Form("histoLL%sRecDY%s_%d%s",theHistName.Data(),systName2.Data(),nsel,systName3.Data()));
+TH2D* Adet = (TH2D*)_file0->Get(Form("histoLL%sRecGen%s_%d%s",theHistName.Data(),systName2.Data(),nsel,systName3.Data()));
 
 if     (suffix == "_sigstat") {
   suffix = Form("_sigstat%d",suffixStat);
@@ -93,12 +93,12 @@ if     (suffix == "_sigstat") {
 
 if(suffix == "_momreslepeff") {
   systName2 = "_LepEff";systName3 = Form("_%d",3);
-  TH1D* hDYSyst  = (TH1D*)_file0->Get(Form("histo%sRecDY%s_%d%s",theHistName.Data(),systName2.Data(),nsel,systName3.Data()));
-  TH2D* AdetSyst = (TH2D*)_file0->Get(Form("histo%sRecGen%s_%d%s",theHistName.Data(),systName2.Data(),nsel,systName3.Data()));
+  TH1D* hDYSyst  = (TH1D*)_file0->Get(Form("histoLL%sRecDY%s_%d%s",theHistName.Data(),systName2.Data(),nsel,systName3.Data()));
+  TH2D* AdetSyst = (TH2D*)_file0->Get(Form("histoLL%sRecGen%s_%d%s",theHistName.Data(),systName2.Data(),nsel,systName3.Data()));
 
   systName2 = "";systName3 = "";
-  TH1D* hDYDef  = (TH1D*)_file0->Get(Form("histo%sRecDY%s_%d%s",theHistName.Data(),systName2.Data(),nsel,systName3.Data()));
-  TH2D* AdetDef = (TH2D*)_file0->Get(Form("histo%sRecGen%s_%d%s",theHistName.Data(),systName2.Data(),nsel,systName3.Data()));
+  TH1D* hDYDef  = (TH1D*)_file0->Get(Form("histoLL%sRecDY%s_%d%s",theHistName.Data(),systName2.Data(),nsel,systName3.Data()));
+  TH2D* AdetDef = (TH2D*)_file0->Get(Form("histoLL%sRecGen%s_%d%s",theHistName.Data(),systName2.Data(),nsel,systName3.Data()));
 
   double diff;
   for(int i=0; i<=hDY->GetNbinsX()+1; i++) {
@@ -135,6 +135,9 @@ if(whichDY == 1 || whichDY == 2){
   hDDilPDF->Scale(theLumi);
   hDDilQCD->Scale(theLumi);
 }
+xini	->Scale(2.0);
+hDDilPDF->Scale(2.0);
+hDDilQCD->Scale(2.0);
 
 // add non-reconstructed fiducial events in gen bin 0
 for(int i=1; i<=Adet->GetNbinsY(); i++) { // GEN
@@ -220,6 +223,13 @@ TH1D *unfoldedDistribution = (TH1D*)unfold.GetOutput("unfold");
 // TH1D *x = (TH1D*)(unfold.GetOutput("x","myVariable",0,0));
 // TH2D *rhoij=unfold.GetRhoIJ("correlation","myVariable");
 
+{
+  unfoldedDistribution->Scale(0.5);
+  xini->Scale(0.5);
+  hDDilPDF->Scale(0.5);
+  hDDilQCD->Scale(0.5);
+}
+
 unfoldedDistribution->Scale(1,"width");
 xini->Scale(1,"width");
 hDDilPDF->Scale(1,"width");
@@ -234,7 +244,7 @@ xini->Draw("same");
 xini->SetLineColor(kRed);
 printf("RESULTS: %f %f\n",unfoldedDistribution->Integral("width"),xini->Integral("width"));
 
-TString theOutputFolder = Form("outputs%s_nsel%d/dy%d",theHistName.Data(),nsel,whichDY);
+TString theOutputFolder = Form("outputsLL%s_nsel%d/dy%d",theHistName.Data(),nsel,whichDY);
 
 char CommandToExec[300];
 sprintf(CommandToExec,"mkdir -p %s",theOutputFolder.Data());
@@ -254,7 +264,7 @@ outFilePlots->Close();
 
 }
 
-void testUnfold(TString theHistName = "Pt", TString suffix = "", int suffixLepStat = -1, int rebin=1){
+void testUnfoldLL(TString theHistName = "Pt", TString suffix = "", int suffixLepStat = -1, int rebin=1){
   for (int i=0;i<=1;i++){
     for (int j=0;j<=3;j++){
   //for (int i=0;i<=0;i++){

@@ -45,7 +45,7 @@ void atributes(TH1D *histo, TString xtitle="", Int_t COLOR = 1, TString ytitle="
   histo->SetLineStyle(style);
 }
 
-void makeSystHist_LepEff(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", bool doXSRatio = false){
+void helper_function(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", bool doXSRatio = false){
   TString theOutputName = Form("outputs%s_nsel%d",theHistName.Data(),nsel);
 
   const int nBinPt = 36; Float_t xbinsPt[nBinPt+1] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,18,20,22,25,28,32,37,43,52,65,85,120,160,190,220,250,300,400,500,800,1500};
@@ -131,7 +131,6 @@ void makeSystHist_LepEff(int nsel = 0, int whichDY = 3, TString theHistName = "P
   for(int ns=0; ns<8; ns++){
     if     (nsel == 0) systXSVal[ns] = systXSValMM[ns];
     else if(nsel == 1) systXSVal[ns] = systXSValEE[ns];
-    else if(nsel == 2) systXSVal[ns] = (systXSValMM[ns]+systXSValEE[ns])/2.0;
   }
 
   for(int i=1; i<=histDef->GetNbinsX(); i++){
@@ -230,4 +229,13 @@ void makeSystHist_LepEff(int nsel = 0, int whichDY = 3, TString theHistName = "P
 
  TString myOutputFile = Form("histoUnfolding%sSystEff%s_nsel%d_dy%d.pdf",theXSRatioName.Data(),theHistName.Data(),nsel,whichDY);
  c1->SaveAs(myOutputFile.Data());
+}
+
+void makeSystHist_LepEff(TString theHistName = "Pt"){
+  for (int i=0;i<=1;i++){
+    for (int j=0;j<=3;j++){
+      helper_function(i, j, theHistName, false);
+      helper_function(i, j, theHistName, true);
+    }
+  }
 }

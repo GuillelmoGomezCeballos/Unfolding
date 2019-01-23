@@ -11,6 +11,14 @@
 #include <iostream>
 #include <fstream>
 
+const int nGenSyst = 11;
+const int nEffSyst = 8+480;
+const int nStaSyst = 72;
+const int nOthSyst = 2;
+
+const int allNuisancesCov  = nGenSyst+nEffSyst+nStaSyst+nOthSyst;
+const int allNuisancesPlot = 9;
+
 void atributes(TH1D *histo, TString xtitle="", Int_t COLOR = 1, TString ytitle="Fraction", Int_t style = 1, Bool_t increaseSize = kFALSE){
 
   histo->ResetAttLine();
@@ -47,7 +55,7 @@ void atributes(TH1D *histo, TString xtitle="", Int_t COLOR = 1, TString ytitle="
   histo->SetMarkerStyle(kFullDotLarge);
   histo->SetLineStyle(style);
 }
-void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", bool doXSRatio = false){
+void helper_function(TString theSuffix, int nsel = 0, int whichDY = 3, TString theHistName = "Pt", bool doXSRatio = false){
 
   bool isDebug = false;
   bool doCorrelateMomResLepEff = true;
@@ -70,15 +78,7 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
   if     (whichDY == 0) { version = 0; alternative = 1;}
   else if(whichDY == 2) { version = 2; alternative = 1;}
   else if(whichDY == 3) { version = 3; alternative = 0;}
-  TString theOutputName = Form("outputs%s_nsel%d",theHistName.Data(),nsel);
-
-  const int nGenSyst = 11;
-  const int nEffSyst = 8+480;
-  const int nStaSyst = 72;
-  const int nOthSyst = 2;
-
-  const int allNuisancesCov  = nGenSyst+nEffSyst+nStaSyst+nOthSyst;
-  const int allNuisancesPlot = 9;
+  TString theOutputName = Form("outputs%s%s_nsel%d",theSuffix.Data(),theHistName.Data(),nsel);
 
   TH1D *histoSystCov[allNuisancesCov], *histoSystPlot[allNuisancesPlot];
   if       (theHistName == "Pt"){
@@ -143,10 +143,6 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
   _file[2] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_momreslepeff.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // MonRes2
   _file[3] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_momres3.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // MonRes3
   }
-  else if(doCorrelateMomResLepEff == true && nsel == 2){
-  _file[2] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_momreslepeff.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // MonRes3
-  _file[3] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_momres2.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // MonRes2
-  }
   _file[4] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_momres4.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // MonRes4
   _file[5] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_pdf.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // PDF bkg
   _file[6] = TFile::Open(Form("%s/dy%d/histoUnfolding%s_nsel%d_dy%d_rebin1_qcd.root",theOutputName.Data(),version,theHistName.Data(),nsel,version)); // QCD bkg.
@@ -172,8 +168,7 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
   }
 
   TString label="MM";
-  if      (nsel==1){label="EE";}
-  else if (nsel==2){label="LL";}
+  if (nsel==1){label="EE";}
   TH1D* histPred     = (TH1D*)_fileDef->Get(Form("hDDil%s%s",theHistName.Data(),label.Data()));
   TH1D* histPredStat = (TH1D*)histPred->Clone(Form("hDDil%s%s_Stat",theHistName.Data(),label.Data()));
   TH1D* histPred_PDF = (TH1D*)_fileDef->Get(Form("hDDil%s%s_PDF",theHistName.Data(),label.Data()));
@@ -188,60 +183,43 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
   for(int ns=0; ns<8; ns++){
     if     (nsel == 0) systXSVal[ns] = systXSValMM[ns];
     else if(nsel == 1) systXSVal[ns] = systXSValEE[ns];
-    else if(nsel == 2) systXSVal[ns] = (systXSValMM[ns]+systXSValEE[ns])/2.0;
   }
 
-  double systUnfVal[24] = {
-0.140,
+  double systUnfVal[16] = {
 0.140,
 0.140,
 0.150,
 0.150,
-0.150,
-0.130,
 0.130,
 0.130,
 0.160,
 0.160,
-0.160,
 0.110,
 0.110,
-0.110,
-0.130,
 0.130,
 0.130,
 0.140,
 0.140,
-0.140,
-0.130,
 0.130,
 0.130
 };
   double theSystUnfVal = 0.0;
   if     (theHistName == "Pt"      && nsel == 0) theSystUnfVal = systUnfVal[ 0];
   else if(theHistName == "Pt"      && nsel == 1) theSystUnfVal = systUnfVal[ 1];
-  else if(theHistName == "Pt"      && nsel == 2) theSystUnfVal = systUnfVal[ 2];
-  else if(theHistName == "Rap"     && nsel == 0) theSystUnfVal = systUnfVal[ 3];
-  else if(theHistName == "Rap"     && nsel == 1) theSystUnfVal = systUnfVal[ 4];
-  else if(theHistName == "Rap"     && nsel == 2) theSystUnfVal = systUnfVal[ 5];
-  else if(theHistName == "PhiStar" && nsel == 0) theSystUnfVal = systUnfVal[ 6];
-  else if(theHistName == "PhiStar" && nsel == 1) theSystUnfVal = systUnfVal[ 7];
-  else if(theHistName == "PhiStar" && nsel == 2) theSystUnfVal = systUnfVal[ 8];
-  else if(theHistName == "PtRap0"  && nsel == 0) theSystUnfVal = systUnfVal[ 9];
-  else if(theHistName == "PtRap0"  && nsel == 1) theSystUnfVal = systUnfVal[10];
-  else if(theHistName == "PtRap0"  && nsel == 2) theSystUnfVal = systUnfVal[11];
-  else if(theHistName == "PtRap1"  && nsel == 0) theSystUnfVal = systUnfVal[12];
-  else if(theHistName == "PtRap1"  && nsel == 1) theSystUnfVal = systUnfVal[13];
-  else if(theHistName == "PtRap1"  && nsel == 2) theSystUnfVal = systUnfVal[14];
-  else if(theHistName == "PtRap2"  && nsel == 0) theSystUnfVal = systUnfVal[15];
-  else if(theHistName == "PtRap2"  && nsel == 1) theSystUnfVal = systUnfVal[16];
-  else if(theHistName == "PtRap2"  && nsel == 2) theSystUnfVal = systUnfVal[17];
-  else if(theHistName == "PtRap3"  && nsel == 0) theSystUnfVal = systUnfVal[18];
-  else if(theHistName == "PtRap3"  && nsel == 1) theSystUnfVal = systUnfVal[19];
-  else if(theHistName == "PtRap3"  && nsel == 2) theSystUnfVal = systUnfVal[20];
-  else if(theHistName == "PtRap4"  && nsel == 0) theSystUnfVal = systUnfVal[21];
-  else if(theHistName == "PtRap4"  && nsel == 1) theSystUnfVal = systUnfVal[22];
-  else if(theHistName == "PtRap4"  && nsel == 2) theSystUnfVal = systUnfVal[23];
+  else if(theHistName == "Rap"     && nsel == 0) theSystUnfVal = systUnfVal[ 2];
+  else if(theHistName == "Rap"     && nsel == 1) theSystUnfVal = systUnfVal[ 3];
+  else if(theHistName == "PhiStar" && nsel == 0) theSystUnfVal = systUnfVal[ 4];
+  else if(theHistName == "PhiStar" && nsel == 1) theSystUnfVal = systUnfVal[ 5];
+  else if(theHistName == "PtRap0"  && nsel == 0) theSystUnfVal = systUnfVal[ 6];
+  else if(theHistName == "PtRap0"  && nsel == 1) theSystUnfVal = systUnfVal[ 7];
+  else if(theHistName == "PtRap1"  && nsel == 0) theSystUnfVal = systUnfVal[ 8];
+  else if(theHistName == "PtRap1"  && nsel == 1) theSystUnfVal = systUnfVal[ 9];
+  else if(theHistName == "PtRap2"  && nsel == 0) theSystUnfVal = systUnfVal[10];
+  else if(theHistName == "PtRap2"  && nsel == 1) theSystUnfVal = systUnfVal[11];
+  else if(theHistName == "PtRap3"  && nsel == 0) theSystUnfVal = systUnfVal[12];
+  else if(theHistName == "PtRap3"  && nsel == 1) theSystUnfVal = systUnfVal[13];
+  else if(theHistName == "PtRap4"  && nsel == 0) theSystUnfVal = systUnfVal[14];
+  else if(theHistName == "PtRap4"  && nsel == 1) theSystUnfVal = systUnfVal[15];
   else {printf("WRONG OPTION\n"); return;}
 
   printf("       unf     monres1 monres2 monres3 momres4 PDF     QCD     receff  lepeffstat    lepeffsyst mcstat  dastat  lumi       total\n");
@@ -285,8 +263,6 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
       systVal[allNuisancesCov-1] = systVal[allNuisancesCov-1] - systXSVal[7];
     }
 
-    for(int j=0; j<allNuisancesCov; j++) {histoSystCov[j]->SetBinContent(i,systVal[j]/100.);}
-
     double systEffValStaAtOnce = systVal[12];
     double systEffValNoStat = sqrt(systVal[nGenSyst+2]*systVal[nGenSyst+2]+systVal[nGenSyst+3]*systVal[nGenSyst+3]+systVal[nGenSyst+4]*systVal[nGenSyst+4]+
                                    systVal[nGenSyst+5]*systVal[nGenSyst+5]+systVal[nGenSyst+6]*systVal[nGenSyst+6]+systVal[nGenSyst+7]*systVal[nGenSyst+7]);
@@ -300,11 +276,23 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
     for(int k=nGenSyst+nEffSyst; k<nGenSyst+nEffSyst+nStaSyst; k++) systMCValSta = systMCValSta + systVal[k]*systVal[k];
     systMCValSta = sqrt(systMCValSta);
 
+    // Remove double counting uncertainties
+    if(nsel == 1 && theSuffix == "LL"){
+      systVal[0] = 0;
+      systMCValSta = 0;
+      systVal[5] = 0;
+      systVal[6] = 0;
+      systVal[allNuisancesCov-2] = 0;
+      systVal[allNuisancesCov-1] = 0;
+    }
+
+    for(int j=0; j<allNuisancesCov; j++) {histoSystCov[j]->SetBinContent(i,systVal[j]/100.);}
+
     histoSystPlot[1]->SetBinContent(i,sqrt(systVal[0]*systVal[0]+systMCValSta*systMCValSta)); // unfolding + mc stat
     histoSystPlot[2]->SetBinContent(i,sqrt(systVal[1]*systVal[1]+systVal[2]*systVal[2]+systVal[3]*systVal[3]+systVal[4]*systVal[4])); // momres
     histoSystPlot[3]->SetBinContent(i,sqrt(systVal[5]*systVal[5]+systVal[6]*systVal[6])); // Bkg.
-    histoSystPlot[5]->SetBinContent(i,systVal[7]); // RecEff
     histoSystPlot[4]->SetBinContent(i,sqrt(systEffValNoStat*systEffValNoStat+systEffValSta*systEffValSta)); // LepEff
+    histoSystPlot[5]->SetBinContent(i,systVal[7]); // RecEff
     histoSystPlot[6]->SetBinContent(i,systVal[allNuisancesCov-2]); // data stat
     histoSystPlot[7]->SetBinContent(i,systVal[allNuisancesCov-1]); // lumi
 
@@ -330,6 +318,7 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
             histoSystPlot[0]->GetBinContent(i));
   }
 
+  // This is a beast
   histoSystPlot[0]->Smooth();
   histoSystPlot[1]->Smooth();
   histoSystPlot[2]->Smooth();
@@ -340,6 +329,36 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
   histoSystPlot[7]->Smooth();
   histoSystPlot[8]->Smooth();
 
+  TString theXSRatioName = "";
+  if(doXSRatio) theXSRatioName = "_XSRatio";
+  // All information to a file
+  for(int i=1; i<=histDef->GetNbinsX(); i++){
+    histDef      ->SetBinError(i,histDef->GetBinContent(i)*histoSystPlot[0]->GetBinContent(i)/100.);
+    histDefNoLumi->SetBinError(i,histDef->GetBinContent(i)*histoSystPlot[8]->GetBinContent(i)/100.);
+  }
+  for(Int_t i=1;i<=histPred->GetNbinsX();++i){
+    double diff[3] = {histPred->GetBinError(i), histPred_PDF->GetBinContent(i)-histPred->GetBinContent(i), histPred_QCD->GetBinContent(i)-histPred->GetBinContent(i)};
+    histPred    ->SetBinError(i,sqrt(diff[0]*diff[0]+diff[1]*diff[1]+diff[2]*diff[2]));
+    histPredStat->SetBinError(i,diff[0]);
+    if(isDebug) printf("histPredSyst (%2d) %5.2f %5.2f %5.2f -> %5.2f\n",i,100*diff[0]/histPred->GetBinContent(i),100*diff[1]/histPred->GetBinContent(i),100*diff[2]/histPred->GetBinContent(i),100*histPred->GetBinError(i)/histPred->GetBinContent(i));
+  }
+
+  char output[200];
+  sprintf(output,"histoUnfolding%sSyst%s%s_nsel%d_dy%d_rebin1_default.root",theXSRatioName.Data(),theSuffix.Data(),theHistName.Data(),nsel,whichDY); 
+  TFile* outFilePlots = new TFile(output,"recreate");
+  outFilePlots->cd();
+
+  histDef      ->Write();
+  histDefNoLumi->Write();
+  histPred     ->Write();
+  histPredStat ->Write();
+
+  for(int i=0; i<allNuisancesCov; i++) histoSystCov[i]->Write();
+  for(int i=0; i<allNuisancesPlot; i++) histoSystPlot[i]->Write();
+
+  outFilePlots->Close();
+
+  // Printing information
   Bool_t increaseSize = kFALSE;
   TString XName = "Z p_{T} [GeV]";
   if     (theHistName == "Rap") XName = "|y^{Z}|";
@@ -371,63 +390,116 @@ void makeSystHist(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", boo
   histoSystPlot[6]->Draw("same,hist");
   if(!doXSRatio) histoSystPlot[7]->Draw("same,hist");
 
- TLatex * CMSLabel = new TLatex (0.15, 0.93, "#bf{CMS}");
- CMSLabel->SetNDC ();
- CMSLabel->SetTextAlign (10);
- CMSLabel->SetTextFont (42);
- CMSLabel->SetTextSize (0.04);
- CMSLabel->Draw ("same") ;
- TLatex * _lumiLabel = new TLatex (0.95, 0.93, "35.9 fb^{-1} (13 TeV)");
- _lumiLabel->SetNDC ();
- _lumiLabel->SetTextAlign (30);
- _lumiLabel->SetTextFont (42);
- _lumiLabel->SetTextSize (0.04);
- _lumiLabel->Draw ("same") ;
- TLegend* leg = new TLegend(0.20,0.60,0.50,0.90);                                                    
- leg ->SetFillStyle(0);
- leg ->SetFillColor(kWhite);
- leg ->SetBorderSize(0);
- leg->SetTextSize(0.035);                                                                         
- leg->AddEntry(histoSystPlot[0],"Total uncertainty","l");
- leg->AddEntry(histoSystPlot[1],"Unfolding","l");
- leg->AddEntry(histoSystPlot[2],"Momentum resolution","l");
- leg->AddEntry(histoSystPlot[3],"Background","l");
- leg->AddEntry(histoSystPlot[4],"Identification","l");
- leg->AddEntry(histoSystPlot[5],"Reconstruction","l");
- leg->AddEntry(histoSystPlot[6],"Statistical","l");
- if(!doXSRatio) leg->AddEntry(histoSystPlot[7],"Luminosity","l");
- leg->Draw();
+  TLatex * CMSLabel = new TLatex (0.15, 0.93, "#bf{CMS}");
+  CMSLabel->SetNDC ();
+  CMSLabel->SetTextAlign (10);
+  CMSLabel->SetTextFont (42);
+  CMSLabel->SetTextSize (0.04);
+  CMSLabel->Draw ("same") ;
+  TLatex * _lumiLabel = new TLatex (0.95, 0.93, "35.9 fb^{-1} (13 TeV)");
+  _lumiLabel->SetNDC ();
+  _lumiLabel->SetTextAlign (30);
+  _lumiLabel->SetTextFont (42);
+  _lumiLabel->SetTextSize (0.04);
+  _lumiLabel->Draw ("same") ;
+  TLegend* leg = new TLegend(0.20,0.60,0.50,0.90);                                                    
+  leg ->SetFillStyle(0);
+  leg ->SetFillColor(kWhite);
+  leg ->SetBorderSize(0);
+  leg->SetTextSize(0.035);                                                                         
+  leg->AddEntry(histoSystPlot[0],"Total uncertainty","l");
+  leg->AddEntry(histoSystPlot[1],"Unfolding","l");
+  leg->AddEntry(histoSystPlot[2],"Momentum resolution","l");
+  leg->AddEntry(histoSystPlot[3],"Background","l");
+  leg->AddEntry(histoSystPlot[4],"Identification","l");
+  leg->AddEntry(histoSystPlot[5],"Reconstruction","l");
+  leg->AddEntry(histoSystPlot[6],"Statistical","l");
+  if(!doXSRatio) leg->AddEntry(histoSystPlot[7],"Luminosity","l");
+  leg->Draw();
 
- TString theXSRatioName = "";
- if(doXSRatio) theXSRatioName = "_XSRatio";
+  TString myOutputFile = Form("histoUnfolding%sSyst%s%s_nsel%d_dy%d.pdf",theXSRatioName.Data(),theSuffix.Data(),theHistName.Data(),nsel,whichDY);
+  c1->SaveAs(myOutputFile.Data());
 
- TString myOutputFile = Form("histoUnfolding%sSyst%s_nsel%d_dy%d.pdf",theXSRatioName.Data(),theHistName.Data(),nsel,whichDY);
- c1->SaveAs(myOutputFile.Data());
 
- for(int i=1; i<=histDef->GetNbinsX(); i++){
-   histDef      ->SetBinError(i,histDef->GetBinContent(i)*histoSystPlot[0]->GetBinContent(i)/100.);
-   histDefNoLumi->SetBinError(i,histDef->GetBinContent(i)*histoSystPlot[8]->GetBinContent(i)/100.);
- }
- for(Int_t i=1;i<=histPred->GetNbinsX();++i){
-   double diff[3] = {histPred->GetBinError(i), histPred_PDF->GetBinContent(i)-histPred->GetBinContent(i), histPred_QCD->GetBinContent(i)-histPred->GetBinContent(i)};
-   histPred    ->SetBinError(i,sqrt(diff[0]*diff[0]+diff[1]*diff[1]+diff[2]*diff[2]));
-   histPredStat->SetBinError(i,diff[0]);
-   if(isDebug) printf("histPredSyst (%2d) %5.2f %5.2f %5.2f -> %5.2f\n",i,100*diff[0]/histPred->GetBinContent(i),100*diff[1]/histPred->GetBinContent(i),100*diff[2]/histPred->GetBinContent(i),100*histPred->GetBinError(i)/histPred->GetBinContent(i));
- }
+}
+void makeSystHist(TString theSuffix, TString theHistName = "Pt"){
+  if(theSuffix != "LL") theSuffix = "";
+  char output[200];
+  for (int j=0;j<=3;j++){
+    for (int nr=0; nr<=1; nr++) {
+      TString theXSRatioName = "";
+      if(nr == 1) theXSRatioName = "_XSRatio";
+      for (int i=0; i<=1; i++){
+        printf("Parameters: %s %d %d %s %d\n",theSuffix.Data(),i,j,theHistName.Data(),nr);
+        helper_function(theSuffix.Data(), i, j, theHistName, nr);
+      }
+      if(theSuffix == "LL"){
+	sprintf(output,"histoUnfolding%sSyst%s%s_nsel%d_dy%d_rebin1_default.root",theXSRatioName.Data(),theSuffix.Data(),theHistName.Data(),0,j); 
+	TFile* inpFilePlots0 = TFile::Open(output);
+	sprintf(output,"histoUnfolding%sSyst%s%s_nsel%d_dy%d_rebin1_default.root",theXSRatioName.Data(),theSuffix.Data(),theHistName.Data(),1,j); 
+	TFile* inpFilePlots1 = TFile::Open(output);
 
- char output[200];
- sprintf(output,"histoUnfolding%sSyst%s_nsel%d_dy%d_rebin1_default.root",theXSRatioName.Data(),theHistName.Data(),nsel,whichDY); 
- TFile* outFilePlots = new TFile(output,"recreate");
- outFilePlots->cd();
+	TH1D* histDef0       = (TH1D*)inpFilePlots0->Get("unfold"        );
+	TH1D* histDefNoLumi0 = (TH1D*)inpFilePlots0->Get("unfoldNoLumi"  );
+	TH1D* histPred0      = (TH1D*)inpFilePlots0->Get("hDDilPtMM"     );
+	TH1D* histPredStat0  = (TH1D*)inpFilePlots0->Get("hDDilPtMM_Stat");
+	TH1D* histoSystCov0[allNuisancesCov];
+	TH1D* histoSystPlot0[allNuisancesPlot];
+	for(int i=0; i<allNuisancesCov; i++)  histoSystCov0[i]  = (TH1D*)inpFilePlots0->Get(Form("histoSystCov_%d",i));
+	for(int i=0; i<allNuisancesPlot; i++) histoSystPlot0[i] = (TH1D*)inpFilePlots0->Get(Form("histoSystPlot_%d",i));
 
- histDef      ->Write();
- histDefNoLumi->Write();
- histPred     ->Write();
- histPredStat ->Write();
- 
- for(int i=0; i<allNuisancesCov; i++) histoSystCov[i]->Write();
- for(int i=0; i<allNuisancesPlot; i++) histoSystPlot[i]->Write();
+	TH1D* histDef1       = (TH1D*)inpFilePlots1->Get("unfold"        );
+	TH1D* histDefNoLumi1 = (TH1D*)inpFilePlots1->Get("unfoldNoLumi"  );
+	TH1D* histPred1      = (TH1D*)inpFilePlots1->Get("hDDilPtEE"     );
+	TH1D* histPredStat1  = (TH1D*)inpFilePlots1->Get("hDDilPtEE_Stat");
+	TH1D* histoSystCov1[allNuisancesCov];
+	TH1D* histoSystPlot1[allNuisancesPlot];
+	for(int i=0; i<allNuisancesCov; i++)  histoSystCov1[i]  = (TH1D*)inpFilePlots1->Get(Form("histoSystCov_%d",i));
+	for(int i=0; i<allNuisancesPlot; i++) histoSystPlot1[i] = (TH1D*)inpFilePlots1->Get(Form("histoSystPlot_%d",i));
 
- outFilePlots->Close();
+	histDef0      ->Add(histDef1	  );
+	histDefNoLumi0->Add(histDefNoLumi1);
+	histPred0     ->Add(histPred1	  );
+	histPredStat0 ->Add(histPredStat1 );
+	histDef0      ->Scale(0.5);
+	histDefNoLumi0->Scale(0.5);
+	histPred0     ->Scale(0.5);
+	histPredStat0 ->Scale(0.5);
+	histDef0      ->SetNameTitle("unfold"	     , "unfold"        );
+	histDefNoLumi0->SetNameTitle("unfoldNoLumi"  , "unfoldNoLumi"  );
+	histPred0     ->SetNameTitle("hDDilPtLL"     , "hDDilPtLL"     );
+	histPredStat0 ->SetNameTitle("hDDilPtLL_Stat", "hDDilPtLL_Stat");
 
+        printf("       unf     monres  Bck     id      reco    dastat  lumi       total\n");
+        for(Int_t nb=1;nb<=histDef0->GetNbinsX();++nb){
+          printf("(%2d) %7.3f %7.3f %7.3f %7.3f %7.3f %7.3f %7.3f -> %7.3f\n",nb,
+            histoSystPlot0[1]->GetBinContent(nb),histoSystPlot0[2]->GetBinContent(nb),histoSystPlot0[3]->GetBinContent(nb),
+            histoSystPlot0[4]->GetBinContent(nb),histoSystPlot0[5]->GetBinContent(nb),histoSystPlot0[6]->GetBinContent(nb),histoSystPlot0[7]->GetBinContent(nb),
+            histoSystPlot0[0]->GetBinContent(nb));
+          printf("(%2d) %7.3f %7.3f %7.3f %7.3f %7.3f %7.3f %7.3f -> %7.3f\n",nb,
+            histoSystPlot1[1]->GetBinContent(nb),histoSystPlot1[2]->GetBinContent(nb),histoSystPlot1[3]->GetBinContent(nb),
+            histoSystPlot1[4]->GetBinContent(nb),histoSystPlot1[5]->GetBinContent(nb),histoSystPlot1[6]->GetBinContent(nb),histoSystPlot1[7]->GetBinContent(nb),
+            histoSystPlot1[0]->GetBinContent(nb));
+            for(int i=0; i<allNuisancesCov; i++)  histoSystCov0[i] ->SetBinContent(nb, TMath::Sqrt(TMath::Power(histoSystCov0[i] ->GetBinContent(nb),2)+TMath::Power(histoSystCov1[i] ->GetBinContent(nb),2)));
+            for(int i=0; i<allNuisancesPlot; i++) histoSystPlot0[i]->SetBinContent(nb, TMath::Sqrt(TMath::Power(histoSystPlot0[i]->GetBinContent(nb),2)+TMath::Power(histoSystPlot1[i]->GetBinContent(nb),2)));
+          printf("(%2d) %7.3f %7.3f %7.3f %7.3f %7.3f %7.3f %7.3f -> %7.3f\n",nb,
+            histoSystPlot0[1]->GetBinContent(nb),histoSystPlot0[2]->GetBinContent(nb),histoSystPlot0[3]->GetBinContent(nb),
+            histoSystPlot0[4]->GetBinContent(nb),histoSystPlot0[5]->GetBinContent(nb),histoSystPlot0[6]->GetBinContent(nb),histoSystPlot0[7]->GetBinContent(nb),
+            histoSystPlot0[0]->GetBinContent(nb));
+        }
+
+	sprintf(output,"histoUnfolding%sSyst%s%s_nsel%d_dy%d_rebin1_default.root",theXSRatioName.Data(),theSuffix.Data(),theHistName.Data(),2,j); 
+	TFile* outFilePlots = new TFile(output,"recreate");
+	outFilePlots->cd();
+	histDef0      ->Write();
+	histDefNoLumi0->Write();
+	histPred0     ->Write();
+	histPredStat0 ->Write();
+	for(int i=0; i<allNuisancesCov; i++) histoSystCov0[i]->Write();
+	for(int i=0; i<allNuisancesPlot; i++) histoSystPlot0[i]->Write();
+	outFilePlots->Close();
+
+      }
+    }
+  }
 }
