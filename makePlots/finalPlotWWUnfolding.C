@@ -14,9 +14,6 @@
 #include "CMS_lumi.C"
 #include "TTree.h"
 
-// This can be done via a root file late on
-const double totalXSUnc = 0.07165385;
-
 void eraselabel(TPad *p,Double_t h){
   p->cd();
   TPad *pe = new TPad("pe","pe",0.02,0,p->GetLeftMargin(),h);	   
@@ -54,7 +51,8 @@ void atributes(TH1D *histo, TString xtitle = "", TString ytitle = "Fraction", TS
   histo->GetYaxis()->SetTitleOffset(  0.5);
   histo->GetYaxis()->SetTitleSize  (0.120);
   histo->GetYaxis()->SetTickLength (0.03 );
-
+  histo->SetFillColor(12);
+  histo->SetFillStyle(3345);
   histo->SetLineColor  (kBlack);
   histo->SetMarkerStyle(kFullCircle);
 }
@@ -71,7 +69,7 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   else if(keyLabel0 == "PTL1"   || keyLabel0 == "PTL10JET")   {XTitle = "p_{T}^{max}"; isLogX = true;}
   else if(keyLabel0 == "PTL2"   || keyLabel0 == "PTL20JET")   {XTitle = "p_{T}^{min}"; isLogX = true;}
   else if(keyLabel0 == "PTLL"   || keyLabel0 == "PTLL0JET")   {XTitle = "p_{T}^{ll}"; isLogX = true;}
-  else if(keyLabel0 == "NJET"   || keyLabel0 == "NJET0JET")   {XTitle = "n_{jets}";}
+  else if(keyLabel0 == "NJET"   || keyLabel0 == "NJET0JET")   {XTitle = "N_{jets}";}
 
   gInterpreter->ExecuteMacro("PaperStyle.C");
   gStyle->SetOptStat(0);
