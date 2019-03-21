@@ -142,14 +142,14 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   }
 
   TString theYTitle = "#sigma / GeV [pb]";
-  if     (isNormalized && keyLabel0 == "MLL")    theYTitle = "1/#sigma d#sigma/dm_{ll}";
-  else if(isNormalized && keyLabel0 == "DPHILL") theYTitle = "1/#sigma d#sigma/d#Delta#phi_{ll}";
-  else if(isNormalized && keyLabel0 == "PTL1")   theYTitle = "1/#sigma d#sigma/dp_{T}^{max}";
-  else if(isNormalized && keyLabel0 == "PTL2")   theYTitle = "1/#sigma d#sigma/dp_{T}^{mix}";
-  else if(isNormalized && keyLabel0 == "PTLL")   theYTitle = "1/#sigma d#sigma/dp_{T}^{ll}";
-  else if(isNormalized && keyLabel0 == "NJET")   theYTitle = "1/#sigma d#sigma/dn_{jets}";
-  else if(                keyLabel0 == "DPHILL") theYTitle = "#sigma / dg. [pb]";
-  else if(                keyLabel0 == "NJET")   theYTitle = "#sigma [pb]";
+  if     (isNormalized && keyLabel0.Contains("MLL"))    theYTitle = "1/#sigma d#sigma/dm_{ll}";
+  else if(isNormalized && keyLabel0.Contains("DPHILL")) theYTitle = "1/#sigma d#sigma/d#Delta#phi_{ll}";
+  else if(isNormalized && keyLabel0.Contains("PTL1"))   theYTitle = "1/#sigma d#sigma/dp_{T}^{max}";
+  else if(isNormalized && keyLabel0.Contains("PTL2"))   theYTitle = "1/#sigma d#sigma/dp_{T}^{mix}";
+  else if(isNormalized && keyLabel0.Contains("PTLL"))   theYTitle = "1/#sigma d#sigma/dp_{T}^{ll}";
+  else if(isNormalized && keyLabel0.Contains("NJET"))   theYTitle = "1/#sigma d#sigma/dn_{jets}";
+  else if(                keyLabel0.Contains("DPHILL")) theYTitle = "#sigma / dg. [pb]";
+  else if(                keyLabel0.Contains("NJET"))   theYTitle = "#sigma [pb]";
 
   hPred1->GetYaxis()->SetTitle(theYTitle.Data());
   hPred1->GetYaxis()->SetLabelFont  (   42);

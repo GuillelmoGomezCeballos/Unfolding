@@ -125,8 +125,8 @@ void helper_function(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", 
   double systVal[allNuisancesCov],systTotalVal;
 
                        // receff/lepeff2/lepeff3/lepeff4/leff5/lepeff6/lepeff7/lumi
-  double systXSValMM[8] = {0.378, 0.479, 0.320, 0.607, 0.318, 0.309, 0.039, 2.500};
-  double systXSValEE[8] = {0.933, 0.630, 0.058, 0.578, 0.510, 0.873, 0.129, 2.500};
+  double systXSValMM[8] = {0.378, 0.062, 0.265, 0.601, 0.246, 0.183, 0.039, 2.500};
+  double systXSValEE[8] = {0.933, 0.104, 0.058, 0.578, 0.510, 0.385, 0.129, 2.500};
   double systXSVal[8];
   for(int ns=0; ns<8; ns++){
     if     (nsel == 0) systXSVal[ns] = systXSValMM[ns];

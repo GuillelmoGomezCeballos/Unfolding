@@ -177,8 +177,8 @@ void helper_function(TString theSuffix, int nsel = 0, int whichDY = 3, TString t
   double systVal[allNuisancesCov],systTotalVal;
 
                         // receff/lepeff2/lepeff3/lepeff4/leff5/lepeff6/lepeff7/lumi
-  double systXSValMM[8] = {0.378, 0.479, 0.320, 0.607, 0.318, 0.309, 0.039, 2.500};
-  double systXSValEE[8] = {0.933, 0.630, 0.058, 0.578, 0.510, 0.873, 0.129, 2.500};
+  double systXSValMM[8] = {0.378, 0.062, 0.265, 0.601, 0.246, 0.183, 0.039, 2.500};
+  double systXSValEE[8] = {0.933, 0.104, 0.058, 0.578, 0.510, 0.385, 0.129, 2.500};
   double systXSVal[8];
   for(int ns=0; ns<8; ns++){
     if     (nsel == 0) systXSVal[ns] = systXSValMM[ns];
@@ -439,19 +439,19 @@ void makeSystHist(TString theSuffix, TString theHistName = "Pt"){
 	sprintf(output,"histoUnfolding%sSyst%s%s_nsel%d_dy%d_rebin1_default.root",theXSRatioName.Data(),theSuffix.Data(),theHistName.Data(),1,j); 
 	TFile* inpFilePlots1 = TFile::Open(output);
 
-	TH1D* histDef0       = (TH1D*)inpFilePlots0->Get("unfold"        );
-	TH1D* histDefNoLumi0 = (TH1D*)inpFilePlots0->Get("unfoldNoLumi"  );
-	TH1D* histPred0      = (TH1D*)inpFilePlots0->Get("hDDilPtMM"     );
-	TH1D* histPredStat0  = (TH1D*)inpFilePlots0->Get("hDDilPtMM_Stat");
+	TH1D* histDef0       = (TH1D*)inpFilePlots0->Get("unfold"                                 );
+	TH1D* histDefNoLumi0 = (TH1D*)inpFilePlots0->Get("unfoldNoLumi"                           );
+	TH1D* histPred0      = (TH1D*)inpFilePlots0->Get(Form("hDDil%sMM",theHistName.Data())     );
+	TH1D* histPredStat0  = (TH1D*)inpFilePlots0->Get(Form("hDDil%sMM_Stat",theHistName.Data()));
 	TH1D* histoSystCov0[allNuisancesCov];
 	TH1D* histoSystPlot0[allNuisancesPlot];
 	for(int i=0; i<allNuisancesCov; i++)  histoSystCov0[i]  = (TH1D*)inpFilePlots0->Get(Form("histoSystCov_%d",i));
 	for(int i=0; i<allNuisancesPlot; i++) histoSystPlot0[i] = (TH1D*)inpFilePlots0->Get(Form("histoSystPlot_%d",i));
 
-	TH1D* histDef1       = (TH1D*)inpFilePlots1->Get("unfold"        );
-	TH1D* histDefNoLumi1 = (TH1D*)inpFilePlots1->Get("unfoldNoLumi"  );
-	TH1D* histPred1      = (TH1D*)inpFilePlots1->Get("hDDilPtEE"     );
-	TH1D* histPredStat1  = (TH1D*)inpFilePlots1->Get("hDDilPtEE_Stat");
+	TH1D* histDef1       = (TH1D*)inpFilePlots1->Get("unfold"				  );
+	TH1D* histDefNoLumi1 = (TH1D*)inpFilePlots1->Get("unfoldNoLumi" 			  );
+	TH1D* histPred1      = (TH1D*)inpFilePlots1->Get(Form("hDDil%sEE",theHistName.Data())	  );
+	TH1D* histPredStat1  = (TH1D*)inpFilePlots1->Get(Form("hDDil%sEE_Stat",theHistName.Data()));
 	TH1D* histoSystCov1[allNuisancesCov];
 	TH1D* histoSystPlot1[allNuisancesPlot];
 	for(int i=0; i<allNuisancesCov; i++)  histoSystCov1[i]  = (TH1D*)inpFilePlots1->Get(Form("histoSystCov_%d",i));
@@ -465,10 +465,10 @@ void makeSystHist(TString theSuffix, TString theHistName = "Pt"){
 	histDefNoLumi0->Scale(0.5);
 	histPred0     ->Scale(0.5);
 	histPredStat0 ->Scale(0.5);
-	histDef0      ->SetNameTitle("unfold"	     , "unfold"        );
-	histDefNoLumi0->SetNameTitle("unfoldNoLumi"  , "unfoldNoLumi"  );
-	histPred0     ->SetNameTitle("hDDilPtLL"     , "hDDilPtLL"     );
-	histPredStat0 ->SetNameTitle("hDDilPtLL_Stat", "hDDilPtLL_Stat");
+	histDef0      ->SetNameTitle("unfold"	                              , "unfold"                                 );
+	histDefNoLumi0->SetNameTitle("unfoldNoLumi"                           , "unfoldNoLumi"                           );
+	histPred0     ->SetNameTitle(Form("hDDil%sLL",theHistName.Data()     ), Form("hDDil%sLL",theHistName.Data())     );
+	histPredStat0 ->SetNameTitle(Form("hDDil%sLL_Stat",theHistName.Data()), Form("hDDil%sLL_Stat",theHistName.Data()));
 
         printf("       unf     monres  Bck     id      reco    dastat  lumi       total\n");
         for(Int_t nb=1;nb<=histDef0->GetNbinsX();++nb){
@@ -488,7 +488,7 @@ void makeSystHist(TString theSuffix, TString theHistName = "Pt"){
             histoSystPlot0[0]->GetBinContent(nb));
         }
 
-	sprintf(output,"histoUnfolding%sSyst%s%s_nsel%d_dy%d_rebin1_default.root",theXSRatioName.Data(),theSuffix.Data(),theHistName.Data(),2,j); 
+	sprintf(output,"histoUnfolding%sSyst%s_nsel%d_dy%d_rebin1_default.root",theXSRatioName.Data(),theHistName.Data(),2,j); 
 	TFile* outFilePlots = new TFile(output,"recreate");
 	outFilePlots->cd();
 	histDef0      ->Write();

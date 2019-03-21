@@ -9,7 +9,7 @@
 #include <iostream>
 #include <fstream>
 
-void testAnalysis_test(int nsel=0, int DY=3, int alt=0, TString theHistName = "Pt", bool useAutoStat = false){
+void testAnalysis_test(int nsel, int DY=3, int alt=0, TString theHistName = "Pt", bool useAutoStat = false){
 
   TString chanName = "mm"; TString chanNameGen = "MM";
   if(nsel == 1) {chanName = "ee"; chanNameGen = "EE";}

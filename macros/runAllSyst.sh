@@ -18,7 +18,7 @@ root -l -q -b MITStyle.C makeSystHist.C'("'${OPTION}'","PtRap2")';
 root -l -q -b MITStyle.C makeSystHist.C'("'${OPTION}'","PtRap3")';
 root -l -q -b MITStyle.C makeSystHist.C'("'${OPTION}'","PtRap4")';
 
-if [ ${OPTION} == "" ]; then
+if [ ${OPTION} == "noLL" ]; then
   root -l -q -b MITStyle.C makeSystHist_LepEff.C'("Pt")';
   root -l -q -b MITStyle.C makeSystHist_LepEff.C'("Rap")';
   root -l -q -b MITStyle.C makeSystHist_LepEff.C'("PhiStar")';
