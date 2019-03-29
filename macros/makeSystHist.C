@@ -177,7 +177,7 @@ void helper_function(TString theSuffix, int nsel = 0, int whichDY = 3, TString t
   double systVal[allNuisancesCov],systTotalVal;
 
                         // receff/lepeff2/lepeff3/lepeff4/leff5/lepeff6/lepeff7/lumi
-  double systXSValMM[8] = {0.378, 0.062, 0.265, 0.601, 0.246, 0.183, 0.039, 2.500};
+  double systXSValMM[8] = {0.378, 0.062, 0.192, 0.548, 0.246, 0.183, 0.039, 2.500};
   double systXSValEE[8] = {0.933, 0.104, 0.058, 0.578, 0.510, 0.385, 0.129, 2.500};
   double systXSVal[8];
   for(int ns=0; ns<8; ns++){
@@ -228,17 +228,46 @@ void helper_function(TString theSuffix, int nsel = 0, int whichDY = 3, TString t
       systVal[j] = 100.*TMath::Abs(histDef->GetBinContent(i)-histAlt[j]->GetBinContent(i))/histDef->GetBinContent(i);
     }
 
+    // Function smoothing
+    bool useFunctionSmoothing = true;
+    if(useFunctionSmoothing == true) {
+      if     (theHistName == "Pt" && nsel == 1 && histDef->GetBinCenter(i) < 40){
+	systVal[1] = 1.09213e+03*TMath::Landau(histDef->GetBinCenter(i),-8.41567e+01,3.36612e+00)/2;
+	systVal[2] = 1.09213e+03*TMath::Landau(histDef->GetBinCenter(i),-8.41567e+01,3.36612e+00)/2;
+      }
+      else if(theHistName == "PtRap0" && nsel == 1 && histDef->GetBinCenter(i) < 40){
+	systVal[1] = 1.87297e+03*TMath::Landau(histDef->GetBinCenter(i),-4.11103e+01,8.53311e-01)/2;
+	systVal[2] = 1.87297e+03*TMath::Landau(histDef->GetBinCenter(i),-4.11103e+01,8.53311e-01)/2;
+      }
+      else if(theHistName == "PtRap1" && nsel == 1 && histDef->GetBinCenter(i) < 20){
+	systVal[1] = 2.21103e+03*TMath::Landau(histDef->GetBinCenter(i),-1.12350e+01,4.42520e-01)/2;
+	systVal[2] = 2.21103e+03*TMath::Landau(histDef->GetBinCenter(i),-1.12350e+01,4.42520e-01)/2;
+      }
+      else if(theHistName == "PtRap2" && nsel == 1 && histDef->GetBinCenter(i) < 30){
+	systVal[1] = 4.94505e+03*TMath::Landau(histDef->GetBinCenter(i),-2.64711e+01,6.50964e-01)/2;
+	systVal[2] = 4.94505e+03*TMath::Landau(histDef->GetBinCenter(i),-2.64711e+01,6.50964e-01)/2;
+      }
+      else if(theHistName == "PtRap2" && nsel == 1 && i>=histDef->GetNbinsX()-1){
+	systVal[1] = 100.*TMath::Abs(histDef->GetBinContent(i-1)-histAlt[1]->GetBinContent(i-1))/histDef->GetBinContent(i-1);
+	systVal[2] = 100.*TMath::Abs(histDef->GetBinContent(i-1)-histAlt[2]->GetBinContent(i-1))/histDef->GetBinContent(i-1);
+      }
+      else if(theHistName == "PtRap3" && nsel == 1 && histDef->GetBinCenter(i) < 30){
+	systVal[1] = 6.26987e+02*TMath::Landau(histDef->GetBinCenter(i),-3.89846e+01,2.89295e+00)/2;
+	systVal[2] = 6.26987e+02*TMath::Landau(histDef->GetBinCenter(i),-3.89846e+01,2.89295e+00)/2;
+      }
+      else if(theHistName == "PtRap4" && nsel == 1 && histDef->GetBinCenter(i) < 30){
+	systVal[1] = 9.71435e+03*TMath::Landau(histDef->GetBinCenter(i),-3.34539e+01,7.61375e-01)/2;
+	systVal[2] = 9.71435e+03*TMath::Landau(histDef->GetBinCenter(i),-3.34539e+01,7.61375e-01)/2;
+      }
+    }
+
     if(doMakeUseFixedSystUnf == true) systVal[0] = theSystUnfVal;
 
     if(nsel == 1) {systVal[3] =0; systVal[4] =0;}
 
-    //if      (histDef->GetBinCenter(i)+histDef->GetBinWidth(i)/2<=45  && systVal[0] > 1.0) systVal[0] = 1.0;
-    //else if (histDef->GetBinCenter(i)+histDef->GetBinWidth(i)/2<=105 && systVal[0] > 1.0) systVal[0] = 0.5;
-    //if(theHistName == "PtRap3" && systVal[0] > 7.0) systVal[0] = 2.0 + gRandom->Rndm()*0.5;
-    //if(systVal[0] > 0.5) systVal[0] = 0.5 + gRandom->Rndm()*0.5;
-    if(systVal[1] > 3.0 && i < 20) systVal[1] = 3.0 + gRandom->Rndm()*0.5;
-    if(systVal[2] > 3.0 && i < 20) systVal[2] = 3.0 + gRandom->Rndm()*0.5;
-    if(systVal[3] > 3.0 && i < 20) systVal[3] = 3.0 + gRandom->Rndm()*0.5;
+    //if(systVal[1] > 3.0 && i < 20) systVal[1] = 3.0 + gRandom->Rndm()*0.5;
+    //if(systVal[2] > 3.0 && i < 20) systVal[2] = 3.0 + gRandom->Rndm()*0.5;
+    //if(systVal[3] > 3.0 && i < 20) systVal[3] = 3.0 + gRandom->Rndm()*0.5;
     systVal[allNuisancesCov-2] = 100.*histDef->GetBinError(i)/histDef->GetBinContent(i); // data stat
     systVal[allNuisancesCov-1] = 100.*0.025;
 
@@ -425,7 +454,7 @@ void helper_function(TString theSuffix, int nsel = 0, int whichDY = 3, TString t
 void makeSystHist(TString theSuffix, TString theHistName = "Pt"){
   if(theSuffix != "LL") theSuffix = "";
   char output[200];
-  for (int j=0;j<=3;j++){
+  for (int j=0;j<=3;j++){ // dy versions
     for (int nr=0; nr<=1; nr++) {
       TString theXSRatioName = "";
       if(nr == 1) theXSRatioName = "_XSRatio";

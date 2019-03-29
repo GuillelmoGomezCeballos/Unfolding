@@ -203,7 +203,8 @@ int regParam_=-3;
 int iBest=regParam_;
 if (regParam_ <0)
 {
-  Int_t nScan=30;
+  Int_t nScan=25;
+  if(nsel == 0) nScan=9;
   if(suffix == "_testscan") nScan=50;
   TSpline *logTauX,*logTauY;
   TGraph *lCurve;
