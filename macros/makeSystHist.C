@@ -407,8 +407,10 @@ void helper_function(TString theSuffix, int nsel = 0, int whichDY = 3, TString t
   if(theHistName != "Rap") c1->SetLogx();
 
   histoSystPlot[0]->SetMinimum(0.0);
-  if     (theHistName == "Rap")     histoSystPlot[0]->SetMaximum( 6.0);
-  else if(theHistName == "PhiStar") histoSystPlot[0]->SetMaximum( 6.0);
+  if     (theHistName == "Rap" && doXSRatio == false)     histoSystPlot[0]->SetMaximum( 5.0);
+  else if(theHistName == "PhiStar" && doXSRatio == false) histoSystPlot[0]->SetMaximum( 5.0);
+  else if(theHistName == "Rap" && doXSRatio == true)      histoSystPlot[0]->SetMaximum( 3.0);
+  else if(theHistName == "PhiStar" && doXSRatio == true)  histoSystPlot[0]->SetMaximum( 3.0);
   else                              histoSystPlot[0]->SetMaximum(16.0);
   histoSystPlot[0]->Draw();
   histoSystPlot[1]->Draw("same,hist");
@@ -454,7 +456,7 @@ void helper_function(TString theSuffix, int nsel = 0, int whichDY = 3, TString t
 void makeSystHist(TString theSuffix, TString theHistName = "Pt"){
   if(theSuffix != "LL") theSuffix = "";
   char output[200];
-  for (int j=0;j<=3;j++){ // dy versions
+  for (int j=3;j<=3;j++){ // dy versions
     for (int nr=0; nr<=1; nr++) {
       TString theXSRatioName = "";
       if(nr == 1) theXSRatioName = "_XSRatio";
