@@ -456,7 +456,7 @@ void helper_function(TString theSuffix, int nsel = 0, int whichDY = 3, TString t
 void makeSystHist(TString theSuffix, TString theHistName = "Pt"){
   if(theSuffix != "LL") theSuffix = "";
   char output[200];
-  for (int j=3;j<=3;j++){ // dy versions
+  for (int j=0;j<=3;j++){ // dy versions
     for (int nr=0; nr<=1; nr++) {
       TString theXSRatioName = "";
       if(nr == 1) theXSRatioName = "_XSRatio";
