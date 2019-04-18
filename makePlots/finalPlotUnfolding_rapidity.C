@@ -91,6 +91,7 @@ void finalPlotUnfolding_rapidity(int nsel = 0, int ReBin = 1, TString XTitle = "
  
   int me=0;
   if (strncmp(keyLabel1.Data(),"EE",2)==0){me=1;}
+  if (strncmp(keyLabel1.Data(),"LL",2)==0){me=2;}
 
   char filename1[300];
   char filename2[300];
@@ -132,11 +133,9 @@ void finalPlotUnfolding_rapidity(int nsel = 0, int ReBin = 1, TString XTitle = "
   hPred1     = (TH1D*)file1->Get(Form("hDDil%s%s"    ,keyLabel2.Data(),keyLabel1.Data()));
   TFile *file2 = new TFile(plotName2, "read");  if(!file2) {printf("File %s does not exist\n",plotName.Data()); return;}
   hPred2 = (TH1D*)file2->Get(Form("hDDil%s%s"	 ,keyLabel2.Data(),keyLabel1.Data()));
-  //hPred2_qcd = (TH1D*)file2->Get(Form("hDDil%s%s_QCD"	 ,keyLabel2.Data(),keyLabel1.Data()));
-  //hPred2_pdf = (TH1D*)file2->Get(Form("hDDil%s%s_PDF"	 ,keyLabel2.Data(),keyLabel1.Data()));
-  //hPred3 = (TH1D*)file2->Get(Form("hDDil%s%s"	 ,keyLabel2.Data(),keyLabel1.Data()));
-  //hPred2 = (TH1D*)file2->Get(Form("hDDil%s%s"	 ,keyLabel2.Data(),"EE"));
   TFile *file3 = new TFile(plotName3, "read");  if(!file3) {printf("File %s does not exist\n",plotName.Data()); return;}
+  if(nsel==2) 
+    keyLabel1="MM";
   hPred3 = (TH1D*)file3->Get(Form("hDDil%s%s"	 ,keyLabel2.Data(),keyLabel1.Data()));
  
   double pull; 
@@ -158,17 +157,6 @@ void finalPlotUnfolding_rapidity(int nsel = 0, int ReBin = 1, TString XTitle = "
   // label for lumi
   char lumitext[100];
   sprintf(lumitext,"%.1f fb^{-1}  (13 TeV)",35.9);  
-  
-  if(nsel==0)
-    {
-      sprintf(xlabel,"|y^{#mu^{+}#mu^{-}}|");
-      sprintf(ylabel,"d#sigma/dy^{#mu^{+}#mu^{-}} [pb]");
-    }
-  else
-    {
-      sprintf(xlabel,"|y^{e^{+}e^{-}}|");
-      sprintf(ylabel,"d#sigma/dy^{e^{+}e^{-}} [pb]");
-    }
  
   TCanvas *c1 = MakeCanvas("c1","c1",800,800);
   c1->cd()->SetTopMargin(0.10);
@@ -230,22 +218,14 @@ void finalPlotUnfolding_rapidity(int nsel = 0, int ReBin = 1, TString XTitle = "
 
   normalization[0] = TotalLumi; normalization[1] = TotalLumi;
   if(isNormalized) {normalization[0] = hPred1->GetSumOfWeights(); normalization[1] = hData->GetSumOfWeights();};
-  if(isNormalized) {normalization[0] = hPred2->GetSumOfWeights();};
-  if(isNormalized) {normalization[0] = hPred3->GetSumOfWeights();};
   hPred1->Scale(1./normalization[0]);
-  hPred1->Scale(2008./2075); // Guillelmo normalizes amc@nlo inclusively to FEWZ NNLO cross section (with NNPDF3.1). Revert back to the amc@nlo inclusive cross section prediction
+  if(isNormalized) {normalization[0] = hPred2->GetSumOfWeights();};
   hPred2->Scale(1./normalization[0]);
-  //hPred2->Scale(1.0,"width");
-  //hPred2->Scale(1975./1.28373e+10);
-  //hPred2_qcd->Scale(1.0,"width");
-  //hPred2_qcd->Scale(1975./1.28373e+10);
-  //hPred2_pdf->Scale(1.0,"width");
-  //hPred2_pdf->Scale(1975./1.28373e+10);
-  //for(int i=1; i<=hPred2->GetNbinsX(); i++) {
-  //  double err = sqrt((hPred2_qcd->GetBinContent(i)-hPred2->GetBinContent(i))*(hPred2_qcd->GetBinContent(i)-hPred2->GetBinContent(i))+(hPred2_pdf->GetBinContent(i)-hPred2->GetBinContent(i))*(hPred2_pdf->GetBinContent(i)-hPred2->GetBinContent(i))+hPred2->GetBinError(i)*hPred2->GetBinError(i));
-    //double err = sqrt((hPred2_pdf->GetBinContent(i)-hPred2->GetBinContent(i))*(hPred2_pdf->GetBinContent(i)-hPred2->GetBinContent(i))+hPred2->GetBinError(i)*hPred2->GetBinError(i));
-  // hPred2->SetBinError(i,err);
-  //}
+  if(!isNormalized)
+    hPred1->Scale(2008./2075); // Guillelmo normalizes amc@nlo inclusively to FEWZ NNLO cross section (with NNPDF3.1). Revert back to the amc@nlo inclusive cross section prediction
+  if(!isNormalized)
+    hPred2->Scale(2008./2075); // Guillelmo normalizes powheg inclusively to FEWZ NNLO cross section (with NNPDF3.1). Revert back to the powheg inclusive cross section prediction
+  if(isNormalized) {normalization[0] = hPred3->GetSumOfWeights();};
   hPred3->Scale(1./normalization[0]);
   hData ->Scale(1./normalization[1]);
   
@@ -270,9 +250,40 @@ void finalPlotUnfolding_rapidity(int nsel = 0, int ReBin = 1, TString XTitle = "
  
   CPlot::sOutDir = "plots";  
   const TString format("all");
+  TString plot_name;
+  TString ratio_name;
   
+  if(nsel==0)
+    {
+      plot_name="zmm_rap";
+      ratio_name="zmm_rap_ratio";
+      sprintf(xlabel,"|y^{#mu^{+}#mu^{-}}|");
+      sprintf(ylabel,"d#sigma/dy^{#mu^{+}#mu^{-}} [pb]");
+    }
+  else if (nsel==1)
+    {
+      plot_name="zee_rap";
+      ratio_name="zee_rap_ratio";
+      sprintf(xlabel,"|y^{e^{+}e^{-}}|");
+      sprintf(ylabel,"d#sigma/dy^{e^{+}e^{-}} [pb]");
+    }
+  else
+    {
+      if(!isNormalized)
+	{
+	  plot_name="zll_rap";
+	  ratio_name="zll_rap_ratio";
+	}
+      else
+	{
+	  plot_name="zll_rap_norm";
+	  ratio_name="zll_rap_ratio_norm";
+	}
+      sprintf(xlabel,"|y^{l^{+}l^{-}}|");
+      sprintf(ylabel,"d#sigma/dy^{l^{+}l^{-}} [pb]");
+    }
   
-  CPlot plotZmmPt("zmm_rap","",xlabel,ylabel);
+  CPlot plotZmmPt(plot_name,"",xlabel,ylabel);
   plotZmmPt.AddHist1D(hData,"Data","PE2",1,1,20);
   plotZmmPt.AddHist1D(hPred1,"aMC@NLO","PE",linecolorAMCAtNlo,1,markerstyleAMCAtNLO);
   plotZmmPt.AddHist1D(hPred2,"POWHEG","PE",linecolorPowheg,1,markerstylePowheg);
@@ -307,11 +318,13 @@ void finalPlotUnfolding_rapidity(int nsel = 0, int ReBin = 1, TString XTitle = "
   
   TH1D *ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_AMCATNLO_COMP =  myratio(hPred1,hData);
 
-  CPlot plotZmmPtDiffSplit_AMCATNLO("zmm_rap_ratio","","","aMC@NLO/Data");
+  CPlot plotZmmPtDiffSplit_AMCATNLO(ratio_name,"","","aMC@NLO/Data");
   plotZmmPtDiffSplit_AMCATNLO.AddHist1D( hZmmPtDiffDummySplit);
   plotZmmPtDiffSplit_AMCATNLO.AddHist1D(ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_AMCATNLO_COMP,"0E",linecolorAMCAtNlo,1,markerstyleAMCAtNLO);
   plotZmmPtDiffSplit_AMCATNLO.AddHist1D(hZmmPtDiffDummySplit,"E2",TColor::GetColor("#828282"),20,1);
   plotZmmPtDiffSplit_AMCATNLO.AddTextBox("#bf{CMS}",0.205,0.51,0.465,0.66,0);
+  if(isNormalized)
+    plotZmmPtDiffSplit_AMCATNLO.AddTextBox("#frac{1}{#sigma} #frac{d#sigma}{d|y^{l^{+}l^{-}}|}",0.155,0.801,0.415,0.917,0);
   plotZmmPtDiffSplit_AMCATNLO.AddTextBox("|#eta|<2.4, p_{T}>25 GeV",0.56,0.55,0.765,0.7,0);
   plotZmmPtDiffSplit_AMCATNLO.AddTextBox(lumitext,0.69,0.721,0.93,0.867,0);
   
@@ -331,7 +344,7 @@ void finalPlotUnfolding_rapidity(int nsel = 0, int ReBin = 1, TString XTitle = "
   plotZmmPtDiffSplit_POWHEG.SetYRange(0.8+eps,1.2-eps);
   plotZmmPtDiffSplit_POWHEG.AddLine(0, 1,2.4, 1,kBlack,1);
   plotZmmPtDiffSplit_POWHEG.AddLine(0, 1.1,2.4, 1.1,kBlack,3);
-  plotZmmPtDiffSplit_POWHEG.AddLine(0,0.9,.4,0.9,kBlack,3);
+  plotZmmPtDiffSplit_POWHEG.AddLine(0,0.9,2.4,0.9,kBlack,3);
 
   TH1D *ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_FEWZ_COMP =  myratio(hPred3,hData);
   hZmmPtDiffDummySplit->GetXaxis()->SetLabelSize(30);
@@ -357,7 +370,7 @@ void finalPlotUnfolding_rapidity(int nsel = 0, int ReBin = 1, TString XTitle = "
   sprintf(CommandToExec,"mkdir -p plots");
   gSystem->Exec(CommandToExec);  
 
-  if(strcmp(outputName.Data(),"") != 0){
+  /*if(strcmp(outputName.Data(),"") != 0){
     TString myOutputFile;
     myOutputFile = Form("plots/%s.eps",outputName.Data());
     //c1->SaveAs(myOutputFile.Data());
@@ -365,6 +378,6 @@ void finalPlotUnfolding_rapidity(int nsel = 0, int ReBin = 1, TString XTitle = "
     c1->SaveAs(myOutputFile.Data());
     myOutputFile = Form("plots/%s.pdf",outputName.Data());
     c1->SaveAs(myOutputFile.Data());
-  }
+    }*/
 
 }
