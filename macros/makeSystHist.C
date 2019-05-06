@@ -281,15 +281,15 @@ void helper_function(TString theSuffix, int nsel = 0, int whichDY = 3, TString t
 
     if(doXSRatio){
       systVal[0 ] = 0;
-      systVal[7 ] = systVal[7 ] - systXSVal[0];
-      systVal[13] = systVal[13] - systXSVal[1];
-      if(doCorrelateMomResLepEff == false) systVal[14] = systVal[14] - systXSVal[2];
-      else                                 systVal[2 ] = systVal[2 ] - systXSVal[2];
-      systVal[15] = systVal[15] - systXSVal[3];
-      systVal[16] = systVal[16] - systXSVal[4];
-      systVal[17] = systVal[17] - systXSVal[5];
-      systVal[18] = systVal[18] - systXSVal[6];
-      systVal[allNuisancesCov-1] = systVal[allNuisancesCov-1] - systXSVal[7];
+      systVal[7 ] = TMath::Abs(systVal[7 ] - systXSVal[0]);
+      systVal[13] = TMath::Abs(systVal[13] - systXSVal[1]);
+      if(doCorrelateMomResLepEff == false) systVal[14] = TMath::Abs(systVal[14] - systXSVal[2]);
+      else                                 systVal[2 ] = TMath::Abs(systVal[2 ] - systXSVal[2]);
+      systVal[15] = TMath::Abs(systVal[15] - systXSVal[3]);
+      systVal[16] = TMath::Abs(systVal[16] - systXSVal[4]);
+      systVal[17] = TMath::Abs(systVal[17] - systXSVal[5]);
+      systVal[18] = TMath::Abs(systVal[18] - systXSVal[6]);
+      systVal[allNuisancesCov-1] = TMath::Abs(systVal[allNuisancesCov-1] - systXSVal[7]);
     }
 
     double systEffValStaAtOnce = systVal[12];
@@ -348,15 +348,17 @@ void helper_function(TString theSuffix, int nsel = 0, int whichDY = 3, TString t
   }
 
   // This is a beast
-  histoSystPlot[0]->Smooth();
-  histoSystPlot[1]->Smooth();
-  histoSystPlot[2]->Smooth();
-  histoSystPlot[3]->Smooth();
-  histoSystPlot[5]->Smooth();
-  histoSystPlot[4]->Smooth();
-  histoSystPlot[6]->Smooth();
-  histoSystPlot[7]->Smooth();
-  histoSystPlot[8]->Smooth();
+  if(!doXSRatio || theHistName.Contains("Pt")){
+    histoSystPlot[0]->Smooth();
+    histoSystPlot[1]->Smooth();
+    histoSystPlot[2]->Smooth();
+    histoSystPlot[3]->Smooth();
+    histoSystPlot[5]->Smooth();
+    histoSystPlot[4]->Smooth();
+    histoSystPlot[6]->Smooth();
+    histoSystPlot[7]->Smooth();
+    histoSystPlot[8]->Smooth();
+  }
 
   TString theXSRatioName = "";
   if(doXSRatio) theXSRatioName = "_XSRatio";
@@ -407,11 +409,11 @@ void helper_function(TString theSuffix, int nsel = 0, int whichDY = 3, TString t
   if(theHistName != "Rap") c1->SetLogx();
 
   histoSystPlot[0]->SetMinimum(0.0);
-  if     (theHistName == "Rap" && doXSRatio == false)     histoSystPlot[0]->SetMaximum( 5.0);
-  else if(theHistName == "PhiStar" && doXSRatio == false) histoSystPlot[0]->SetMaximum( 5.0);
-  else if(theHistName == "Rap" && doXSRatio == true)      histoSystPlot[0]->SetMaximum( 3.0);
+  if     (theHistName == "Rap" && doXSRatio == false)     histoSystPlot[0]->SetMaximum( 6.0);
+  else if(theHistName == "PhiStar" && doXSRatio == false) histoSystPlot[0]->SetMaximum( 6.0);
+  else if(theHistName == "Rap" && doXSRatio == true)      histoSystPlot[0]->SetMaximum( 4.0);
   else if(theHistName == "PhiStar" && doXSRatio == true)  histoSystPlot[0]->SetMaximum( 3.0);
-  else                              histoSystPlot[0]->SetMaximum(16.0);
+  else                                                    histoSystPlot[0]->SetMaximum(16.0);
   histoSystPlot[0]->Draw();
   histoSystPlot[1]->Draw("same,hist");
   histoSystPlot[2]->Draw("same,hist");
@@ -529,6 +531,73 @@ void makeSystHist(TString theSuffix, TString theHistName = "Pt"){
 	for(int i=0; i<allNuisancesCov; i++) histoSystCov0[i]->Write();
 	for(int i=0; i<allNuisancesPlot; i++) histoSystPlot0[i]->Write();
 	outFilePlots->Close();
+
+        // Begin printing information
+	Bool_t increaseSize = kFALSE;
+	TString XName = "Z p_{T} [GeV]";
+	if     (theHistName == "Rap") XName = "|y^{Z}|";
+	else if(theHistName == "PhiStar") {XName = "#phi*"; increaseSize = kTRUE;}
+	atributes(histoSystPlot0[0],XName.Data(), 1,"Uncertainty (%)", 1, increaseSize);
+	atributes(histoSystPlot0[1],XName.Data(), 2,"Uncertainty (%)", 1, increaseSize);
+	atributes(histoSystPlot0[2],XName.Data(), 4,"Uncertainty (%)", 1, increaseSize);
+	atributes(histoSystPlot0[3],XName.Data(), 5,"Uncertainty (%)", 1, increaseSize);
+	atributes(histoSystPlot0[4],XName.Data(), 6,"Uncertainty (%)", 1, increaseSize);
+	atributes(histoSystPlot0[5],XName.Data(), 7,"Uncertainty (%)", 1, increaseSize);
+	atributes(histoSystPlot0[6],XName.Data(), 8,"Uncertainty (%)", 1, increaseSize);
+	atributes(histoSystPlot0[7],XName.Data(),11,"Uncertainty (%)", 1, increaseSize);
+	atributes(histoSystPlot0[8],XName.Data(),46,"Uncertainty (%)", 1, increaseSize);
+
+	TCanvas* c1 = new TCanvas("c1", "c1",5,5,500,500);
+	c1->cd();
+	if(theHistName != "Rap") c1->SetLogx();
+
+	histoSystPlot0[0]->SetMinimum(0.0);
+	if     (theHistName == "Rap"     && nr == 0) histoSystPlot0[0]->SetMaximum( 6.0);
+	else if(theHistName == "PhiStar" && nr == 0) histoSystPlot0[0]->SetMaximum( 6.0);
+	else if(theHistName == "Rap"     && nr == 1) histoSystPlot0[0]->SetMaximum( 3.0);
+	else if(theHistName == "PhiStar" && nr == 1) histoSystPlot0[0]->SetMaximum( 3.0);
+	else                                         histoSystPlot0[0]->SetMaximum(16.0);
+	histoSystPlot0[0]->Draw();
+	histoSystPlot0[1]->Draw("same,hist");
+	histoSystPlot0[2]->Draw("same,hist");
+	histoSystPlot0[3]->Draw("same,hist");
+	histoSystPlot0[4]->Draw("same,hist");
+	histoSystPlot0[5]->Draw("same,hist");
+	histoSystPlot0[6]->Draw("same,hist");
+	if(nr == 0) histoSystPlot0[7]->Draw("same,hist");
+
+	TLatex * CMSLabel = new TLatex (0.15, 0.93, "#bf{CMS}");
+	CMSLabel->SetNDC ();
+	CMSLabel->SetTextAlign (10);
+	CMSLabel->SetTextFont (42);
+	CMSLabel->SetTextSize (0.04);
+	CMSLabel->Draw ("same") ;
+	TLatex * _lumiLabel = new TLatex (0.95, 0.93, "35.9 fb^{-1} (13 TeV)");
+	_lumiLabel->SetNDC ();
+	_lumiLabel->SetTextAlign (30);
+	_lumiLabel->SetTextFont (42);
+	_lumiLabel->SetTextSize (0.04);
+	_lumiLabel->Draw ("same") ;
+	TLegend* leg = new TLegend(0.20,0.60,0.50,0.90);                                                    
+	leg ->SetFillStyle(0);
+	leg ->SetFillColor(kWhite);
+	leg ->SetBorderSize(0);
+	leg->SetTextSize(0.035);                                                                         
+	leg->AddEntry(histoSystPlot0[0],"Total uncertainty","l");
+	leg->AddEntry(histoSystPlot0[1],"Unfolding","l");
+	leg->AddEntry(histoSystPlot0[2],"Momentum resolution","l");
+	leg->AddEntry(histoSystPlot0[3],"Background","l");
+	leg->AddEntry(histoSystPlot0[4],"Identification","l");
+	leg->AddEntry(histoSystPlot0[5],"Reconstruction","l");
+	leg->AddEntry(histoSystPlot0[6],"Statistical","l");
+	if(nr == 0) leg->AddEntry(histoSystPlot0[7],"Luminosity","l");
+	leg->Draw();
+
+	TString myOutputFile = Form("histoUnfolding%sSyst%s%s_nsel%d_dy%d.pdf",theXSRatioName.Data(),theSuffix.Data(),theHistName.Data(),2,j);
+	c1->SaveAs(myOutputFile.Data());
+
+        // End printing information
+
 
       }
     }
