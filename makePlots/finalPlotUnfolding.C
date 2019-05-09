@@ -141,9 +141,11 @@ void finalPlotUnfolding(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}"
   }
 
   TString theYTitle = "#sigma / GeV [pb]";
-  if     (isNormalized && keyLabel0 == "Rap")     theYTitle = "1/#sigma d#sigma/dY";
-  else if(isNormalized && keyLabel0 == "PhiStar") theYTitle = "1/#sigma d#sigma/d#phi*";
-  else if(isNormalized)                           theYTitle = "1/#sigma d#sigma/dp_{T} [ GeV^{-1}]";
+  if     (isNormalized  && keyLabel0 == "Rap")     theYTitle = "1/#sigma d#sigma/dY";
+  else if(isNormalized  && keyLabel0 == "PhiStar") theYTitle = "1/#sigma d#sigma/d#phi*";
+  else if(!isNormalized && keyLabel0 == "Rap")     theYTitle = "#sigma [pb]";
+  else if(!isNormalized && keyLabel0 == "PhiStar") theYTitle = "#sigma [pb]";
+  else if(isNormalized)                            theYTitle = "1/#sigma d#sigma/dp_{T} [ GeV^{-1}]";
 
   hPred1->GetYaxis()->SetTitle(theYTitle.Data());
   hPred1->GetYaxis()->SetLabelFont  (   42);

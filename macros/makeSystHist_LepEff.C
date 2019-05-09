@@ -66,7 +66,7 @@ void helper_function(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", 
   else if(whichDY == 2) { version = 2; alternative = 1;}
   else if(whichDY == 3) { version = 3; alternative = 0;}
 
-  const int allNuisancesCov  = 8+480;
+  const int allNuisancesCov  = 11+480;
   const int allNuisancesPlot = 8;
 
   TH1D *histoSystCov[allNuisancesCov], *histoSystPlot[allNuisancesPlot];
@@ -124,11 +124,11 @@ void helper_function(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", 
 
   double systVal[allNuisancesCov],systTotalVal;
 
-                       // receff/lepeff2/lepeff3/lepeff4/leff5/lepeff6/lepeff7/lumi
-  double systXSValMM[8] = {0.378, 0.062, 0.192, 0.548, 0.246, 0.183, 0.039, 2.500};
-  double systXSValEE[8] = {0.933, 0.104, 0.058, 0.578, 0.510, 0.385, 0.129, 2.500};
-  double systXSVal[8];
-  for(int ns=0; ns<8; ns++){
+                       // receff/lepeff2/lepeff3/lepeff4/leff5/lepeff6/lepeff7/lepeff8/lepeff8/lepeff10/lumi
+  double systXSValMM[11] = {0.378, 0.062, 0.192, 0.548, 0.246, 0.183, 0.059, 0.001, 0.035, 0.115, 2.500};
+  double systXSValEE[11] = {0.932, 0.104, 0.058, 0.578, 0.509, 0.385, 0.192, 0.004, 0.111, 0.419, 2.500};
+  double systXSVal[11];
+  for(int ns=0; ns<11; ns++){
     if     (nsel == 0) systXSVal[ns] = systXSValMM[ns];
     else if(nsel == 1) systXSVal[ns] = systXSValEE[ns];
   }
@@ -140,24 +140,29 @@ void helper_function(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", 
     }
 
     if(doXSRatio){
-      systVal[2] = TMath::Abs(systVal[2] - systXSVal[1]);
-      systVal[3] = TMath::Abs(systVal[3] - systXSVal[2]);
-      systVal[4] = TMath::Abs(systVal[4] - systXSVal[3]);
-      systVal[5] = TMath::Abs(systVal[5] - systXSVal[4]);
-      systVal[6] = TMath::Abs(systVal[6] - systXSVal[5]);
-      systVal[7] = TMath::Abs(systVal[7] - systXSVal[6]);
+      systVal[2]  = TMath::Abs(systVal[2]  - systXSVal[1]);
+      systVal[3]  = TMath::Abs(systVal[3]  - systXSVal[2]);
+      systVal[4]  = TMath::Abs(systVal[4]  - systXSVal[3]);
+      systVal[5]  = TMath::Abs(systVal[5]  - systXSVal[4]);
+      systVal[6]  = TMath::Abs(systVal[6]  - systXSVal[5]);
+      systVal[7]  = TMath::Abs(systVal[7]  - systXSVal[6]);
+      systVal[8]  = TMath::Abs(systVal[8]  - systXSVal[7]);
+      systVal[9]  = TMath::Abs(systVal[9]  - systXSVal[8]);
+      systVal[10] = TMath::Abs(systVal[10] - systXSVal[9]);
     }
 
     double systValTotAtOnce = systVal[0];
     double systValStaAtOnce = systVal[1];
-    double systValNoStat = sqrt(systVal[2]*systVal[2]+systVal[3]*systVal[3]+systVal[4]*systVal[4]+
-                                systVal[5]*systVal[5]+systVal[6]*systVal[6]+systVal[7]*systVal[7]);
+    double systValNoStat = sqrt(systVal[2]*systVal[2]+systVal[3]*systVal[3]+systVal[ 4]*systVal[ 4]+
+                                systVal[5]*systVal[5]+systVal[6]*systVal[6]+systVal[ 7]*systVal[ 7]+
+                                systVal[8]*systVal[8]+systVal[9]*systVal[9]+systVal[10]*systVal[10]);
 
     double systValSta = 0;
     for(int k=7; k<allNuisancesCov; k++) systValSta = systValSta + systVal[k]*systVal[k];
     systValSta = systVal[1]/10.; //sqrt(systValSta);
 
-    printf("(%2d) %7.3f %7.3f %7.3f %7.3f %7.3f %7.3f (%7.3f/%7.3f) -> (%7.3f/%7.3f/%7.3f)\n",i,systVal[2],systVal[3],systVal[4],systVal[5],systVal[6],systVal[7],
+    printf("(%2d) %7.3f %7.3f %7.3f %7.3f %7.3f %7.3f %7.3f %7.3f %7.3f (%7.3f/%7.3f) -> (%7.3f/%7.3f/%7.3f)\n",i,
+           systVal[2],systVal[3],systVal[4],systVal[5],systVal[6],systVal[7],systVal[8],systVal[9],systVal[10],
            systValStaAtOnce,systValSta,
            systValTotAtOnce,sqrt(systValStaAtOnce*systValStaAtOnce+systValNoStat*systValNoStat),sqrt(systValSta*systValSta+systValNoStat*systValNoStat));
     histoSystPlot[0]->SetBinContent(i,sqrt(systValSta*systValSta+systValNoStat*systValNoStat)); // total
@@ -167,21 +172,29 @@ void helper_function(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", 
     histoSystPlot[4]->SetBinContent(i,systVal[4]); // lepeff4 
     histoSystPlot[5]->SetBinContent(i,systVal[5]); // lepeff5 
     histoSystPlot[6]->SetBinContent(i,systVal[6]); // lepeff6
-    histoSystPlot[7]->SetBinContent(i,systVal[7]); // lepeff7
+    histoSystPlot[7]->SetBinContent(i,sqrt(systVal[7]*systVal[7]+systVal[ 8]*systVal[ 8]+
+                                           systVal[9]*systVal[9]+systVal[10]*systVal[10])); // lepeff7+lepeff8+lepeff9+lepeff10
   }
+
+  TString theUncLabel = "#sigma";
+  if	 (doXSRatio && theHistName == "Rap")	  theUncLabel = "1/#sigma d#sigma/dY";
+  else if(doXSRatio && theHistName == "PhiStar")  theUncLabel = "1/#sigma d#sigma/d#phi*";
+  else if(!doXSRatio && theHistName == "Rap")	  theUncLabel = "#sigma";
+  else if(!doXSRatio && theHistName == "PhiStar") theUncLabel = "#sigma";
+  else if(doXSRatio)				  theUncLabel = "1/#sigma d#sigma/dp_{T}";
 
   Bool_t increaseSize = kFALSE;
   TString XName = "Z p_{T} [GeV]";
   if     (theHistName == "Rap") XName = "|y^{Z}|";
   else if(theHistName == "PhiStar") {XName = "#phi*"; increaseSize = kTRUE;}
-  atributes(histoSystPlot[0],XName.Data(), 1,"Uncertainty (%)", 1, increaseSize);
-  atributes(histoSystPlot[1],XName.Data(), 2,"Uncertainty (%)", 1, increaseSize);
-  atributes(histoSystPlot[2],XName.Data(), 4,"Uncertainty (%)", 1, increaseSize);
-  atributes(histoSystPlot[3],XName.Data(), 5,"Uncertainty (%)", 1, increaseSize);
-  atributes(histoSystPlot[4],XName.Data(), 6,"Uncertainty (%)", 1, increaseSize);
-  atributes(histoSystPlot[5],XName.Data(), 7,"Uncertainty (%)", 1, increaseSize);
-  atributes(histoSystPlot[6],XName.Data(), 8,"Uncertainty (%)", 1, increaseSize);
-  atributes(histoSystPlot[7],XName.Data(),11,"Uncertainty (%)", 1, increaseSize);
+  atributes(histoSystPlot[0],XName.Data(), 1,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 1, increaseSize);
+  atributes(histoSystPlot[1],XName.Data(), 2,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 1, increaseSize);
+  atributes(histoSystPlot[2],XName.Data(), 4,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 1, increaseSize);
+  atributes(histoSystPlot[3],XName.Data(), 5,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 1, increaseSize);
+  atributes(histoSystPlot[4],XName.Data(), 6,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 1, increaseSize);
+  atributes(histoSystPlot[5],XName.Data(), 7,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 1, increaseSize);
+  atributes(histoSystPlot[6],XName.Data(), 8,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 1, increaseSize);
+  atributes(histoSystPlot[7],XName.Data(),11,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 1, increaseSize);
 
   TCanvas* c1 = new TCanvas("c1", "c1",5,5,500,500);
   c1->cd();
@@ -197,7 +210,7 @@ void helper_function(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", 
   histoSystPlot[6]->Draw("same,hist");
   histoSystPlot[7]->Draw("same,hist");
 
- TLatex * CMSLabel = new TLatex (0.15, 0.93, "#bf{CMS}");
+ TLatex * CMSLabel = new TLatex (0.15, 0.93, "#bf{CMS} Preliminary");
  CMSLabel->SetNDC ();
  CMSLabel->SetTextAlign (10);
  CMSLabel->SetTextFont (42);

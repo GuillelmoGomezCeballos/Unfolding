@@ -100,13 +100,13 @@ void makeUnrolling(int whichDY=3, TString theHistName = "Rap"){
   printf("Rec: "); for(int i=0; i<=nBinRecY; i++) printf("(%d,%.1f) ",i,xbinsRecY[i]); printf("\n");
 
   const int nRecNuisances = 4;
-  const int nEffNuisances = 8+480;
+  const int nEffNuisances = 11+480;
   const int nMomNuisances = 5;
 
   // Initialization of input histograms
   TH2D* histoXRecGen[2]; // 2
   TH2D* histoXRecGen_RecEff[2][nRecNuisances]; // 8
-  TH2D* histoXRecGen_LepEff[2][nEffNuisances]; // 976
+  TH2D* histoXRecGen_LepEff[2][nEffNuisances]; // 982
   TH2D* histoXRecGen_MomRes[2][nMomNuisances]; // 10
   TH1D* histoXRecDA[2]; // 2
   TH1D* histoXRecDY[2]; // 2
@@ -114,8 +114,8 @@ void makeUnrolling(int whichDY=3, TString theHistName = "Rap"){
   TH1D* histoXRecVV[2]; // 2
   TH1D* histoXRecDY_RecEff[2][nRecNuisances]; // 8
   TH1D* histoXRecVV_RecEff[2][nRecNuisances]; // 8
-  TH1D* histoXRecDY_LepEff[2][nEffNuisances]; // 976
-  TH1D* histoXRecVV_LepEff[2][nEffNuisances]; // 976
+  TH1D* histoXRecDY_LepEff[2][nEffNuisances]; // 982
+  TH1D* histoXRecVV_LepEff[2][nEffNuisances]; // 982
   TH1D* histoXRecDA_MomRes[2][nMomNuisances]; // 10
   TH1D* histoXRecDY_MomRes[2][nMomNuisances]; // 10
   TH1D* histoXRecEM_MomRes[2][nMomNuisances]; // 10
@@ -164,7 +164,7 @@ void makeUnrolling(int whichDY=3, TString theHistName = "Rap"){
   // Initialization of output histograms
   TH2D* histoYRecGen[2]; // 2
   TH2D* histoYRecGen_RecEff[2][nRecNuisances]; // 8
-  TH2D* histoYRecGen_LepEff[2][nEffNuisances]; // 976
+  TH2D* histoYRecGen_LepEff[2][nEffNuisances]; // 982
   TH2D* histoYRecGen_MomRes[2][nMomNuisances]; // 10
   TH1D* histoYRecDA[2]; // 2
   TH1D* histoYRecDY[2]; // 2
@@ -172,8 +172,8 @@ void makeUnrolling(int whichDY=3, TString theHistName = "Rap"){
   TH1D* histoYRecVV[2]; // 2
   TH1D* histoYRecDY_RecEff[2][nRecNuisances]; // 8
   TH1D* histoYRecVV_RecEff[2][nRecNuisances]; // 8
-  TH1D* histoYRecDY_LepEff[2][nEffNuisances]; // 976
-  TH1D* histoYRecVV_LepEff[2][nEffNuisances]; // 976
+  TH1D* histoYRecDY_LepEff[2][nEffNuisances]; // 982
+  TH1D* histoYRecVV_LepEff[2][nEffNuisances]; // 982
   TH1D* histoYRecDA_MomRes[2][nMomNuisances]; // 10
   TH1D* histoYRecDY_MomRes[2][nMomNuisances]; // 10
   TH1D* histoYRecEM_MomRes[2][nMomNuisances]; // 10

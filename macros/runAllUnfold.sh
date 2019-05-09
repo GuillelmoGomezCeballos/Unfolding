@@ -67,7 +67,7 @@ if [ $1 == 1 ]; then
 	root -l -q -b ${MACRO}.C'("PtRap4","_lepeff",'${OPTION}')';
       done    
   elif [ $2 == 4 ]; then
-    for i in `seq 400 487`;
+    for i in `seq 400 490`;
       do
 	export OPTION=$i;
 	root -l -q -b ${MACRO}.C'("Pt","_lepeff",'${OPTION}')';
