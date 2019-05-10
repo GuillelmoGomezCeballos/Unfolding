@@ -1,7 +1,7 @@
 #!/bin/sh
 
-root -q -b -l testAnalysis_test.C+'(0,3,0,"Total")';
-root -q -b -l testAnalysis_test.C+'(1,3,0,"Total")';
+root -q -b -l testAnalysis_test.C+'(0,3,0,"Tot")';
+root -q -b -l testAnalysis_test.C+'(1,3,0,"Tot")';
 combineCards.py -S datacard_Tot_mm.txt > datacard_Tot_mm.text;
 combineCards.py -S datacard_Tot_ee.txt > datacard_Tot_ee.text;
 combineCards.py -S datacard_Tot_mm.txt datacard_Tot_ee.txt > datacard_Tot_ll.text;
