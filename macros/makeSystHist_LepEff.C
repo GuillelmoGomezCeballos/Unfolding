@@ -176,12 +176,12 @@ void helper_function(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", 
                                            systVal[9]*systVal[9]+systVal[10]*systVal[10])); // lepeff7+lepeff8+lepeff9+lepeff10
   }
 
-  TString theUncLabel = "#sigma";
+  TString theUncLabel = "d#sigma/dp_{T}";
   if	 (doXSRatio && theHistName == "Rap")	  theUncLabel = "1/#sigma d#sigma/dY";
   else if(doXSRatio && theHistName == "PhiStar")  theUncLabel = "1/#sigma d#sigma/d#phi*";
-  else if(!doXSRatio && theHistName == "Rap")	  theUncLabel = "#sigma";
-  else if(!doXSRatio && theHistName == "PhiStar") theUncLabel = "#sigma";
   else if(doXSRatio)				  theUncLabel = "1/#sigma d#sigma/dp_{T}";
+  else if(!doXSRatio && theHistName == "Rap")	  theUncLabel = "d#sigma/dY";
+  else if(!doXSRatio && theHistName == "PhiStar") theUncLabel = "d#sigma/d#phi*";
 
   Bool_t increaseSize = kFALSE;
   TString XName = "Z p_{T} [GeV]";

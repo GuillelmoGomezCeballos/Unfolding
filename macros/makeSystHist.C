@@ -393,10 +393,12 @@ void helper_function(TString theSuffix, int nsel = 0, int whichDY = 3, TString t
 
   outFilePlots->Close();
 
-  TString theUncLabel = "#sigma";
-  if	 (doXSRatio && theHistName == "Rap")	 theUncLabel = "1/#sigma d#sigma/dY";
-  else if(doXSRatio && theHistName == "PhiStar") theUncLabel = "1/#sigma d#sigma/d#phi*";
-  else if(doXSRatio)				 theUncLabel = "1/#sigma d#sigma/dp_{T}";
+  TString theUncLabel = "d#sigma/dp_{T}";
+  if	 (doXSRatio  && theHistName == "Rap")	  theUncLabel = "1/#sigma d#sigma/dY";
+  else if(doXSRatio  && theHistName == "PhiStar") theUncLabel = "1/#sigma d#sigma/d#phi*";
+  else if(doXSRatio)				  theUncLabel = "1/#sigma d#sigma/dp_{T}";
+  else if(!doXSRatio && theHistName == "Rap")	  theUncLabel = "d#sigma/dY";
+  else if(!doXSRatio && theHistName == "PhiStar") theUncLabel = "d#sigma/d#phi*";
 
   // Printing information
   Bool_t increaseSize = kFALSE;
@@ -541,10 +543,12 @@ void makeSystHist(TString theSuffix, TString theHistName = "Pt"){
 	for(int i=0; i<allNuisancesPlot; i++) histoSystPlot0[i]->Write();
 	outFilePlots->Close();
 
-        TString theUncLabel = "#sigma";
+        TString theUncLabel = "d#sigma/dp_{T}";
         if     (theXSRatioName == "_XSRatio" && theHistName == "Rap")     theUncLabel = "1/#sigma d#sigma/dY";
         else if(theXSRatioName == "_XSRatio" && theHistName == "PhiStar") theUncLabel = "1/#sigma d#sigma/d#phi*";
         else if(theXSRatioName == "_XSRatio")                             theUncLabel = "1/#sigma d#sigma/dp_{T}";
+        else if(theXSRatioName != "_XSRatio" && theHistName == "Rap")     theUncLabel = "d#sigma/dY";
+        else if(theXSRatioName != "_XSRatio" && theHistName == "PhiStar") theUncLabel = "d#sigma/d#phi*";
 
         // Begin printing information
 	Bool_t increaseSize = kFALSE;
