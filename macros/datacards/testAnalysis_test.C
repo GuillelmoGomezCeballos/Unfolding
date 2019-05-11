@@ -20,8 +20,6 @@ void testAnalysis_test(int nsel, int DY=3, int alt=0, TString theHistName = "Pt"
   TString path = "../inputsCards200/";
   if     (theHistName == "Tot") {path = "../inputsCards200/"; applyQCDscalePDFUnc = false;}
   else if(theHistName == "Total") {path = "../inputs/"; theHistName = "Tot"; applyQCDscalePDFUnc = false;}
-  else if(theHistName == "Total30") {path = "../inputs_pt30/"; theHistName = "Tot"; applyQCDscalePDFUnc = false;}
-  else if(theHistName == "Total3035") {path = "../inputs_elmutagpt3035/"; theHistName = "Tot"; applyQCDscalePDFUnc = false;}
   else if(theHistName == "PtAll") {path = "../inputs/"; theHistName = "Pt"; applyQCDscalePDFUnc = false; inputValues[0] = 36; inputValues[1] = 72;}
 
   if(theHistName == "Tot") {inputValues[0] = 1; inputValues[1] = 1;}
