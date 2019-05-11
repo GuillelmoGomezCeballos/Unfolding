@@ -210,7 +210,7 @@ void helper_function(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", 
   histoSystPlot[6]->Draw("same,hist");
   histoSystPlot[7]->Draw("same,hist");
 
- TLatex * CMSLabel = new TLatex (0.15, 0.93, "#bf{CMS} Preliminary");
+ TLatex * CMSLabel = new TLatex (0.15, 0.93, "#bf{CMS} #scale[0.75]{#it{Preliminary}}");
  CMSLabel->SetNDC ();
  CMSLabel->SetTextAlign (10);
  CMSLabel->SetTextFont (42);
