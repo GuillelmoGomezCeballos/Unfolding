@@ -455,11 +455,25 @@ void helper_function(TString theSuffix, int nsel = 0, int whichDY = 3, TString t
   leg->AddEntry(histoSystPlot[1],"Unfolding","l");
   leg->AddEntry(histoSystPlot[2],"Momentum resolution","l");
   leg->AddEntry(histoSystPlot[3],"Background","l");
-  leg->AddEntry(histoSystPlot[4],"Identification","l");
+  leg->AddEntry(histoSystPlot[4],"Identification & trigger","l");
   leg->AddEntry(histoSystPlot[5],"Reconstruction","l");
   leg->AddEntry(histoSystPlot[6],"Statistical","l");
   if(!doXSRatio) leg->AddEntry(histoSystPlot[7],"Luminosity","l");
   leg->Draw();
+  if(theHistName.Contains("PtRap")){
+    TString theLabel = "";
+    if     (theHistName == "PtRap0") theLabel = "0 < |y^{l^{+}l^{-}}| < 0.4";
+    else if(theHistName == "PtRap1") theLabel = "0.4 < |y^{l^{+}l^{-}}| < 0.8";
+    else if(theHistName == "PtRap2") theLabel = "0.8 < |y^{l^{+}l^{-}}| < 1.2";
+    else if(theHistName == "PtRap3") theLabel = "1.2 < |y^{l^{+}l^{-}}| < 1.6";
+    else if(theHistName == "PtRap4") theLabel = "1.6 < |y^{l^{+}l^{-}}| < 2.4";
+    TLatex *_extraLabel = new TLatex(0.9, 0.8, theLabel.Data());
+    _extraLabel->SetNDC();
+    _extraLabel->SetTextAlign(32);
+    _extraLabel->SetTextFont(42);
+    _extraLabel->SetTextSize(0.04);
+    _extraLabel->Draw("same");
+  }
 
   TString myOutputFile = Form("histoUnfolding%sSyst%s%s_nsel%d_dy%d.pdf",theXSRatioName.Data(),theSuffix.Data(),theHistName.Data(),nsel,whichDY);
   c1->SaveAs(myOutputFile.Data());
@@ -469,7 +483,7 @@ void helper_function(TString theSuffix, int nsel = 0, int whichDY = 3, TString t
 void makeSystHist(TString theSuffix, TString theHistName = "Pt"){
   if(theSuffix != "LL") theSuffix = "";
   char output[200];
-  for (int j=0;j<=3;j++){ // dy versions
+  for (int j=3;j<=3;j++){ // dy versions
     for (int nr=0; nr<=1; nr++) {
       TString theXSRatioName = "";
       if(nr == 1) theXSRatioName = "_XSRatio";
@@ -605,11 +619,25 @@ void makeSystHist(TString theSuffix, TString theHistName = "Pt"){
 	leg->AddEntry(histoSystPlot0[1],"Unfolding","l");
 	leg->AddEntry(histoSystPlot0[2],"Momentum resolution","l");
 	leg->AddEntry(histoSystPlot0[3],"Background","l");
-	leg->AddEntry(histoSystPlot0[4],"Identification","l");
+	leg->AddEntry(histoSystPlot0[4],"Identification & trigger","l");
 	leg->AddEntry(histoSystPlot0[5],"Reconstruction","l");
 	leg->AddEntry(histoSystPlot0[6],"Statistical","l");
 	if(nr == 0) leg->AddEntry(histoSystPlot0[7],"Luminosity","l");
 	leg->Draw();
+     	if(theHistName.Contains("PtRap")){
+     	  TString theLabel = "";
+     	  if	 (theHistName == "PtRap0") theLabel = "0 < |y^{l^{+}l^{-}}| < 0.4";
+     	  else if(theHistName == "PtRap1") theLabel = "0.4 < |y^{l^{+}l^{-}}| < 0.8";
+     	  else if(theHistName == "PtRap2") theLabel = "0.8 < |y^{l^{+}l^{-}}| < 1.2";
+     	  else if(theHistName == "PtRap3") theLabel = "1.2 < |y^{l^{+}l^{-}}| < 1.6";
+     	  else if(theHistName == "PtRap4") theLabel = "1.6 < |y^{l^{+}l^{-}}| < 2.4";
+     	  TLatex *_extraLabel = new TLatex(0.9, 0.8, theLabel.Data());
+     	  _extraLabel->SetNDC();
+     	  _extraLabel->SetTextAlign(32);
+     	  _extraLabel->SetTextFont(42);
+     	  _extraLabel->SetTextSize(0.04);
+     	  _extraLabel->Draw("same");
+     	}
 
 	TString myOutputFile = Form("histoUnfolding%sSyst%s%s_nsel%d_dy%d.pdf",theXSRatioName.Data(),theSuffix.Data(),theHistName.Data(),2,j);
 	c1->SaveAs(myOutputFile.Data());

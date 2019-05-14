@@ -234,8 +234,22 @@ void helper_function(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", 
  leg->AddEntry(histoSystPlot[4],"Background modeling","l");
  leg->AddEntry(histoSystPlot[5],"Tag selecion","l");
  leg->AddEntry(histoSystPlot[6],"MC generator","l");
- leg->AddEntry(histoSystPlot[7],"Trigger efficiency","l");
+ leg->AddEntry(histoSystPlot[7],"Trigger","l");
  leg->Draw();
+  if(theHistName.Contains("PtRap")){
+    TString theLabel = "";
+    if     (theHistName == "PtRap0") theLabel = "0 < |y^{l^{+}l^{-}}| < 0.4";
+    else if(theHistName == "PtRap1") theLabel = "0.4 < |y^{l^{+}l^{-}}| < 0.8";
+    else if(theHistName == "PtRap2") theLabel = "0.8 < |y^{l^{+}l^{-}}| < 1.2";
+    else if(theHistName == "PtRap3") theLabel = "1.2 < |y^{l^{+}l^{-}}| < 1.6";
+    else if(theHistName == "PtRap4") theLabel = "1.6 < |y^{l^{+}l^{-}}| < 2.4";
+    TLatex *_extraLabel = new TLatex(0.9, 0.8, theLabel.Data());
+    _extraLabel->SetNDC();
+    _extraLabel->SetTextAlign(32);
+    _extraLabel->SetTextFont(42);
+    _extraLabel->SetTextSize(0.04);
+    _extraLabel->Draw("same");
+  }
 
  TString theXSRatioName = "";
  if(doXSRatio) theXSRatioName = "_XSRatio";
@@ -246,7 +260,7 @@ void helper_function(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", 
 
 void makeSystHist_LepEff(TString theHistName = "Pt"){
   for (int i=0;i<=1;i++){
-    for (int j=0;j<=3;j++){
+    for (int j=3;j<=3;j++){
       helper_function(i, j, theHistName, false);
       helper_function(i, j, theHistName, true);
     }
