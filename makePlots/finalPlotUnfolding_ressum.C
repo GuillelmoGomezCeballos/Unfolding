@@ -98,19 +98,14 @@ void finalPlotUnfolding_ressum(int nsel = 0, int ReBin = 1, TString XTitle = "N_
  
   int me=0;
   if (strncmp(keyLabel1.Data(),"EE",2)==0){me=1;}
+  if (strncmp(keyLabel1.Data(),"LL",2)==0){me=2;}
 
   char filename1[300];
   char filename2[300];
   char filename3[300];
-  //me=1;
   sprintf(filename1,"_nsel%d_dy3_rebin%d_default.root",me,ReBin);//default, AMCNLO
-  //me=0;
-  if(keyLabel0 == "Pttest" || keyLabel0 == "PhiStartest") sprintf(filename2,"_nsel%d_dy5_rebin%d_default.root",me,ReBin);
-  else  sprintf(filename2,"_nsel%d_dy2_rebin%d_default.root",me,ReBin);
-  //if(keyLabel0 == "Pttest" || keyLabel0 == "PhiStartest") 
-  //sprintf(filename3,"DYJetsToEE_POWHEG_MINLO.root");
-  if(keyLabel0 == "Pttest" || keyLabel0 == "PhiStartest") sprintf(filename3,"_nsel%d_dy4_rebin%d_default.root",me,ReBin);
-  else                                                    sprintf(filename3,"_nsel%d_dy7_rebin%d_default.root",me,ReBin);
+  sprintf(filename2,"_nsel%d_dy5_rebin%d_default.root",me,ReBin);
+  sprintf(filename3,"_nsel%d_dy4_rebin%d_default.root",me,ReBin);
 
   TString plotName2=plotName;
   TString plotName3=plotName;
@@ -136,15 +131,12 @@ void finalPlotUnfolding_ressum(int nsel = 0, int ReBin = 1, TString XTitle = "N_
     }
   TFile* file1 = new TFile(plotName, "read");  if(!file1) {printf("File %s does not exist\n",plotName.Data()); return;}
   hData      = (TH1D*)file1->Get(Form("unfold"));
-  //hPred1     = (TH1D*)file1->Get(Form("hDDil%s%s"    ,keyLabel2.Data(),"EE"));
   hPred1     = (TH1D*)file1->Get(Form("hDDil%s%s"    ,keyLabel2.Data(),keyLabel1.Data()));
   TFile *file2 = new TFile(plotName2, "read");  if(!file2) {printf("File %s does not exist\n",plotName.Data()); return;}
-  hPred2 = (TH1D*)file2->Get(Form("hDDil%s%s"	 ,keyLabel2.Data(),keyLabel1.Data()));
   hPred2 = (TH1D*)file2->Get("hDDilPtMM");
-  //hPred2 = (TH1D*)file2->Get(Form("hDDil%s%s"	 ,keyLabel2.Data(),"EE"));
   TFile *file3 = new TFile(plotName3, "read");  if(!file3) {printf("File %s does not exist\n",plotName.Data()); return;}
+  if(nsel==2) keyLabel1="MM";
   hPred3 = (TH1D*)file3->Get(Form("hDDil%s%s"	 ,keyLabel2.Data(),keyLabel1.Data()));
-  //hPred3 = (TH1D*)file3->Get("hDDilPtEE");
   
   double pull; 
   double pullerr;
@@ -166,17 +158,6 @@ void finalPlotUnfolding_ressum(int nsel = 0, int ReBin = 1, TString XTitle = "N_
   char lumitext[100];
   sprintf(lumitext,"%.1f fb^{-1}  (13 TeV)",35.9);  
 
-  if(nsel==0)
-    {
-      sprintf(xlabel,"p_{T}^{#mu^{+}#mu^{-}} [GeV]");
-      sprintf(ylabel,"d#sigma/dp_{T}^{#mu^{+}#mu^{-}} [pb/GeV]");
-    }
-  else
-    {
-      sprintf(xlabel,"p_{T}^{e^{+}e^{-}} [GeV]");
-      sprintf(ylabel,"d#sigma/dp_{T}^{e^{+}e^{-}} [pb/GeV]");
-    }
- 
   TCanvas *c1 = MakeCanvas("c1","c1",800,800);
   c1->cd()->SetTopMargin(0.10);
   c1->cd()->SetBottomMargin(0.15);
@@ -281,9 +262,34 @@ void finalPlotUnfolding_ressum(int nsel = 0, int ReBin = 1, TString XTitle = "N_
  
   CPlot::sOutDir = "plots";  
   const TString format("all");
+
+  TString plot_name;
+  TString ratio_name;
+  
+  if(nsel==0)
+    {
+      plot_name="zmm_ressum";
+      ratio_name="zmm_ressum_ratio";
+      sprintf(xlabel,"p_{T}^{#mu^{+}#mu^{-}} [GeV]");
+      sprintf(ylabel,"d#sigma/dp_{T}^{#mu^{+}#mu^{-}} [pb/GeV]");
+    }
+  else if (nsel==1)
+    {
+      plot_name="zee_ressum";
+      ratio_name="zee_ressum_ratio";
+      sprintf(xlabel,"p_{T}^{e^{+}e^{-}} [GeV]");
+      sprintf(ylabel,"d#sigma/dp_{T}^{e^{+}e^{-}} [pb/GeV]");
+    }
+  else
+    {
+      plot_name="zll_ressum";
+      ratio_name="zll_ressum_ratio";
+      sprintf(xlabel,"p_{T}^{l^{+}l^{-}} [GeV]");
+      sprintf(ylabel,"d#sigma/dp_{T}^{l^{+}l^{-}} [pb/GeV]");
+    }
   
   
-  CPlot plotZmmPt("zee_ressum","",xlabel,ylabel);
+  CPlot plotZmmPt(plot_name,"",xlabel,ylabel);
   plotZmmPt.SetXRange(0.3,1500);
   plotZmmPt.AddHist1D(hZmmPtDiffDummySplit2);
   plotZmmPt.AddHist1D(hData,"Data","PE2",1,1,20);
@@ -320,9 +326,9 @@ void finalPlotUnfolding_ressum(int nsel = 0, int ReBin = 1, TString XTitle = "N_
   
   TH1D *ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_AMCATNLO_COMP =  myratio(hPred1,hData);
 
-  CPlot plotZmmPtDiffSplit_AMCATNLO("zee_ressum_ratio","","","aMC@NLO/Data");
+  CPlot plotZmmPtDiffSplit_AMCATNLO(ratio_name,"","","aMC@NLO/Data");
   plotZmmPtDiffSplit_AMCATNLO.AddHist1D( hZmmPtDiffDummySplit);
-  plotZmmPtDiffSplit_AMCATNLO.AddHist1D(ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_AMCATNLO_COMP,"0E",linecolorAMCAtNlo,1,markerstyleAMCAtNLO);
+  plotZmmPtDiffSplit_AMCATNLO.AddHist1D(ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_AMCATNLO_COMP,"E0",linecolorAMCAtNlo,1,markerstyleAMCAtNLO);
   plotZmmPtDiffSplit_AMCATNLO.AddHist1D(hZmmPtDiffDummySplit,"E2",TColor::GetColor("#828282"),20,1);
   plotZmmPtDiffSplit_AMCATNLO.AddTextBox("#bf{CMS}",0.205,0.51,0.465,0.66,0);
   plotZmmPtDiffSplit_AMCATNLO.AddTextBox("|#eta|<2.4, p_{T}>25 GeV",0.56,0.55,0.765,0.7,0);
@@ -340,7 +346,7 @@ void finalPlotUnfolding_ressum(int nsel = 0, int ReBin = 1, TString XTitle = "N_
     
   CPlot plotZmmPtDiffSplit_POWHEG("zmmPtSplit","","","Resbos/Data");
   plotZmmPtDiffSplit_POWHEG.AddHist1D( hZmmPtDiffDummySplit);
-  plotZmmPtDiffSplit_POWHEG.AddHist1D(ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_POWHEG_COMP,"0E",linecolorPowheg,1,markerstylePowheg);
+  plotZmmPtDiffSplit_POWHEG.AddHist1D(ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_POWHEG_COMP,"E0",linecolorPowheg,1,markerstylePowheg);
   plotZmmPtDiffSplit_POWHEG.AddHist1D(hZmmPtDiffDummySplit,"E2",TColor::GetColor("#828282"),20,1);
   plotZmmPtDiffSplit_POWHEG.SetLogx(1);
   plotZmmPtDiffSplit_POWHEG.SetYRange(0.7+eps,1.3-eps);
@@ -353,7 +359,7 @@ void finalPlotUnfolding_ressum(int nsel = 0, int ReBin = 1, TString XTitle = "N_
   
   CPlot plotZmmPtDiffSplit_FEWZ("zmmPtSplit","",xlabel,"Geneva/Data");
   plotZmmPtDiffSplit_FEWZ.AddHist1D(hZmmPtDiffDummySplit);
-  plotZmmPtDiffSplit_FEWZ.AddHist1D(ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_FEWZ_COMP,"0E",linecolorFEWZ,1,markerstyleFEWZ);
+  plotZmmPtDiffSplit_FEWZ.AddHist1D(ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_FEWZ_COMP,"E0",linecolorFEWZ,1,markerstyleFEWZ);
   plotZmmPtDiffSplit_FEWZ.AddHist1D(hZmmPtDiffDummySplit,"E2",TColor::GetColor("#828282"),20,1);
   plotZmmPtDiffSplit_FEWZ.SetLogx(1);
   plotZmmPtDiffSplit_FEWZ.SetYRange(0.7+eps,1.3-eps);
@@ -373,7 +379,7 @@ void finalPlotUnfolding_ressum(int nsel = 0, int ReBin = 1, TString XTitle = "N_
   sprintf(CommandToExec,"mkdir -p plots");
   gSystem->Exec(CommandToExec);  
 
-  if(strcmp(outputName.Data(),"") != 0){
+  /*if(strcmp(outputName.Data(),"") != 0){
     TString myOutputFile;
     myOutputFile = Form("plots/%s.eps",outputName.Data());
     //c1->SaveAs(myOutputFile.Data());
@@ -381,6 +387,6 @@ void finalPlotUnfolding_ressum(int nsel = 0, int ReBin = 1, TString XTitle = "N_
     c1->SaveAs(myOutputFile.Data());
     myOutputFile = Form("plots/%s.pdf",outputName.Data());
     c1->SaveAs(myOutputFile.Data());
-  }
+    }*/
 
 }

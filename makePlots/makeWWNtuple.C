@@ -31,10 +31,10 @@ void makeWWResult(TString type, TString the0J = "", bool isNormalized = false){
     xbinsWWPTL1[ 5] =  80;      xbinsWWPTL1[ 6] =  90;      xbinsWWPTL1[ 7] = 100;      xbinsWWPTL1[ 8] = 110;      xbinsWWPTL1[ 9] = 130;      
     xbinsWWPTL1[10] = 150;      xbinsWWPTL1[11] = 175;      xbinsWWPTL1[12] = 220;      xbinsWWPTL1[13] = 300;      xbinsWWPTL1[14] = 400;
 
-  const int nBinWWPTL2 = 8;
+  const int nBinWWPTL2 = 9;
   Float_t xbinsWWPTL2[nBinWWPTL2+1];
-    xbinsWWPTL2[ 0] =  25;      xbinsWWPTL2[ 1] =  30;      xbinsWWPTL2[ 2] =  35;      xbinsWWPTL2[ 3] =  40;      xbinsWWPTL2[ 4] =  45;
-    xbinsWWPTL2[ 5] =  50;      xbinsWWPTL2[ 6] =  75;      xbinsWWPTL2[ 7] = 100;      xbinsWWPTL2[ 8] = 150;
+    xbinsWWPTL2[ 0] =  20;      xbinsWWPTL2[ 1] =  25;      xbinsWWPTL2[ 2] =  30;      xbinsWWPTL2[ 3] =  35;      xbinsWWPTL2[ 4] =  40;      
+    xbinsWWPTL2[ 5] =  45;      xbinsWWPTL2[ 6] =  50;      xbinsWWPTL2[ 7] =  75;      xbinsWWPTL2[ 8] = 100;      xbinsWWPTL2[ 9] = 150;
 
   const int nBinWWPTLL = 15;
   Float_t xbinsWWPTLL[nBinWWPTLL+1];

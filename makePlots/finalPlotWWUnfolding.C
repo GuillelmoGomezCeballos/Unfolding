@@ -14,9 +14,6 @@
 #include "CMS_lumi.C"
 #include "TTree.h"
 
-// This can be done via a root file late on
-const double totalXSUnc = 0.07165385;
-
 void eraselabel(TPad *p,Double_t h){
   p->cd();
   TPad *pe = new TPad("pe","pe",0.02,0,p->GetLeftMargin(),h);	   
@@ -54,7 +51,8 @@ void atributes(TH1D *histo, TString xtitle = "", TString ytitle = "Fraction", TS
   histo->GetYaxis()->SetTitleOffset(  0.5);
   histo->GetYaxis()->SetTitleSize  (0.120);
   histo->GetYaxis()->SetTickLength (0.03 );
-
+  histo->SetFillColor(12);
+  histo->SetFillStyle(3345);
   histo->SetLineColor  (kBlack);
   histo->SetMarkerStyle(kFullCircle);
 }
@@ -71,7 +69,7 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   else if(keyLabel0 == "PTL1"   || keyLabel0 == "PTL10JET")   {XTitle = "p_{T}^{max}"; isLogX = true;}
   else if(keyLabel0 == "PTL2"   || keyLabel0 == "PTL20JET")   {XTitle = "p_{T}^{min}"; isLogX = true;}
   else if(keyLabel0 == "PTLL"   || keyLabel0 == "PTLL0JET")   {XTitle = "p_{T}^{ll}"; isLogX = true;}
-  else if(keyLabel0 == "NJET"   || keyLabel0 == "NJET0JET")   {XTitle = "n_{jets}";}
+  else if(keyLabel0 == "NJET"   || keyLabel0 == "NJET0JET")   {XTitle = "N_{jets}";}
 
   gInterpreter->ExecuteMacro("PaperStyle.C");
   gStyle->SetOptStat(0);
@@ -144,14 +142,14 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   }
 
   TString theYTitle = "#sigma / GeV [pb]";
-  if     (isNormalized && keyLabel0 == "MLL")    theYTitle = "1/#sigma d#sigma/dm_{ll}";
-  else if(isNormalized && keyLabel0 == "DPHILL") theYTitle = "1/#sigma d#sigma/d#Delta#phi_{ll}";
-  else if(isNormalized && keyLabel0 == "PTL1")   theYTitle = "1/#sigma d#sigma/dp_{T}^{max}";
-  else if(isNormalized && keyLabel0 == "PTL2")   theYTitle = "1/#sigma d#sigma/dp_{T}^{mix}";
-  else if(isNormalized && keyLabel0 == "PTLL")   theYTitle = "1/#sigma d#sigma/dp_{T}^{ll}";
-  else if(isNormalized && keyLabel0 == "NJET")   theYTitle = "1/#sigma d#sigma/dn_{jets}";
-  else if(                keyLabel0 == "DPHILL") theYTitle = "#sigma / dg. [pb]";
-  else if(                keyLabel0 == "NJET")   theYTitle = "#sigma [pb]";
+  if     (isNormalized && keyLabel0.Contains("MLL"))    theYTitle = "1/#sigma d#sigma/dm_{ll}";
+  else if(isNormalized && keyLabel0.Contains("DPHILL")) theYTitle = "1/#sigma d#sigma/d#Delta#phi_{ll}";
+  else if(isNormalized && keyLabel0.Contains("PTL1"))   theYTitle = "1/#sigma d#sigma/dp_{T}^{max}";
+  else if(isNormalized && keyLabel0.Contains("PTL2"))   theYTitle = "1/#sigma d#sigma/dp_{T}^{mix}";
+  else if(isNormalized && keyLabel0.Contains("PTLL"))   theYTitle = "1/#sigma d#sigma/dp_{T}^{ll}";
+  else if(isNormalized && keyLabel0.Contains("NJET"))   theYTitle = "1/#sigma d#sigma/dn_{jets}";
+  else if(                keyLabel0.Contains("DPHILL")) theYTitle = "#sigma / dg. [pb]";
+  else if(                keyLabel0.Contains("NJET"))   theYTitle = "#sigma [pb]";
 
   hPred1->GetYaxis()->SetTitle(theYTitle.Data());
   hPred1->GetYaxis()->SetLabelFont  (   42);

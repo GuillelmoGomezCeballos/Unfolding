@@ -68,10 +68,11 @@ void finalPlotUnfolding(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}"
   gStyle->SetOptStat(0);
 
   double TotalLumi = 35800.0;
-  double normalization[2];
+  double normalization[4];
 
   int me=0;
-  if (strncmp(keyLabel1.Data(),"EE",2)==0){me=1;}
+  if     (strncmp(keyLabel1.Data(),"EE",2)==0){me=1;}
+  else if(strncmp(keyLabel1.Data(),"LL",2)==0){me=2;}
 
   char filename1[300];
   char filename2[300];
@@ -140,9 +141,11 @@ void finalPlotUnfolding(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}"
   }
 
   TString theYTitle = "#sigma / GeV [pb]";
-  if     (isNormalized && keyLabel0 == "Rap")     theYTitle = "1/#sigma d#sigma/dY";
-  else if(isNormalized && keyLabel0 == "PhiStar") theYTitle = "1/#sigma d#sigma/d#phi*";
-  else if(isNormalized)                           theYTitle = "1/#sigma d#sigma/dp_{T} [ GeV^{-1}]";
+  if     (isNormalized  && keyLabel0 == "Rap")     theYTitle = "1/#sigma d#sigma/dY";
+  else if(isNormalized  && keyLabel0 == "PhiStar") theYTitle = "1/#sigma d#sigma/d#phi*";
+  else if(!isNormalized && keyLabel0 == "Rap")     theYTitle = "#sigma [pb]";
+  else if(!isNormalized && keyLabel0 == "PhiStar") theYTitle = "#sigma [pb]";
+  else if(isNormalized)                            theYTitle = "1/#sigma d#sigma/dp_{T} [ GeV^{-1}]";
 
   hPred1->GetYaxis()->SetTitle(theYTitle.Data());
   hPred1->GetYaxis()->SetLabelFont  (   42);
@@ -171,14 +174,17 @@ void finalPlotUnfolding(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}"
 
   hPred1->SetTitle("");
   hData ->SetTitle("");
-  normalization[0] = TotalLumi; normalization[1] = TotalLumi;
-  if(isNormalized) {normalization[0] = hPred1->GetSumOfWeights(); normalization[1] = hData->GetSumOfWeights();};
-  if(isNormalized) {normalization[0] = hPred2->GetSumOfWeights();};
-  if(isNormalized) {normalization[0] = hPred3->GetSumOfWeights();};
+  normalization[0] = TotalLumi; normalization[1] = TotalLumi; normalization[2] = TotalLumi; normalization[3] = TotalLumi;
+  if(isNormalized) {
+     normalization[0] = hPred1->GetSumOfWeights(); 
+     normalization[1] = hPred2->GetSumOfWeights(); 
+     normalization[2] = hPred3->GetSumOfWeights(); 
+     normalization[3] = hData->GetSumOfWeights();
+  }
   hPred1->Scale(1./normalization[0]);
-  hPred2->Scale(1./normalization[0]);
-  hPred3->Scale(1./normalization[0]);
-  hData ->Scale(1./normalization[1]);
+  hPred2->Scale(1./normalization[1]);
+  hPred3->Scale(1./normalization[2]);
+  hData ->Scale(1./normalization[3]);
 
   if(isLogY == true) hPred1->GetYaxis()->SetRangeUser(hPred1->GetMinimum()/10,hPred1->GetMaximum()*500);
   else               hPred1->GetYaxis()->SetRangeUser(0.0,hPred1->GetMaximum()*1.5);
