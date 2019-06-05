@@ -14,11 +14,11 @@
 
 void makeWWResult(TString type, TString the0J = "", bool isNormalized = false){
 
-  const int nBinWWMLL = 14;
+  const int nBinWWMLL = 13;
   Float_t xbinsWWMLL[nBinWWMLL+1];
-    xbinsWWMLL[ 0] =  20;      xbinsWWMLL[ 1] =  55;      xbinsWWMLL[ 2] =  75;      xbinsWWMLL[ 3] =  85;      xbinsWWMLL[ 4] =   95;
-    xbinsWWMLL[ 5] = 110;      xbinsWWMLL[ 6] = 125;      xbinsWWMLL[ 7] = 140;      xbinsWWMLL[ 8] = 160;      xbinsWWMLL[ 9] =  185;
-    xbinsWWMLL[10] = 220;      xbinsWWMLL[11] = 280;      xbinsWWMLL[12] = 380;      xbinsWWMLL[13] = 600;      xbinsWWMLL[14] = 1500;
+    xbinsWWMLL[ 0] =  55;      xbinsWWMLL[ 1] =  75;      xbinsWWMLL[ 2] =  85;      xbinsWWMLL[ 3] =   95;     xbinsWWMLL[ 4] = 110;      
+    xbinsWWMLL[ 5] = 125;      xbinsWWMLL[ 6] = 140;      xbinsWWMLL[ 7] = 160;      xbinsWWMLL[ 8] =  185;     xbinsWWMLL[ 9] = 220;      
+    xbinsWWMLL[10] = 280;      xbinsWWMLL[11] = 380;      xbinsWWMLL[12] = 600;      xbinsWWMLL[13] = 1500;
 
   const int nBinWWDPHILL = 9;
   Float_t xbinsWWDPHILL[nBinWWDPHILL+1];
@@ -27,14 +27,14 @@ void makeWWResult(TString type, TString the0J = "", bool isNormalized = false){
 
   const int nBinWWPTL1 = 14;
   Float_t xbinsWWPTL1[nBinWWPTL1+1];
-    xbinsWWPTL1[ 0] =  25;      xbinsWWPTL1[ 1] =  40;      xbinsWWPTL1[ 2] =  50;      xbinsWWPTL1[ 3] =  60;      xbinsWWPTL1[ 4] =  70;
+    xbinsWWPTL1[ 0] =  27;      xbinsWWPTL1[ 1] =  40;      xbinsWWPTL1[ 2] =  50;      xbinsWWPTL1[ 3] =  60;      xbinsWWPTL1[ 4] =  70;
     xbinsWWPTL1[ 5] =  80;      xbinsWWPTL1[ 6] =  90;      xbinsWWPTL1[ 7] = 100;      xbinsWWPTL1[ 8] = 110;      xbinsWWPTL1[ 9] = 130;      
     xbinsWWPTL1[10] = 150;      xbinsWWPTL1[11] = 175;      xbinsWWPTL1[12] = 220;      xbinsWWPTL1[13] = 300;      xbinsWWPTL1[14] = 400;
 
-  const int nBinWWPTL2 = 9;
+  const int nBinWWPTL2 = 8;
   Float_t xbinsWWPTL2[nBinWWPTL2+1];
-    xbinsWWPTL2[ 0] =  20;      xbinsWWPTL2[ 1] =  25;      xbinsWWPTL2[ 2] =  30;      xbinsWWPTL2[ 3] =  35;      xbinsWWPTL2[ 4] =  40;      
-    xbinsWWPTL2[ 5] =  45;      xbinsWWPTL2[ 6] =  50;      xbinsWWPTL2[ 7] =  75;      xbinsWWPTL2[ 8] = 100;      xbinsWWPTL2[ 9] = 150;
+    xbinsWWPTL2[ 0] =  25;      xbinsWWPTL2[ 1] =  30;      xbinsWWPTL2[ 2] =  35;      xbinsWWPTL2[ 3] =  40;      xbinsWWPTL2[ 4] =  45;      
+    xbinsWWPTL2[ 5] =  50;      xbinsWWPTL2[ 6] =  75;      xbinsWWPTL2[ 7] = 100;      xbinsWWPTL2[ 8] = 150;
 
   const int nBinWWPTLL = 15;
   Float_t xbinsWWPTLL[nBinWWPTLL+1];
@@ -47,6 +47,11 @@ void makeWWResult(TString type, TString the0J = "", bool isNormalized = false){
   Float_t xbinsWWNJET[nBinWWNJET+1];
     xbinsWWNJET[ 0] =-0.5;      xbinsWWNJET[ 1] = 0.5;      xbinsWWNJET[ 2] = 1.5;      xbinsWWNJET[ 3] = 2.5;
 
+  const int nBinWWN0JET = 5;
+  Float_t xbinsWWN0JET[nBinWWN0JET+1];
+    xbinsWWN0JET[ 0] =-0.5;      xbinsWWN0JET[ 1] = 0.5;      xbinsWWN0JET[ 2] = 1.5;
+    xbinsWWN0JET[ 3] = 2.5;      xbinsWWN0JET[ 4] = 3.5;      xbinsWWN0JET[ 5] = 4.5;
+
   TString xsfname("input_files/");
   TH1D* histoResult;
   if     (type == "MLL")    {histoResult = new TH1D(Form("hDWWMLL%s",the0J.Data()),    Form("hDWWMLL%s",the0J.Data()),    nBinWWMLL,    xbinsWWMLL   ); xsfname = xsfname + Form("WWMLL%s",the0J.Data());}
@@ -54,7 +59,8 @@ void makeWWResult(TString type, TString the0J = "", bool isNormalized = false){
   else if(type == "PTL1")   {histoResult = new TH1D(Form("hDWWPTL1%s",the0J.Data()),   Form("hDWWPTL1%s",the0J.Data()),   nBinWWPTL1,   xbinsWWPTL1  ); xsfname = xsfname + Form("WWPTL1%s",the0J.Data());}
   else if(type == "PTL2")   {histoResult = new TH1D(Form("hDWWPTL2%s",the0J.Data()),   Form("hDWWPTL2%s",the0J.Data()),   nBinWWPTL2,   xbinsWWPTL2  ); xsfname = xsfname + Form("WWPTL2%s",the0J.Data());}
   else if(type == "PTLL")   {histoResult = new TH1D(Form("hDWWPTLL%s",the0J.Data()),   Form("hDWWPTLL%s",the0J.Data()),   nBinWWPTLL,   xbinsWWPTLL  ); xsfname = xsfname + Form("WWPTLL%s",the0J.Data());}
-  else if(type == "NJET")   {histoResult = new TH1D(Form("hDWWNJET"),                 Form("hDWWNJET"),                   nBinWWNJET,   xbinsWWNJET  ); xsfname = xsfname + "WWNJET";}
+  else if(type == "NJET")   {histoResult = new TH1D(Form("hDWWNJET"),                  Form("hDWWNJET"),                  nBinWWNJET,   xbinsWWNJET  ); xsfname = xsfname + "WWNJET";}
+  else if(type == "N0JET")  {histoResult = new TH1D(Form("hDWWN0JET"),                 Form("hDWWN0JET"),                 nBinWWN0JET,  xbinsWWN0JET ); xsfname = xsfname + "WWN0JET";}
   else {printf("WRONG TYPE\n"); return;}
 
   if(isNormalized) xsfname = xsfname + "_normalized.txt";
@@ -112,5 +118,6 @@ void makeWWNtuple(){
 
  makeWWResult("NJET", ""    , false);
  makeWWResult("NJET", ""    , true);
+ makeWWResult("N0JET", ""   , false);
 
 }

@@ -65,11 +65,12 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   bool isLogX = false;
 
   if     (keyLabel0 == "MLL"    || keyLabel0 == "MLL0JET")    {XTitle = "m_{ll}"; isLogX = true;}
-  else if(keyLabel0 == "DPHILL" || keyLabel0 == "DPHILL0JET") {XTitle = "#Delta#phi_{ll}";}
+  else if(keyLabel0 == "DPHILL" || keyLabel0 == "DPHILL0JET") {XTitle = "#Delta#phi_{ll}"; units = "dg.";}
   else if(keyLabel0 == "PTL1"   || keyLabel0 == "PTL10JET")   {XTitle = "p_{T}^{max}"; isLogX = true;}
   else if(keyLabel0 == "PTL2"   || keyLabel0 == "PTL20JET")   {XTitle = "p_{T}^{min}"; isLogX = true;}
   else if(keyLabel0 == "PTLL"   || keyLabel0 == "PTLL0JET")   {XTitle = "p_{T}^{ll}"; isLogX = true;}
-  else if(keyLabel0 == "NJET"   || keyLabel0 == "NJET0JET")   {XTitle = "N_{jets}";}
+  else if(keyLabel0 == "NJET")  {XTitle = "N_{jets}"; units = "";}
+  else if(keyLabel0 == "N0JET") {XTitle = ""; units = "";}
 
   gInterpreter->ExecuteMacro("PaperStyle.C");
   gStyle->SetOptStat(0);
@@ -80,29 +81,33 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   TH1D* hPred1     = (TH1D*)_fileGenWW->Get(Form("hDWW%s",keyLabel0.Data()));
   TH1D* hPred1_PDF = (TH1D*)_fileGenWW->Get(Form("hDWW%s_PDF",keyLabel0.Data()));
   TH1D* hPred1_QCD = (TH1D*)_fileGenWW->Get(Form("hDWW%s_QCD",keyLabel0.Data()));
+  TH1D* hPred1_NNLO= (TH1D*)_fileGenWW->Get(Form("hDWW%s_NNLO",keyLabel0.Data()));
 
   TString plotName = Form("input_files/xs_WW%s_normalized%d.root", keyLabel0.Data(), isNormalized);
   TFile *_file0 = TFile::Open(plotName.Data());
   TH1D* hData = (TH1D*)_file0->Get(Form("hDWW%s",keyLabel0.Data()));
   
-  double totalUnc[2] = {TMath::Abs(1-hPred1_PDF->GetSumOfWeights()/hPred1->GetSumOfWeights()),
-                        TMath::Abs(1-hPred1_QCD->GetSumOfWeights()/hPred1->GetSumOfWeights())};
+  double totalUnc[3] = {TMath::Abs(1-hPred1_PDF->GetSumOfWeights() /hPred1->GetSumOfWeights()),
+                        TMath::Abs(1-hPred1_QCD->GetSumOfWeights() /hPred1->GetSumOfWeights()),
+                        TMath::Abs(1-hPred1_NNLO->GetSumOfWeights()/hPred1->GetSumOfWeights())};
 
   for(Int_t i=1;i<=hPred1->GetNbinsX();++i){
-    double diff[3] = {hPred1->GetBinError(i)/hPred1->GetBinContent(i),
-                      TMath::Abs(1-hPred1_PDF->GetBinContent(i)/hPred1->GetBinContent(i)),
-                      TMath::Abs(1-hPred1_QCD->GetBinContent(i)/hPred1->GetBinContent(i))};
+    double diff[4] = {hPred1->GetBinError(i)/hPred1->GetBinContent(i),
+                      TMath::Abs(1-hPred1_PDF->GetBinContent(i) /hPred1->GetBinContent(i)),
+                      TMath::Abs(1-hPred1_QCD->GetBinContent(i) /hPred1->GetBinContent(i)),
+                      TMath::Abs(1-hPred1_NNLO->GetBinContent(i)/hPred1->GetBinContent(i))};
 
     if(isNormalized) {
-      diff[1] = TMath::Abs(1-(hPred1_PDF->GetBinContent(i)/hPred1_PDF->GetSumOfWeights())/(hPred1->GetBinContent(i)/hPred1->GetSumOfWeights()));
-      diff[2] = TMath::Abs(1-(hPred1_QCD->GetBinContent(i)/hPred1_QCD->GetSumOfWeights())/(hPred1->GetBinContent(i)/hPred1->GetSumOfWeights()));
+      diff[1] = TMath::Abs(1-(hPred1_PDF->GetBinContent(i) /hPred1_PDF->GetSumOfWeights() )/(hPred1->GetBinContent(i)/hPred1->GetSumOfWeights()));
+      diff[2] = TMath::Abs(1-(hPred1_QCD->GetBinContent(i) /hPred1_QCD->GetSumOfWeights() )/(hPred1->GetBinContent(i)/hPred1->GetSumOfWeights()));
+      diff[3] = TMath::Abs(1-(hPred1_NNLO->GetBinContent(i)/hPred1_NNLO->GetSumOfWeights())/(hPred1->GetBinContent(i)/hPred1->GetSumOfWeights()));
     }
 
     hData->SetBinContent(i,hData->GetBinContent(i)*hPred1->GetBinContent(i));
     hData->SetBinError  (i,hData->GetBinError  (i)*hPred1->GetBinContent(i));
 
-    hPred1->SetBinError(i,sqrt(diff[0]*diff[0]+diff[1]*diff[1]+diff[2]*diff[2])*hPred1->GetBinContent(i));
-    if(isDebug) printf("hPredSyst (%2d) %5.2f %5.2f %5.2f -> %5.2f\n",i,100*diff[0],100*diff[1],100*diff[2],100*hPred1->GetBinError(i)/hPred1->GetBinContent(i));
+    hPred1->SetBinError(i,sqrt(diff[0]*diff[0]+diff[1]*diff[1]+diff[2]*diff[2]+diff[3]*diff[3])*hPred1->GetBinContent(i));
+    if(isDebug) printf("hPredSyst (%2d) %5.2f %5.2f %5.2f %5.2f -> %5.2f\n",i,100*diff[0],100*diff[1],100*diff[2],100*diff[3],100*hPred1->GetBinError(i)/hPred1->GetBinContent(i));
   }
 
   hData ->Scale(1,"width");
@@ -150,6 +155,7 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   else if(isNormalized && keyLabel0.Contains("NJET"))   theYTitle = "1/#sigma d#sigma/dn_{jets}";
   else if(                keyLabel0.Contains("DPHILL")) theYTitle = "#sigma / dg. [pb]";
   else if(                keyLabel0.Contains("NJET"))   theYTitle = "#sigma [pb]";
+  else if(                keyLabel0.Contains("N0JET"))  theYTitle = "#sigma [pb]";
 
   hPred1->GetYaxis()->SetTitle(theYTitle.Data());
   hPred1->GetYaxis()->SetLabelFont  (   42);
@@ -176,6 +182,14 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   hPred1->SetMarkerStyle(3);
   hPred1->SetMarkerColor(kBlack);
 
+  TAxis *xa = hData->GetXaxis();
+  if(keyLabel0.Contains("N0JET")){
+   xa->SetBinLabel(1 ,"p_{T}^{j} < 25 GeV");
+   xa->SetBinLabel(2 ,"p_{T}^{j} < 30 GeV");
+   xa->SetBinLabel(3 ,"p_{T}^{j} < 35 GeV");
+   xa->SetBinLabel(4 ,"p_{T}^{j} < 45 GeV");
+   xa->SetBinLabel(5 ,"p_{T}^{j} < 60 GeV");
+  }
   hPred1->SetTitle("");
   hData ->SetTitle("");
   double normalization[2] = {1.0, 1.0};
