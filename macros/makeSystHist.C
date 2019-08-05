@@ -464,13 +464,15 @@ void helper_function(TString theSuffix, int nsel = 0, int whichDY = 3, TString t
   leg->Draw();
   if(1){
     TString theLabel = "";
-    if     (theHistName == "PtRap0") theLabel = "0 < |y^{l^{+}l^{-}}| < 0.4";
-    else if(theHistName == "PtRap1") theLabel = "0.4 < |y^{l^{+}l^{-}}| < 0.8";
-    else if(theHistName == "PtRap2") theLabel = "0.8 < |y^{l^{+}l^{-}}| < 1.2";
-    else if(theHistName == "PtRap3") theLabel = "1.2 < |y^{l^{+}l^{-}}| < 1.6";
-    else if(theHistName == "PtRap4") theLabel = "1.6 < |y^{l^{+}l^{-}}| < 2.4";
-    else if(nsel == 0              ) theLabel = "#mu^{+}#mu^{-} sample";
-    else if(nsel == 1              ) theLabel = "e^{+}e^{-} sample";
+    TString leptonLegend = "#mu^{+}#mu^{-} sample";
+    if(nsel == 1) leptonLegend = "e^{+}e^{-} sample";
+    if     (theHistName == "PtRap0") theLabel = Form("#splitline{0 < |y^{l^{+}l^{-}}| < 0.4}{%s}",leptonLegend.Data());
+    else if(theHistName == "PtRap1") theLabel = Form("#splitline{0.4 < |y^{l^{+}l^{-}}| < 0.8}{%s}",leptonLegend.Data());
+    else if(theHistName == "PtRap2") theLabel = Form("#splitline{0.8 < |y^{l^{+}l^{-}}| < 1.2}{%s}",leptonLegend.Data());
+    else if(theHistName == "PtRap3") theLabel = Form("#splitline{1.2 < |y^{l^{+}l^{-}}| < 1.6}{%s}",leptonLegend.Data());
+    else if(theHistName == "PtRap4") theLabel = Form("#splitline{1.6 < |y^{l^{+}l^{-}}| < 2.4}{%s}",leptonLegend.Data());
+    else if(nsel == 0              ) theLabel = leptonLegend.Data();
+    else if(nsel == 1              ) theLabel = leptonLegend.Data();
     TLatex *_extraLabel = new TLatex(0.85, 0.8, theLabel.Data());
     _extraLabel->SetNDC();
     _extraLabel->SetTextAlign(32);
