@@ -39,7 +39,7 @@ void helper_function(int nsel=0,int whichDY=0, int rebin=1, TString theHistName 
   else if(whichDY == 3){
     _file0 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period3.root",theInputFolder.Data(),whichDY,theHistName.Data()));
     _file1 = TFile::Open("/afs/cern.ch/work/c/ceballos/public/samples/panda/v_001_0/genZpt_NLO.root");
-    _file2 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period3.root",theInputFolder.Data(),2,theHistName.Data()));
+    _file2 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period3.root",theInputFolder.Data(),3,theHistName.Data()));
   }
 
 if((suffix == "_lepeff" || suffix == "_sigstat") && suffixStat < 0) {printf("Wrong suffixStat: %d\n",suffixStat); return;}
@@ -257,7 +257,7 @@ outFilePlots->Close();
 
 void testUnfold(TString theHistName = "Pt", TString suffix = "", int suffixLepStat = -1, int rebin=1){
   for (int i=0;i<=1;i++){
-    for (int j=0;j<=3;j++){
+    for (int j=3;j<=3;j++){
   //for (int i=0;i<=0;i++){
   //  for (int j=0;j<=0;j++){
       helper_function(i,j,rebin,theHistName.Data(),suffix.Data(),suffixLepStat);

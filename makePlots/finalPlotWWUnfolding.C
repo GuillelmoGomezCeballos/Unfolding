@@ -229,17 +229,23 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
 
   double pull; 
   double pullerr;
+  double pullinv; 
+  double pullinverr;
 
   for(int i=1; i<=hNum->GetNbinsX(); i++){
       pull = 1.0; pullerr = 0.0;
+      pullinv = 1.0; pullinverr = 0.0;
       if(hNum->GetBinContent(i) > 0 && hDen->GetBinContent(i) > 0){
         pull = (hNum->GetBinContent(i)/hDen->GetBinContent(i));
 	pullerr = pull*hDen->GetBinError(i)/hDen->GetBinContent(i);
+        pullinv = (hDen->GetBinContent(i)/hNum->GetBinContent(i));
+	pullinverr = pullinv*hDen->GetBinError(i)/hDen->GetBinContent(i);
       }
       else {
         printf("0 events in %d\n",i);
       }
-      if(isDebug) printf("ratio(%2d): data/pred = %.3f +/- %.3f predUnc: %.3f\n",i,pull,pullerr,hNum->GetBinError(i)/hNum->GetBinContent(i));
+      if(isDebug) printf("ratio(%2d): pred/data = %.3f +/- %.3f predUnc: %.3f\n",i,pull,pullerr,hNum->GetBinError(i)/hNum->GetBinContent(i));
+      if(isDebug) printf("ratio(%2d): data/pred = %.3f +/- %.3f, sigma = %.3f pb\n",i,pullinv,pullinverr,hNum->GetBinContent(i));
       hRatio->SetBinContent(i,pull);
       hRatio->SetBinError(i,pullerr);
       hBand->SetBinContent(i,1);
