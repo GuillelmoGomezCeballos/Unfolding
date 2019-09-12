@@ -29,7 +29,9 @@ void eraselabel(TPad *p,Double_t h){
 
 TH1D *makeDiffHist(TH1D* hData, TH1D* hFit, const TString name)
 {
-  TH1D *hDiff = (TH1D*)hData->Clone("hDiff");
+  double xbin[37]={0.3,1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,18,20,22,25,28,32,37,43,52,65,85,120,160,190,220,250,300,400,500,800,1500};
+  TH1D* hDiff = new TH1D("h0","h0",36,xbin);
+  //TH1D *hDiff = (TH1D*)hData->Clone("hDiff");
   hDiff->SetName(name);
   for(Int_t ibin=1; ibin<=hData->GetNbinsX(); ibin++) {
     
@@ -81,7 +83,70 @@ TH1D* myratio(TH1D* g1,TH1D* g2) {
   return g3;
 }
 
-void finalPlotUnfolding_fixed(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString units = "", TString plotName = "histo_nice.root", TString outputName = "njets",
+
+TGraphAsymmErrors* myratio_graph(TGraph* g1, TGraph *gpdf, TH1D* g2) {
+  std::cout << "New" << std::endl;
+  
+  TGraphAsymmErrors* g3= (TGraphAsymmErrors*)g1->Clone("httt");;
+
+  Double_t   x1=0.,   y1=0., x2=0., y2=0.;
+  Double_t pull=1.0, pullerr=0.0;
+  Double_t eyhigh=0, eylow=0;
+
+  for (Int_t i=0; i<=g1->GetN(); i++) {
+    pull = 1.0; pullerr = 0.0;
+    g1->GetPoint(i,x1,y1);
+    eyhigh=sqrt(g1->GetErrorYhigh(i)*g1->GetErrorYhigh(i)+gpdf->GetErrorYhigh(i)*gpdf->GetErrorYhigh(i));
+    eylow=sqrt(g1->GetErrorYlow(i)*g1->GetErrorYlow(i)+gpdf->GetErrorYlow(i)*gpdf->GetErrorYlow(i));
+    std::cout << "let's test " << y1 << " " << g1->GetErrorYhigh(i) << " " << gpdf->GetErrorYhigh(i) << " " << g1->GetErrorYlow(i) << " " << gpdf->GetErrorYlow(i) << std::endl;
+    if(y1>0 && g2->GetBinContent(i+1)>0)
+      {
+	std::cout << i << " " << y1 << " " << g2->GetBinContent(i+1) << std::endl;
+	//pull = (y1/g2->GetBinContent(i));
+	g3->SetPoint(i,x1,y1/g2->GetBinContent(i+1));
+	g3->SetPointEYhigh(i,eyhigh/g2->GetBinContent(i+1));
+	g3->SetPointEYlow(i,eylow/g2->GetBinContent(i+1));
+      }
+    else {
+      printf("0 events in %d\n",i);
+    }
+  }
+  return g3;
+}
+
+TGraphAsymmErrors* myratio_graph_geneva(TGraph* g1, TH1D* g2) {
+  std::cout << "New" << std::endl;
+  
+  TGraphAsymmErrors* g3= (TGraphAsymmErrors*)g1->Clone("httt");;
+
+  Double_t   x1=0.,   y1=0., x2=0., y2=0.;
+  Double_t pull=1.0, pullerr=0.0;
+  Double_t eyhigh=0, eylow=0;
+  Double_t xyhigh=0, xylow=0;
+
+  for (Int_t i=0; i<=g1->GetN(); i++) {
+    pull = 1.0; pullerr = 0.0;
+    g1->GetPoint(i,x1,y1);
+    eyhigh=g1->GetErrorYhigh(i);
+    eylow=g1->GetErrorYlow(i);
+    xyhigh=g1->GetErrorXhigh(i);
+    xylow=g1->GetErrorXlow(i);
+    if(y1>0 && g2->GetBinContent(i+1)>0)
+      {
+	std::cout << i << "geneva  " << y1 << " " << g2->GetBinContent(i+1) << " " <<  xyhigh << " " << xylow << std::endl;
+	//pull = (y1/g2->GetBinContent(i));
+	g3->SetPoint(i,x1,y1/g2->GetBinContent(i+1));
+	g3->SetPointEYhigh(i,eyhigh/g2->GetBinContent(i+1));
+	g3->SetPointEYlow(i,eylow/g2->GetBinContent(i+1));
+      }
+    else {
+      printf("0 events in %d\n",i);
+    }
+  }
+  return g3;
+}
+
+void finalPlotUnfolding_ressum_tmd(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString units = "", TString plotName = "histo_nice.root", TString outputName = "njets",
                 bool isLogY = false, bool isLogX = false, TString keyLabel0 = "Pt", TString keyLabel1 = "MM", bool isNormalized = false) {
   std::cout << "Are we here? " << std::endl;
   //gInterpreter->ExecuteMacro("PaperStyle.C");
@@ -89,6 +154,12 @@ void finalPlotUnfolding_fixed(int nsel = 0, int ReBin = 1, TString XTitle = "N_{
 
   double TotalLumi = 35900.0;
   double normalization[2];
+
+  gStyle->SetEndErrorSize(0);   
+
+  double xbin[37]={0.3,1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,18,20,22,25,28,32,37,43,52,65,85,120,160,190,220,250,300,400,500,800,1500};
+  TH1D* hZmmPtDiffDummySplit2 = new TH1D("h0","h0",36,xbin);
+
  
   int me=0;
   if (strncmp(keyLabel1.Data(),"EE",2)==0){me=1;}
@@ -97,25 +168,37 @@ void finalPlotUnfolding_fixed(int nsel = 0, int ReBin = 1, TString XTitle = "N_{
   char filename1[300];
   char filename2[300];
   char filename3[300];
+  char filenameTMD[300];
+  char filenameTMD_pdf[300];
   sprintf(filename1,"_nsel%d_dy3_rebin%d_default.root",me,ReBin);//default, AMCNLO
-  sprintf(filename2,"_nsel%d_dy6_rebin%d_default.root",me,ReBin);
-  sprintf(filename3,"_nsel%d_dy7_rebin%d_default.root",me,ReBin);
- 
+  sprintf(filename2,"_nsel%d_dy5_rebin%d_default.root",me,ReBin);
+  //sprintf(filename3,"_nsel%d_dy4_rebin%d_default.root",me,ReBin);
+  sprintf(filename3,"gva_CMS_SMP_17_10_Z_mumu_13TeV_NNPDF31_as114.root");
+  sprintf(filenameTMD_pdf,"cascade3-13TeV-aMCatNLO-DY-H6-iscale1-lhescale3-m10toinf-TMDset2-102200-PDF_error.root");
+  sprintf(filenameTMD,"cascade3-13TeV-aMCatNLO-DY-H6-iscale1-lhescale3-m10toinf-TMDset2-102200-iwgt-scales_combine.root");
+
   TString plotName2=plotName;
-  TString plotName3=plotName;
+  //TString plotName3=plotName;
+  TString plotName3="/afs/cern.ch/work/a/arapyan/Run2/test/CMSSW_8_0_26_patch1/src/Unfolding/makePlots/tmd_predictions/";
+  TString plotNameTMD="/afs/cern.ch/work/a/arapyan/Run2/test/CMSSW_8_0_26_patch1/src/Unfolding/makePlots/tmd_predictions/";
+  TString plotNameTMD_pdf="/afs/cern.ch/work/a/arapyan/Run2/test/CMSSW_8_0_26_patch1/src/Unfolding/makePlots/tmd_predictions/";
   plotName.Append(filename1);
   plotName2=plotName2.Append(filename2);
   plotName3=plotName3.Append(filename3);
+  plotNameTMD=plotNameTMD.Append(filenameTMD);
+  plotNameTMD_pdf=plotNameTMD_pdf.Append(filenameTMD_pdf);
   std::cout <<  plotName << std::endl;
   std::cout <<  plotName2 << std::endl;
   std::cout <<  plotName3 << std::endl;
+  std::cout <<  plotNameTMD << std::endl;
   
   TH1D* hData;
   TH1D* hPred1;
   TH1D* hPred2;
-  TH1D* hPred3_pdf;
-  TH1D* hPred3_qcd;
-  TH1D* hPred3;
+  //TH1D* hPred3;
+  TGraphAsymmErrors* hPred3;
+  TGraphAsymmErrors* hPredTMD;
+  TGraphAsymmErrors* hPredTMD_pdf;
   TString keyLabel2;
   if(keyLabel0 == "Pttest")
     {
@@ -129,9 +212,17 @@ void finalPlotUnfolding_fixed(int nsel = 0, int ReBin = 1, TString XTitle = "N_{
   hData      = (TH1D*)file1->Get(Form("unfold"));
   hPred1     = (TH1D*)file1->Get(Form("hDDil%s%s"    ,keyLabel2.Data(),keyLabel1.Data()));
   TFile *file2 = new TFile(plotName2, "read");  if(!file2) {printf("File %s does not exist\n",plotName.Data()); return;}
-  hPred2 = (TH1D*)file2->Get(Form("hDDil%s%s"	 ,keyLabel2.Data(),"MM"));
+  hPred2 = (TH1D*)file2->Get("hDDilPtMM");
   TFile *file3 = new TFile(plotName3, "read");  if(!file3) {printf("File %s does not exist\n",plotName.Data()); return;}
-  hPred3 = (TH1D*)file3->Get(Form("hDDil%s%s"	 ,keyLabel2.Data(),"MM"));
+  TFile *fileTMD = new TFile(plotNameTMD, "read");  if(!fileTMD) {printf("File %s does not exist\n",plotNameTMD.Data()); return;}
+  TFile *fileTMD_pdf = new TFile(plotNameTMD_pdf, "read");  if(!fileTMD) {printf("File %s does not exist\n",plotNameTMD.Data()); return;}
+  if(nsel==2) keyLabel1="MM";
+  //hPred3 = (TH1D*)file3->Get(Form("hDDil%s%s"	 ,keyLabel2.Data(),keyLabel1.Data()));
+  hPred3 = (TGraphAsymmErrors*)file3->Get("CMS_2018_PAS_SMP_17_010/d02-x01-y01");
+  hPred3->RemovePoint(0);
+  hPredTMD = (TGraphAsymmErrors*)fileTMD->Get("CMS_2018_PAS_SMP_17_010/d02-x01-y01");
+  hPredTMD_pdf = (TGraphAsymmErrors*)fileTMD_pdf->Get("CMS_2018_PAS_SMP_17_010/d02-x01-y01");
+
   
   double pull; 
   double pullerr;
@@ -215,13 +306,15 @@ void finalPlotUnfolding_fixed(int nsel = 0, int ReBin = 1, TString XTitle = "N_{
   normalization[0] = TotalLumi; normalization[1] = TotalLumi;
   if(isNormalized) {normalization[0] = hPred1->GetSumOfWeights(); normalization[1] = hData->GetSumOfWeights();};
   if(isNormalized) {normalization[0] = hPred2->GetSumOfWeights();};
-  if(isNormalized) {normalization[0] = hPred3->GetSumOfWeights();};
+  //if(isNormalized) {normalization[0] = hPred3->GetSumOfWeights();};
   hPred1->Scale(1./normalization[0]);
   hPred1->Scale(2008./2075); // Guillelmo normalizes amc@nlo inclusively to FEWZ NNLO cross section (with NNPDF3.1). Revert back to the amc@nlo inclusive cross section prediction
   hPred2->Scale(1./normalization[0]);
-  hPred3->Scale(1./normalization[0]);
+  //hPred3->Scale(1./normalization[0]);
+  //hPred3->Scale(1.0,"width");
+  //hPred3->Scale(1975./1.28373e+10);
   hData ->Scale(1./normalization[1]);
-
+  
   hData->GetYaxis()->SetTitleFont(42);
   hData->GetYaxis()->SetLabelFont(42);
   hData->GetXaxis()->SetTitleFont(42);
@@ -235,6 +328,19 @@ void finalPlotUnfolding_fixed(int nsel = 0, int ReBin = 1, TString XTitle = "N_{
   hData->GetYaxis()->SetLabelOffset(0.015);
   hData->GetXaxis()->SetLabelOffset(0.015);
 
+  hZmmPtDiffDummySplit2->GetYaxis()->SetTitleFont(42);
+  hZmmPtDiffDummySplit2->GetYaxis()->SetLabelFont(42);
+  hZmmPtDiffDummySplit2->GetXaxis()->SetTitleFont(42);
+  hZmmPtDiffDummySplit2->GetXaxis()->SetLabelFont(42);
+  hZmmPtDiffDummySplit2->GetYaxis()->SetTitleSize(0.055);
+  hZmmPtDiffDummySplit2->GetXaxis()->SetTitleSize(0.055);
+  hZmmPtDiffDummySplit2->GetYaxis()->SetLabelSize(0.039);
+  hZmmPtDiffDummySplit2->GetXaxis()->SetLabelSize(0.039);
+  hZmmPtDiffDummySplit2->GetYaxis()->SetTitleOffset(1.20);
+  hZmmPtDiffDummySplit2->GetXaxis()->SetTitleOffset(1.20);
+  hZmmPtDiffDummySplit2->GetYaxis()->SetLabelOffset(0.015);
+  hZmmPtDiffDummySplit2->GetXaxis()->SetLabelOffset(0.015);
+  
   hData->SetFillStyle(3004);
   hData->SetFillColor(TColor::GetColor("#828282"));
   hPred1->SetFillColor(fillcolorAMCAtNlo);
@@ -252,38 +358,39 @@ void finalPlotUnfolding_fixed(int nsel = 0, int ReBin = 1, TString XTitle = "N_{
   
   if(nsel==0)
     {
-      plot_name="zmm_fixed";
-      ratio_name="zmm_fixed";
+      plot_name="zmm_ressum";
+      ratio_name="zmm_ressum_ratio";
       sprintf(xlabel,"p_{T}^{Z} [GeV]");
       sprintf(ylabel,"d#sigma/dp_{T}^{Z} [pb/GeV]");
     }
   else if (nsel==1)
     {
-      plot_name="zee_fixed";
-      ratio_name="zee_fixed_ratio";
+      plot_name="zee_ressum";
+      ratio_name="zee_ressum_ratio";
       sprintf(xlabel,"p_{T}^{Z} [GeV]");
       sprintf(ylabel,"d#sigma/dp_{T}^{Z} [pb/GeV]");
     }
   else
     {
-      plot_name="zll_fixed";
-      ratio_name="zll_fixed_ratio";
+      plot_name="zll_ressum";
+      ratio_name="zll_ressum_ratio";
       sprintf(xlabel,"p_{T}^{Z} [GeV]");
       sprintf(ylabel,"d#sigma/dp_{T}^{Z} [pb/GeV]");
     }
   
   
   CPlot plotZmmPt(plot_name,"",xlabel,ylabel);
-  plotZmmPt.SetXRange(30,1500);
+  plotZmmPt.SetXRange(0.3,1500);
+  plotZmmPt.AddHist1D(hZmmPtDiffDummySplit2);
   plotZmmPt.AddHist1D(hData,"Data","PE2",1,1,20);
-  plotZmmPt.AddHist1D(hPred1,"aMC@NLO","PE",linecolorAMCAtNlo,1,markerstyleAMCAtNLO);
-  plotZmmPt.AddHist1D(hPred2,"ZjNNLO","PE",linecolorPowheg,1,markerstylePowheg);
-  plotZmmPt.AddHist1D(hPred3,"FEWZ","PE",linecolorFEWZ,1,markerstyleFEWZ);
+  //plotZmmPt.AddHist1D(hPred1,"aMC@NLO","PE",linecolorAMCAtNlo,1,markerstyleAMCAtNLO);
+  plotZmmPt.AddGraph(hPredTMD,"PB TMD","PE",linecolorAMCAtNlo,markerstyleAMCAtNLO,1);
+  plotZmmPt.AddHist1D(hPred2,"Resbos","PE",linecolorPowheg,1,markerstylePowheg);
+  //plotZmmPt.AddHist1D(hPred3,"Geneva","PE",linecolorFEWZ,1,markerstyleFEWZ);
+  plotZmmPt.AddGraph(hPred3,"Geneva","PE",linecolorFEWZ,markerstyleFEWZ,1);
   plotZmmPt.AddHist1D(hData,"PE2",1,1,20);
   plotZmmPt.AddHist1D(hData,"P",1,1,20);
- 
   plotZmmPt.AddTextBox("#bf{CMS}",0.08,0.90,0.34,0.96,0);
-  //plotZmmPt.AddTextBox("#bf{CMS} #scale[0.75]{#it{Preliminary}}",0.15,0.90,0.41,0.96,0);
   if(nsel==0)
     plotZmmPt.AddTextBox("Z/#gamma^{*} #rightarrow #mu^{+}#mu^{-}",0.55,0.55,0.90,0.61,0);
   else if (nsel==1)
@@ -292,15 +399,14 @@ void finalPlotUnfolding_fixed(int nsel = 0, int ReBin = 1, TString XTitle = "N_{
     plotZmmPt.AddTextBox("Z/#gamma^{*} #rightarrow #mu^{+}#mu^{-}, e^{+}e^{-}",0.55,0.55,0.90,0.61,0);
   plotZmmPt.AddTextBox("|#eta| < 2.4, p_{T} > 25 GeV",0.55,0.40,0.90,0.55,0);
   plotZmmPt.AddTextBox(lumitext,0.69,0.90,0.93,0.96,0);
-  plotZmmPt.SetYRange(0.000001,1.12*(hData->GetMaximum() + sqrt(hData->GetMaximum())));
+  plotZmmPt.SetYRange(0,1.12*(hData->GetMaximum() + sqrt(hData->GetMaximum())));
   plotZmmPt.SetLogx(1);
-  plotZmmPt.SetLogy(1);
+  plotZmmPt.SetLogy(0);
   plotZmmPt.SetLegend(0.62,0.66,0.95,0.87);
   plotZmmPt.Draw(c1,kTRUE,format);
 
   // draw split
   TH1D *hZmmPtDiffDummySplit =  makeDiffHist(hData,hData,"hZmmPtDiffDummySplit");
-  
   hZmmPtDiffDummySplit->SetFillStyle(3004);
   hZmmPtDiffDummySplit->SetFillColor(TColor::GetColor("#828282"));
   hZmmPtDiffDummySplit->GetXaxis()->SetTitleFont(42);
@@ -317,13 +423,14 @@ void finalPlotUnfolding_fixed(int nsel = 0, int ReBin = 1, TString XTitle = "N_{
   hZmmPtDiffDummySplit->GetYaxis()->SetLabelSize(25);
   hZmmPtDiffDummySplit->GetYaxis()->SetNdivisions(408);
   hZmmPtDiffDummySplit->GetXaxis()->SetTickSize(.1);
-  hZmmPtDiffDummySplit->GetXaxis()->SetRangeUser(32,1500);
+  hZmmPtDiffDummySplit->GetXaxis()->SetRangeUser(0.3,800);
   
-  TH1D *ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_AMCATNLO_COMP =  myratio(hPred1,hData);
+  TGraphAsymmErrors *ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_AMCATNLO_COMP =  myratio_graph(hPredTMD,hPredTMD_pdf,hData);
+  //TH1D *ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_AMCATNLO_COMP =  myratio(hPred1,hData);
 
-  CPlot plotZmmPtDiffSplit_AMCATNLO(ratio_name,"","","aMC@NLO/Data");
+  CPlot plotZmmPtDiffSplit_AMCATNLO(ratio_name,"","","PB TMD/Data");
   plotZmmPtDiffSplit_AMCATNLO.AddHist1D( hZmmPtDiffDummySplit);
-  plotZmmPtDiffSplit_AMCATNLO.AddHist1D(ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_AMCATNLO_COMP,"E0",linecolorAMCAtNlo,1,markerstyleAMCAtNLO);
+  plotZmmPtDiffSplit_AMCATNLO.AddGraph(ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_AMCATNLO_COMP,"E0",linecolorAMCAtNlo,markerstyleAMCAtNLO,1);
   plotZmmPtDiffSplit_AMCATNLO.AddHist1D(hZmmPtDiffDummySplit,"E2",TColor::GetColor("#828282"),20,1);
   plotZmmPtDiffSplit_AMCATNLO.AddTextBox("#bf{CMS}",0.08,0.731,0.34,0.877,0);
   //plotZmmPtDiffSplit_AMCATNLO.AddTextBox("#bf{CMS} #scale[0.75]{#it{Preliminary}}",0.15,0.721,0.41,0.867,0);
@@ -354,7 +461,7 @@ void finalPlotUnfolding_fixed(int nsel = 0, int ReBin = 1, TString XTitle = "N_{
 
   TH1D *ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_POWHEG_COMP =  myratio(hPred2,hData);
     
-  CPlot plotZmmPtDiffSplit_POWHEG("zmmPtSplit","","","ZjNNLO/Data");
+  CPlot plotZmmPtDiffSplit_POWHEG("zmmPtSplit","","","Resbos/Data");
   plotZmmPtDiffSplit_POWHEG.AddHist1D( hZmmPtDiffDummySplit);
   plotZmmPtDiffSplit_POWHEG.AddHist1D(ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_POWHEG_COMP,"E0",linecolorPowheg,1,markerstylePowheg);
   plotZmmPtDiffSplit_POWHEG.AddHist1D(hZmmPtDiffDummySplit,"E2",TColor::GetColor("#828282"),20,1);
@@ -364,12 +471,15 @@ void finalPlotUnfolding_fixed(int nsel = 0, int ReBin = 1, TString XTitle = "N_{
   plotZmmPtDiffSplit_POWHEG.AddLine(0, 1.1,1500, 1.1,kBlack,3);
   plotZmmPtDiffSplit_POWHEG.AddLine(0,0.9,1500,0.9,kBlack,3);
 
-  TH1D *ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_FEWZ_COMP =  myratio(hPred3,hData);
+  TGraphAsymmErrors *ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_FEWZ_COMP =  myratio_graph_geneva(hPred3,hData);
+
+  //TH1D *ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_FEWZ_COMP =  myratio(hPred3,hData);
   //hZmmPtDiffDummySplit->GetXaxis()->SetLabelSize(30);
   
-  CPlot plotZmmPtDiffSplit_FEWZ("zmmPtSplit","",xlabel,"FEWZ/Data");
+  CPlot plotZmmPtDiffSplit_FEWZ("zmmPtSplit","",xlabel,"Geneva/Data");
   plotZmmPtDiffSplit_FEWZ.AddHist1D(hZmmPtDiffDummySplit);
-  plotZmmPtDiffSplit_FEWZ.AddHist1D(ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_FEWZ_COMP,"E0",linecolorFEWZ,1,markerstyleFEWZ);
+  plotZmmPtDiffSplit_FEWZ.AddGraph(ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_FEWZ_COMP,"E0",linecolorFEWZ,markerstyleFEWZ,1);
+  //plotZmmPtDiffSplit_FEWZ.AddHist1D(ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_FEWZ_COMP,"E0",linecolorFEWZ,1,markerstyleFEWZ);
   plotZmmPtDiffSplit_FEWZ.AddHist1D(hZmmPtDiffDummySplit,"E2",TColor::GetColor("#828282"),20,1);
   plotZmmPtDiffSplit_FEWZ.SetLogx(1);
   plotZmmPtDiffSplit_FEWZ.SetYRange(0.7+eps,1.3-eps);
@@ -382,7 +492,8 @@ void finalPlotUnfolding_fixed(int nsel = 0, int ReBin = 1, TString XTitle = "N_{
   plotZmmPtDiffSplit_POWHEG.Draw(cR[3],kFALSE,format,2);
   plotZmmPtDiffSplit_AMCATNLO.Draw(cR[3],kTRUE,format,3);
 
-  printf("Total yields: %f - %f %f %f\n", hData->Integral("Width"),hPred1->Integral("Width"),hPred2->Integral("Width"),hPred3->Integral("Width"));
+
+  //printf("Total yields: %f - %f %f %f\n", hData->Integral("Width"),hPred1->Integral("Width"),hPred2->Integral("Width"),hPred3->Integral("Width"));
 
   char CommandToExec[300];
   sprintf(CommandToExec,"mkdir -p plots");

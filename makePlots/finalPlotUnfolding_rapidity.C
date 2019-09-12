@@ -176,7 +176,7 @@ void finalPlotUnfolding_rapidity(int nsel = 0, int ReBin = 1, TString XTitle = "
   cR.push_back(  MakeCanvas("c_4_ratio","c",800,1000) );
   double topmargin=0.10;
   double bottommargin=0.149;
-  double firstextra=0.05; // for CMS Preliminary, etc..
+  double firstextra=0.06; // for CMS Preliminary, etc..
   
   for(int n=2;n<=4 ;++n)
     {
@@ -229,17 +229,20 @@ void finalPlotUnfolding_rapidity(int nsel = 0, int ReBin = 1, TString XTitle = "
   hPred3->Scale(1./normalization[0]);
   hData ->Scale(1./normalization[1]);
   
-  hData->GetYaxis()->SetTitleFont(43);
-  hData->GetYaxis()->SetTitleSize(35);
-  hData->GetYaxis()->SetLabelFont(43);
-  hData->GetYaxis()->SetLabelSize(30);
-  hData->GetXaxis()->SetTitleFont(43);
-  hData->GetXaxis()->SetTitleSize(35);
-  hData->GetXaxis()->SetLabelFont(43);
-  hData->GetXaxis()->SetLabelSize(30);
-  hData->GetYaxis()->SetTitleOffset(1.4);
+  hData->GetYaxis()->SetTitleFont(42);
+  hData->GetYaxis()->SetLabelFont(42);
+  hData->GetXaxis()->SetTitleFont(42);
+  hData->GetXaxis()->SetLabelFont(42);
+  hData->GetYaxis()->SetTitleSize(0.055);
+  hData->GetXaxis()->SetTitleSize(0.055);
+  hData->GetYaxis()->SetLabelSize(0.039);
+  hData->GetXaxis()->SetLabelSize(0.039);
+  hData->GetYaxis()->SetTitleOffset(1.30);
+  hData->GetXaxis()->SetTitleOffset(1.20);
+  hData->GetYaxis()->SetLabelOffset(0.015);
+  hData->GetXaxis()->SetLabelOffset(0.015);
 
-  hData->SetFillStyle(3554);
+  hData->SetFillStyle(3004);
   hData->SetFillColor(TColor::GetColor("#828282"));
   hPred1->SetFillColor(fillcolorAMCAtNlo);
   hPred2->SetFillColor(fillcolorPowheg);
@@ -257,15 +260,15 @@ void finalPlotUnfolding_rapidity(int nsel = 0, int ReBin = 1, TString XTitle = "
     {
       plot_name="zmm_rap";
       ratio_name="zmm_rap_ratio";
-      sprintf(xlabel,"|y^{#mu^{+}#mu^{-}}|");
-      sprintf(ylabel,"d#sigma/dy^{#mu^{+}#mu^{-}} [pb]");
+      sprintf(xlabel,"|y^{Z}|");
+      sprintf(ylabel,"d#sigma/dy^{Z} [pb]");
     }
   else if (nsel==1)
     {
       plot_name="zee_rap";
       ratio_name="zee_rap_ratio";
-      sprintf(xlabel,"|y^{e^{+}e^{-}}|");
-      sprintf(ylabel,"d#sigma/dy^{e^{+}e^{-}} [pb]");
+      sprintf(xlabel,"|y^{Z}|");
+      sprintf(ylabel,"d#sigma/dy^{Z} [pb]");
     }
   else
     {
@@ -279,8 +282,11 @@ void finalPlotUnfolding_rapidity(int nsel = 0, int ReBin = 1, TString XTitle = "
 	  plot_name="zll_rap_norm";
 	  ratio_name="zll_rap_ratio_norm";
 	}
-      sprintf(xlabel,"|y^{l^{+}l^{-}}|");
-      sprintf(ylabel,"d#sigma/dy^{l^{+}l^{-}} [pb]");
+      sprintf(xlabel,"|y^{Z}|");
+      if(isNormalized)
+	sprintf(ylabel,"1/#sigma d#sigma/dy^{Z}");
+      else
+	sprintf(ylabel,"d#sigma/dy^{Z} [pb]");
     }
   
   CPlot plotZmmPt(plot_name,"",xlabel,ylabel);
@@ -291,29 +297,46 @@ void finalPlotUnfolding_rapidity(int nsel = 0, int ReBin = 1, TString XTitle = "
   plotZmmPt.AddHist1D(hData,"PE2",1,1,20);
   plotZmmPt.AddHist1D(hData,"P",1,1,20);
   plotZmmPt.AddTextBox("#bf{CMS}",0.08,0.90,0.34,0.96,0);
-  plotZmmPt.AddTextBox("|#eta|<2.4, p_{T}>25 GeV",0.18,0.15,0.4,0.25,0);
+  if(nsel==0)
+    plotZmmPt.AddTextBox("Z/#gamma^{*} #rightarrow #mu^{+}#mu^{-}",0.17,0.75,0.55,0.81,0);
+  else if (nsel==1)
+    plotZmmPt.AddTextBox("Z/#gamma^{*} #rightarrow e^{+}e^{-}",0.17,0.75,0.55,0.81,0);
+  else
+    plotZmmPt.AddTextBox("Z/#gamma^{*} #rightarrow #mu^{+}#mu^{-}, e^{+}e^{-}",0.17,0.75,0.55,0.81,0);
+  plotZmmPt.AddTextBox("|#eta| < 2.4, p_{T} > 25 GeV",0.17,0.17,0.55,0.55,0);
   plotZmmPt.AddTextBox(lumitext,0.69,0.90,0.93,0.96,0);
   plotZmmPt.SetYRange(0,1.12*(hData->GetMaximum() + sqrt(hData->GetMaximum())));
   plotZmmPt.SetYRange(0,550);
+  if(isNormalized)
+    plotZmmPt.SetYRange(0,0.15);
   plotZmmPt.SetLogy(0);
-  plotZmmPt.SetLegend(0.6,0.64,0.95,0.87);
+  plotZmmPt.SetLegend(0.62,0.66,0.95,0.87);
   plotZmmPt.Draw(c1,kTRUE,format);
 
   // draw split
   TH1D *hZmmPtDiffDummySplit =  makeDiffHist(hData,hData,"hZmmPtDiffDummySplit");
-  hZmmPtDiffDummySplit->SetFillStyle(3554);
+  hZmmPtDiffDummySplit->SetFillStyle(3004);
   hZmmPtDiffDummySplit->SetFillColor(TColor::GetColor("#828282"));
+
+
+  hZmmPtDiffDummySplit->GetXaxis()->SetTitleFont(42);
+  hZmmPtDiffDummySplit->GetXaxis()->SetLabelFont(42);
+  hZmmPtDiffDummySplit->GetXaxis()->SetTitleSize(0.140);
+  hZmmPtDiffDummySplit->GetXaxis()->SetLabelSize(0.100);
+  hZmmPtDiffDummySplit->GetXaxis()->SetTitleOffset(1.20);
+  hZmmPtDiffDummySplit->GetXaxis()->SetLabelOffset(0.040);
+
   hZmmPtDiffDummySplit->GetYaxis()->SetTitleFont(43);
   hZmmPtDiffDummySplit->GetYaxis()->SetTitleSize(27);
   hZmmPtDiffDummySplit->GetYaxis()->SetTitleOffset(2);
   hZmmPtDiffDummySplit->GetYaxis()->SetLabelFont(43);
   hZmmPtDiffDummySplit->GetYaxis()->SetLabelSize(25);
   hZmmPtDiffDummySplit->GetYaxis()->SetNdivisions(408);
-  hZmmPtDiffDummySplit->GetXaxis()->SetTitleFont(43);
-  hZmmPtDiffDummySplit->GetXaxis()->SetTitleSize(35);
-  hZmmPtDiffDummySplit->GetXaxis()->SetTitleOffset(3.2);
-  hZmmPtDiffDummySplit->GetXaxis()->SetLabelFont(43);
-  hZmmPtDiffDummySplit->GetXaxis()->SetLabelSize(30);
+  //hZmmPtDiffDummySplit->GetXaxis()->SetTitleFont(43);
+  //hZmmPtDiffDummySplit->GetXaxis()->SetTitleSize(40);
+  //hZmmPtDiffDummySplit->GetXaxis()->SetTitleOffset(3.2);
+  //hZmmPtDiffDummySplit->GetXaxis()->SetLabelFont(43);
+  //hZmmPtDiffDummySplit->GetXaxis()->SetLabelSize(30);
   hZmmPtDiffDummySplit->GetXaxis()->SetTickSize(.1);
   
   TH1D *ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_AMCATNLO_COMP =  myratio(hPred1,hData);
@@ -322,10 +345,19 @@ void finalPlotUnfolding_rapidity(int nsel = 0, int ReBin = 1, TString XTitle = "
   plotZmmPtDiffSplit_AMCATNLO.AddHist1D( hZmmPtDiffDummySplit);
   plotZmmPtDiffSplit_AMCATNLO.AddHist1D(ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_AMCATNLO_COMP,"0E",linecolorAMCAtNlo,1,markerstyleAMCAtNLO);
   plotZmmPtDiffSplit_AMCATNLO.AddHist1D(hZmmPtDiffDummySplit,"E2",TColor::GetColor("#828282"),20,1);
-  plotZmmPtDiffSplit_AMCATNLO.AddTextBox("#bf{CMS}",0.205,0.51,0.465,0.66,0);
+  plotZmmPtDiffSplit_AMCATNLO.AddTextBox("#bf{CMS}",0.08,0.731,0.34,0.877,0);
+  //plotZmmPtDiffSplit_AMCATNLO.AddTextBox("#bf{CMS} #scale[0.75]{#it{Preliminary}}",0.15,0.721,0.41,0.867,0);
   if(isNormalized)
-    plotZmmPtDiffSplit_AMCATNLO.AddTextBox("#frac{1}{#sigma} #frac{d#sigma}{d|y^{l^{+}l^{-}}|}",0.155,0.801,0.415,0.917,0);
-  plotZmmPtDiffSplit_AMCATNLO.AddTextBox("|#eta|<2.4, p_{T}>25 GeV",0.56,0.55,0.765,0.7,0);
+    plotZmmPtDiffSplit_AMCATNLO.AddTextBox("#frac{1}{#sigma} #frac{d#sigma}{d|y^{Z}|}",0.16,0.48,0.36,0.62,0);
+  else
+    plotZmmPtDiffSplit_AMCATNLO.AddTextBox("#frac{d#sigma}{d|y^{Z}|}",0.16,0.48,0.36,0.62,0);
+  plotZmmPtDiffSplit_AMCATNLO.AddTextBox("|#eta| < 2.4, p_{T} > 25 GeV",0.33,0.49,0.63,0.74,0);
+  if(nsel==0)
+    plotZmmPtDiffSplit_AMCATNLO.AddTextBox("Z/#gamma^{*} #rightarrow #mu^{+}#mu^{-}",0.64,0.55,0.81,0.70,0);
+  else if(nsel==1)
+    plotZmmPtDiffSplit_AMCATNLO.AddTextBox("Z/#gamma^{*} #rightarrow e^{+}e^{-}",0.64,0.55,0.81,0.70,0);
+  else
+    plotZmmPtDiffSplit_AMCATNLO.AddTextBox("Z/#gamma^{*} #rightarrow #mu^{+}#mu^{-}, e^{+}e^{-}",0.64,0.5,0.89,0.75,0);
   plotZmmPtDiffSplit_AMCATNLO.AddTextBox(lumitext,0.69,0.721,0.93,0.867,0);
   
   plotZmmPtDiffSplit_AMCATNLO.SetYRange(0.8+eps,1.2 + (1.2-0.8) *(firstextra)/ base );
@@ -347,7 +379,7 @@ void finalPlotUnfolding_rapidity(int nsel = 0, int ReBin = 1, TString XTitle = "
   plotZmmPtDiffSplit_POWHEG.AddLine(0,0.9,2.4,0.9,kBlack,3);
 
   TH1D *ZPT_RATIO_STAT_SYS_UNCERT_BAND_DATA_FEWZ_COMP =  myratio(hPred3,hData);
-  hZmmPtDiffDummySplit->GetXaxis()->SetLabelSize(30);
+  //hZmmPtDiffDummySplit->GetXaxis()->SetLabelSize(30);
   
   CPlot plotZmmPtDiffSplit_FEWZ("zmmPtSplit","",xlabel,"FEWZ/Data");
   plotZmmPtDiffSplit_FEWZ.AddHist1D(hZmmPtDiffDummySplit);
