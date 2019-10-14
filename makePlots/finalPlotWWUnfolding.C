@@ -65,7 +65,7 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   bool isLogX = false;
 
   if     (keyLabel0 == "MLL"    || keyLabel0 == "MLL0JET")    {XTitle = "m_{ll}"; isLogX = true;}
-  else if(keyLabel0 == "DPHILL" || keyLabel0 == "DPHILL0JET") {XTitle = "#Delta#phi_{ll}"; units = "dg.";}
+  else if(keyLabel0 == "DPHILL" || keyLabel0 == "DPHILL0JET") {XTitle = "#Delta#phi_{ll}"; units = "rad";}
   else if(keyLabel0 == "PTL1"   || keyLabel0 == "PTL10JET")   {XTitle = "p_{T}^{max}"; isLogX = true;}
   else if(keyLabel0 == "PTL2"   || keyLabel0 == "PTL20JET")   {XTitle = "p_{T}^{min}"; isLogX = true;}
   else if(keyLabel0 == "PTLL"   || keyLabel0 == "PTLL0JET")   {XTitle = "p_{T}^{ll}"; isLogX = true;}
@@ -76,6 +76,8 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   gStyle->SetOptStat(0);
 
   bool isDebug = true;
+
+  double scaleDFSF = 1.0; if(keyLabel0.Contains("N0JET")) scaleDFSF = 2.0;
 
   TFile *_fileGenWW = TFile::Open("/afs/cern.ch/work/c/ceballos/public/samples/panda/v_001_0/genWW.root");
   TH1D* hPred1     = (TH1D*)_fileGenWW->Get(Form("hDWW%s",keyLabel0.Data()));
@@ -110,6 +112,9 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
     if(isDebug) printf("hPredSyst (%2d) %5.2f %5.2f %5.2f %5.2f -> %5.2f\n",i,100*diff[0],100*diff[1],100*diff[2],100*diff[3],100*hPred1->GetBinError(i)/hPred1->GetBinContent(i));
   }
 
+  hData ->Scale(scaleDFSF);
+  hPred1->Scale(scaleDFSF);
+  
   hData ->Scale(1,"width");
   hPred1->Scale(1,"width");
 
@@ -147,15 +152,20 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   }
 
   TString theYTitle = "#sigma / GeV [pb]";
-  if     (isNormalized && keyLabel0.Contains("MLL"))    theYTitle = "1/#sigma d#sigma/dm_{ll}";
-  else if(isNormalized && keyLabel0.Contains("DPHILL")) theYTitle = "1/#sigma d#sigma/d#Delta#phi_{ll}";
-  else if(isNormalized && keyLabel0.Contains("PTL1"))   theYTitle = "1/#sigma d#sigma/dp_{T}^{max}";
-  else if(isNormalized && keyLabel0.Contains("PTL2"))   theYTitle = "1/#sigma d#sigma/dp_{T}^{mix}";
-  else if(isNormalized && keyLabel0.Contains("PTLL"))   theYTitle = "1/#sigma d#sigma/dp_{T}^{ll}";
-  else if(isNormalized && keyLabel0.Contains("NJET"))   theYTitle = "1/#sigma d#sigma/dn_{jets}";
-  else if(                keyLabel0.Contains("DPHILL")) theYTitle = "#sigma / dg. [pb]";
-  else if(                keyLabel0.Contains("NJET"))   theYTitle = "#sigma [pb]";
-  else if(                keyLabel0.Contains("N0JET"))  theYTitle = "#sigma [pb]";
+  if     (!isNormalized && keyLabel0.Contains("MLL"))    theYTitle = "d#sigma/dm_{ll} [pb/GeV]";
+  else if(!isNormalized && keyLabel0.Contains("DPHILL")) theYTitle = "d#sigma/d#Delta#phi_{ll} [pb/rad]";
+  else if(!isNormalized && keyLabel0.Contains("PTL1"))   theYTitle = "d#sigma/dp_{T}^{max} [pb/GeV]";
+  else if(!isNormalized && keyLabel0.Contains("PTL2"))   theYTitle = "d#sigma/dp_{T}^{mix} [pb/GeV]";
+  else if(!isNormalized && keyLabel0.Contains("PTLL"))   theYTitle = "d#sigma/dp_{T}^{ll} [pb/GeV]";
+  else if(!isNormalized && keyLabel0.Contains("NJET"))   theYTitle = "d#sigma/dn_{jets}";
+  else if( isNormalized && keyLabel0.Contains("MLL"))    theYTitle = "1/#sigma d#sigma/dm_{ll} [1/GeV]";
+  else if( isNormalized && keyLabel0.Contains("DPHILL")) theYTitle = "1/#sigma d#sigma/d#Delta#phi_{ll} [1/rad]";
+  else if( isNormalized && keyLabel0.Contains("PTL1"))   theYTitle = "1/#sigma d#sigma/dp_{T}^{max} [1/GeV]";
+  else if( isNormalized && keyLabel0.Contains("PTL2"))   theYTitle = "1/#sigma d#sigma/dp_{T}^{mix} [1/GeV]";
+  else if( isNormalized && keyLabel0.Contains("PTLL"))   theYTitle = "1/#sigma d#sigma/dp_{T}^{ll} [1/GeV]";
+  else if( isNormalized && keyLabel0.Contains("NJET"))   theYTitle = "1/#sigma d#sigma/dn_{jets}";
+  else if(                 keyLabel0.Contains("N0JET"))  theYTitle = "#sigma [pb]";
+  else {printf("PROBLEM!\n"); return;}
 
   hPred1->GetYaxis()->SetTitle(theYTitle.Data());
   hPred1->GetYaxis()->SetLabelFont  (   42);

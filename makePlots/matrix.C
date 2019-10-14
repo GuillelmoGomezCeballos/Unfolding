@@ -8,7 +8,7 @@
 #include <TMath.h>
 #include <iostream>
 #include <fstream>
-void helper_function(int me=0, int DY=3, TString theHistName = "Pt", TString path = "../macros/outputs/", int reBin = 1){
+void helper_function(int me=0, int DY=3, TString theHistName = "Pt", TString path = "../macros/folders_dressedleptons/outputs/", int reBin = 1){
 
   //gInterpreter->ExecuteMacro("GoodStyle.C");
   gStyle->SetOptStat(0);
@@ -75,7 +75,7 @@ void helper_function(int me=0, int DY=3, TString theHistName = "Pt", TString pat
   gSystem->Exec(CommandToExec);  
 
   char outputLimits[200];
-  sprintf(outputLimits,"output_root/matrix%d%d.root",me,DY);
+  sprintf(outputLimits,"output_root/matrix%d%d_%s.root",me,DY,theHistName.Data());
   TFile* outFileLimits = new TFile(outputLimits,"recreate");
   outFileLimits->cd();
   covariance_momres    ->Write();  
@@ -123,7 +123,7 @@ void helper_function(int me=0, int DY=3, TString theHistName = "Pt", TString pat
   gSystem->Exec(CommandToExec);  
 
   TString myOutputFile;
-  myOutputFile = Form("plots/covariance_nsel%d_DY%d.pdf",me,DY);
+  myOutputFile = Form("plots/covariance_nsel%d_DY%d_%s.pdf",me,DY,theHistName.Data());
   c1->SaveAs(myOutputFile.Data());
   
   
