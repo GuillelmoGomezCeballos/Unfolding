@@ -31,26 +31,26 @@ void atributes(TH1D *histo, TString xtitle="", Int_t COLOR = 1, TString ytitle="
   histo->GetXaxis()->SetTitle(xtitle);
   histo->GetXaxis()->SetLabelFont  (   42);
   histo->GetXaxis()->SetLabelOffset(0.015);
-  histo->GetXaxis()->SetLabelSize  (0.050);
+  histo->GetXaxis()->SetLabelSize  (0.039);
   histo->GetXaxis()->SetNdivisions (  505);
   histo->GetXaxis()->SetTitleFont  (   42);
-  if(xtitle == "p^{l^{+}l^{-}}_{T} [GeV]")
-  histo->GetXaxis()->SetTitleOffset( 1.80);
+  if(xtitle == "p^{Z}_{T} [GeV]")
+  histo->GetXaxis()->SetTitleOffset( 1.02);
   else
-  histo->GetXaxis()->SetTitleOffset( 1.50);
+  histo->GetXaxis()->SetTitleOffset( 1.02);
   if(!increaseSize)
-  histo->GetXaxis()->SetTitleSize  (0.035);
+  histo->GetXaxis()->SetTitleSize  (0.055);
   else
-  histo->GetXaxis()->SetTitleSize  (0.043);
+  histo->GetXaxis()->SetTitleSize  (0.055);
 
   histo->GetYaxis()->SetTitle(ytitle);
   histo->GetYaxis()->SetLabelFont  (   42);
   histo->GetYaxis()->SetLabelOffset(0.015);
-  histo->GetYaxis()->SetLabelSize  (0.050);
+  histo->GetYaxis()->SetLabelSize  (0.039);
   histo->GetYaxis()->SetNdivisions (  505);
   histo->GetYaxis()->SetTitleFont  (   42);
-  histo->GetYaxis()->SetTitleOffset(  1.7);
-  histo->GetYaxis()->SetTitleSize  (0.035);
+  histo->GetYaxis()->SetTitleOffset(  1.02);
+  histo->GetYaxis()->SetTitleSize  (0.055);
   histo->SetLineColor(COLOR);
   histo->SetMarkerStyle(kFullDotLarge);
   histo->SetLineStyle(style);
@@ -79,7 +79,7 @@ void helper_function(TString theSuffix, int nsel = 0, int whichDY = 3, TString t
   if     (whichDY == 0) { version = 0; alternative = 1;}
   else if(whichDY == 2) { version = 2; alternative = 1;}
   else if(whichDY == 3) { version = 3; alternative = 3;/*0*/}
-  TString theOutputName = Form("folders_dressedleptons/outputs%s%s_nsel%d",theSuffix.Data(),theHistName.Data(),nsel);
+  TString theOutputName = Form("/afs/cern.ch/user/c/ceballos/public/zpt/folders_dressedleptons/outputs%s%s_nsel%d",theSuffix.Data(),theHistName.Data(),nsel);
 
   TH1D *histoSystCov[allNuisancesCov], *histoSystPlot[allNuisancesPlot];
   if       (theHistName == "Pt"){
@@ -394,18 +394,18 @@ void helper_function(TString theSuffix, int nsel = 0, int whichDY = 3, TString t
 
   outFilePlots->Close();
 
-  TString theUncLabel = "d#sigma/dp^{l^{+}l^{-}}_{T}";
-  if	 (doXSRatio  && theHistName == "Rap")	  theUncLabel = "1/#sigma d#sigma/dy^{l^{+}l^{-}}";
-  else if(doXSRatio  && theHistName == "PhiStar") theUncLabel = "1/#sigma d#sigma/d#phi*";
-  else if(doXSRatio)				  theUncLabel = "1/#sigma d#sigma/dp^{l^{+}l^{-}}_{T}";
-  else if(!doXSRatio && theHistName == "Rap")	  theUncLabel = "d#sigma/dy^{l^{+}l^{-}}";
-  else if(!doXSRatio && theHistName == "PhiStar") theUncLabel = "d#sigma/d#phi*";
+  TString theUncLabel = "d#sigma/dp^{Z}_{T}";
+  if	 (doXSRatio  && theHistName == "Rap")	  theUncLabel = "1/#sigma d#sigma/dy^{Z}";
+  else if(doXSRatio  && theHistName == "PhiStar") theUncLabel = "1/#sigma d#sigma/d#phi_{#eta}*";
+  else if(doXSRatio)				  theUncLabel = "1/#sigma d#sigma/dp^{Z}_{T}";
+  else if(!doXSRatio && theHistName == "Rap")	  theUncLabel = "d#sigma/dy^{Z}";
+  else if(!doXSRatio && theHistName == "PhiStar") theUncLabel = "d#sigma/d#phi_{#eta}*";
 
   // Printing information
   Bool_t increaseSize = kFALSE;
-  TString XName = "p^{l^{+}l^{-}}_{T} [GeV]";
-  if     (theHistName == "Rap") XName = "|y^{l^{+}l^{-}}|";
-  else if(theHistName == "PhiStar") {XName = "#phi*"; increaseSize = kTRUE;}
+  TString XName = "p^{Z}_{T} [GeV]";
+  if     (theHistName == "Rap") XName = "|y^{Z}|";
+  else if(theHistName == "PhiStar") {XName = "#phi_{#eta}*"; increaseSize = kTRUE;}
   atributes(histoSystPlot[0],XName.Data(), 1,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 1, increaseSize);
   atributes(histoSystPlot[1],XName.Data(), 2,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 2, increaseSize);
   atributes(histoSystPlot[2],XName.Data(), 4,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 3, increaseSize);
@@ -463,6 +463,7 @@ void helper_function(TString theSuffix, int nsel = 0, int whichDY = 3, TString t
   if(!doXSRatio) leg->AddEntry(histoSystPlot[7],"Integrated luminosity","l");
   leg->Draw();
   if(1){
+<<<<<<< HEAD
     TString theLabel = "";
     TString leptonLegend = "#mu^{+}#mu^{-} sample";
     if(nsel == 1) leptonLegend = "e^{+}e^{-} sample";
@@ -474,11 +475,28 @@ void helper_function(TString theSuffix, int nsel = 0, int whichDY = 3, TString t
     else if(nsel == 0              ) theLabel = leptonLegend.Data();
     else if(nsel == 1              ) theLabel = leptonLegend.Data();
     TLatex *_extraLabel = new TLatex(0.85, 0.8, theLabel.Data());
+=======
+    TString theLabel = ""; TString theLabel1 = "";
+    if     (theHistName == "PtRap0") theLabel1 = "0 < |y^{Z}| < 0.4";
+    else if(theHistName == "PtRap1") theLabel1 = "0.4 < |y^{Z}| < 0.8";
+    else if(theHistName == "PtRap2") theLabel1 = "0.8 < |y^{Z}| < 1.2";
+    else if(theHistName == "PtRap3") theLabel1 = "1.2 < |y^{Z}| < 1.6";
+    else if(theHistName == "PtRap4") theLabel1 = "1.6 < |y^{Z}| < 2.4";
+    if(nsel == 0             ) theLabel = "#mu^{+}#mu^{-} sample";
+    else if(nsel == 1              ) theLabel = "e^{+}e^{-} sample";
+    TLatex *_extraLabel = new TLatex(0.87, 0.88, theLabel.Data());
+>>>>>>> 55df6f7a6cac99b3d96fc0aa7d252264c069dbd9
     _extraLabel->SetNDC();
     _extraLabel->SetTextAlign(32);
     _extraLabel->SetTextFont(42);
-    _extraLabel->SetTextSize(0.04);
+    _extraLabel->SetTextSize(0.05);
     _extraLabel->Draw("same");
+    TLatex *_extraLabel1 = new TLatex(0.5, 0.5, theLabel1.Data());
+    _extraLabel1->SetNDC();
+    _extraLabel1->SetTextAlign(32);
+    _extraLabel1->SetTextFont(42);
+    _extraLabel1->SetTextSize(0.05);
+    _extraLabel1->Draw("same");
   }
 
   TString myOutputFile = Form("histoUnfolding%sSyst%s%s_nsel%d_dy%d.pdf",theXSRatioName.Data(),theSuffix.Data(),theHistName.Data(),nsel,whichDY);
@@ -565,16 +583,16 @@ void makeSystHist(TString theSuffix, TString theHistName = "Pt"){
 
         TString theUncLabel = "d#sigma/dp_{T}";
         if     (theXSRatioName == "_XSRatio" && theHistName == "Rap")     theUncLabel = "1/#sigma d#sigma/dY";
-        else if(theXSRatioName == "_XSRatio" && theHistName == "PhiStar") theUncLabel = "1/#sigma d#sigma/d#phi*";
+        else if(theXSRatioName == "_XSRatio" && theHistName == "PhiStar") theUncLabel = "1/#sigma d#sigma/d#phi_{#eta}*";
         else if(theXSRatioName == "_XSRatio")                             theUncLabel = "1/#sigma d#sigma/dp_{T}";
         else if(theXSRatioName != "_XSRatio" && theHistName == "Rap")     theUncLabel = "d#sigma/dY";
-        else if(theXSRatioName != "_XSRatio" && theHistName == "PhiStar") theUncLabel = "d#sigma/d#phi*";
+        else if(theXSRatioName != "_XSRatio" && theHistName == "PhiStar") theUncLabel = "d#sigma/d#phi_{#eta}*";
 
         // Begin printing information
 	Bool_t increaseSize = kFALSE;
 	TString XName = "Z p_{T} [GeV]";
 	if     (theHistName == "Rap") XName = "|y^{Z}|";
-	else if(theHistName == "PhiStar") {XName = "#phi*"; increaseSize = kTRUE;}
+	else if(theHistName == "PhiStar") {XName = "#phi_{#eta}*"; increaseSize = kTRUE;}
 	atributes(histoSystPlot0[0],XName.Data(), 1,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 1, increaseSize);
 	atributes(histoSystPlot0[1],XName.Data(), 2,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 1, increaseSize);
 	atributes(histoSystPlot0[2],XName.Data(), 4,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 1, increaseSize);
@@ -633,11 +651,11 @@ void makeSystHist(TString theSuffix, TString theHistName = "Pt"){
 	leg->Draw();
      	if(theHistName.Contains("PtRap")){
      	  TString theLabel = "";
-     	  if	 (theHistName == "PtRap0") theLabel = "0 < |y^{l^{+}l^{-}}| < 0.4";
-     	  else if(theHistName == "PtRap1") theLabel = "0.4 < |y^{l^{+}l^{-}}| < 0.8";
-     	  else if(theHistName == "PtRap2") theLabel = "0.8 < |y^{l^{+}l^{-}}| < 1.2";
-     	  else if(theHistName == "PtRap3") theLabel = "1.2 < |y^{l^{+}l^{-}}| < 1.6";
-     	  else if(theHistName == "PtRap4") theLabel = "1.6 < |y^{l^{+}l^{-}}| < 2.4";
+     	  if	 (theHistName == "PtRap0") theLabel = "0 < |y^{Z}| < 0.4";
+     	  else if(theHistName == "PtRap1") theLabel = "0.4 < |y^{Z}| < 0.8";
+     	  else if(theHistName == "PtRap2") theLabel = "0.8 < |y^{Z}| < 1.2";
+     	  else if(theHistName == "PtRap3") theLabel = "1.2 < |y^{Z}| < 1.6";
+     	  else if(theHistName == "PtRap4") theLabel = "1.6 < |y^{Z}| < 2.4";
      	  TLatex *_extraLabel = new TLatex(0.9, 0.8, theLabel.Data());
      	  _extraLabel->SetNDC();
      	  _extraLabel->SetTextAlign(32);
