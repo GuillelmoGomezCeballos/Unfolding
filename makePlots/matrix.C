@@ -19,8 +19,8 @@ void helper_function(int me=0, int DY=3, TString theHistName = "Pt", TString pat
   TFile* _file0 = new TFile(Form("%s",filename),  "read"); if(!_file0) {printf("File does not exist\n"); return;}
   printf("Filename: %s\n",filename);
 
-  const int nGenSyst = 8;
-  const int nEffSyst = 7+480;
+  const int nGenSyst = 11;
+  const int nEffSyst = 11+480;
   const int nStaSyst = 72;
   const int nOthSyst = 2;
 
