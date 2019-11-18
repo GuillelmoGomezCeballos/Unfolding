@@ -17,10 +17,10 @@ void testAnalysis_test(int nsel, int DY=3, int alt=0, TString theHistName = "Pt"
 
   int inputValues[2] = {5, 10};
 
-  TString path = "../inputsCards200/";
-  if     (theHistName == "Tot") {path = "../inputsCards200/"; applyQCDscalePDFUnc = false;}
-  else if(theHistName == "Total") {path = "../inputs/"; theHistName = "Tot"; applyQCDscalePDFUnc = false;}
-  else if(theHistName == "PtAll") {path = "../inputs/"; theHistName = "Pt"; applyQCDscalePDFUnc = false; inputValues[0] = 36; inputValues[1] = 72;}
+  TString path = "../folders_dressedleptons/inputsCards200/";
+  if     (theHistName == "Tot") {path = "../folders_dressedleptons/inputsCards200/"; applyQCDscalePDFUnc = false;}
+  else if(theHistName == "Total") {path = "../folders_dressedleptons/inputs/"; theHistName = "Tot"; applyQCDscalePDFUnc = false;}
+  else if(theHistName == "PtAll") {path = "../folders_dressedleptons/inputs/"; theHistName = "Pt"; applyQCDscalePDFUnc = false; inputValues[0] = 36; inputValues[1] = 72;}
 
   if(theHistName == "Tot") {inputValues[0] = 1; inputValues[1] = 1;}
   const int nChan = inputValues[0];

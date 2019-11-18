@@ -209,7 +209,7 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
 
   if(isLogY == true) hPred1->GetYaxis()->SetRangeUser(hPred1->GetMinimum()/10,hPred1->GetMaximum()*100);
   else               hPred1->GetYaxis()->SetRangeUser(0.0,hPred1->GetMaximum()*1.5);
-  hPred1->Draw();
+  hPred1->Draw("hist,e");
   hData->Draw("ep,same");
 
   gStyle->SetOptStat(0);

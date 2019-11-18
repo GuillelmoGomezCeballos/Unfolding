@@ -1,6 +1,6 @@
 //takes covariance matrix and convert to correlation matrix
 void helper_function(int me=0,int DY=3,TString theHistName = "Pt", TString theUnc = "totsum"){
-  TFile *file = new TFile(Form("output_root/matrix%d%d.root",me,DY),"READ");
+  TFile *file = new TFile(Form("output_root/matrix%d%d_%s.root",me,DY,theHistName.Data()),"READ");
   TH2D* covar = (TH2D*)file->Get(Form("covariance_%s_%d",theUnc.Data(),me));
   printf("which matrix: %s\n",Form("covariance_%s_%d",theUnc.Data(),me));                                                                                                                          
   TH2D* corr = (TH2D*)covar->Clone("test");

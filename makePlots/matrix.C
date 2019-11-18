@@ -61,7 +61,7 @@ void helper_function(int me=0, int DY=3, TString theHistName = "Pt", TString pat
       for(int k=0; k<nSyst-2; k++) sum_totsum = sum_totsum + histoSyst[k]->GetBinContent(i)*histoSyst[k]->GetBinContent(j);
       if(i==j) sum_totsum = sum_totsum + histoSyst[nSyst-2]->GetBinContent(i)*histoSyst[nSyst-2]->GetBinContent(j); // data stat. uncertainty is diagonal only
       sum_totsum = sum_totsum + histoSyst[nSyst-1]->GetBinContent(i)*histoSyst[nSyst-1]->GetBinContent(j); // adding lumi
-                          
+
       covariance_momres    ->SetBinContent(i,j,sum_momres    );
       covariance_lepeff    ->SetBinContent(i,j,sum_lepeff    );
       covariance_lepeffSyst->SetBinContent(i,j,sum_lepeffSyst);
