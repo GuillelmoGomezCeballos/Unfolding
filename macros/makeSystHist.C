@@ -463,7 +463,6 @@ void helper_function(TString theSuffix, int nsel = 0, int whichDY = 3, TString t
   if(!doXSRatio) leg->AddEntry(histoSystPlot[7],"Integrated luminosity","l");
   leg->Draw();
   if(1){
-<<<<<<< HEAD
     TString theLabel = "";
     TString leptonLegend = "#mu^{+}#mu^{-} sample";
     if(nsel == 1) leptonLegend = "e^{+}e^{-} sample";
@@ -475,28 +474,11 @@ void helper_function(TString theSuffix, int nsel = 0, int whichDY = 3, TString t
     else if(nsel == 0              ) theLabel = leptonLegend.Data();
     else if(nsel == 1              ) theLabel = leptonLegend.Data();
     TLatex *_extraLabel = new TLatex(0.85, 0.8, theLabel.Data());
-=======
-    TString theLabel = ""; TString theLabel1 = "";
-    if     (theHistName == "PtRap0") theLabel1 = "0 < |y^{Z}| < 0.4";
-    else if(theHistName == "PtRap1") theLabel1 = "0.4 < |y^{Z}| < 0.8";
-    else if(theHistName == "PtRap2") theLabel1 = "0.8 < |y^{Z}| < 1.2";
-    else if(theHistName == "PtRap3") theLabel1 = "1.2 < |y^{Z}| < 1.6";
-    else if(theHistName == "PtRap4") theLabel1 = "1.6 < |y^{Z}| < 2.4";
-    if(nsel == 0             ) theLabel = "#mu^{+}#mu^{-} sample";
-    else if(nsel == 1              ) theLabel = "e^{+}e^{-} sample";
-    TLatex *_extraLabel = new TLatex(0.87, 0.88, theLabel.Data());
->>>>>>> 55df6f7a6cac99b3d96fc0aa7d252264c069dbd9
     _extraLabel->SetNDC();
     _extraLabel->SetTextAlign(32);
     _extraLabel->SetTextFont(42);
     _extraLabel->SetTextSize(0.05);
     _extraLabel->Draw("same");
-    TLatex *_extraLabel1 = new TLatex(0.5, 0.5, theLabel1.Data());
-    _extraLabel1->SetNDC();
-    _extraLabel1->SetTextAlign(32);
-    _extraLabel1->SetTextFont(42);
-    _extraLabel1->SetTextSize(0.05);
-    _extraLabel1->Draw("same");
   }
 
   TString myOutputFile = Form("histoUnfolding%sSyst%s%s_nsel%d_dy%d.pdf",theXSRatioName.Data(),theSuffix.Data(),theHistName.Data(),nsel,whichDY);
