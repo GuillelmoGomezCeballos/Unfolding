@@ -75,9 +75,9 @@ void helper_function(TString theSuffix, int nsel = 0, int whichDY = 3, TString t
   const int nBinPtRap3 = 34; Float_t xbinsPtRap3[nBinPtRap3+1] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,18,20,22,25,28,32,37,43,52,65,85,120,160,190,220,250,300,400,1500};
   const int nBinPtRap4 = 34; Float_t xbinsPtRap4[nBinPtRap4+1] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,18,20,22,25,28,32,37,43,52,65,85,120,160,190,220,250,300,400,1500};
 
-  int version = 1; int alternative = 0;
-  if     (whichDY == 0) { version = 0; alternative = 1;}
-  else if(whichDY == 2) { version = 2; alternative = 1;}
+  int version = 1; int alternative = 1;/*0*/
+  if     (whichDY == 0) { version = 0; alternative = 0;/*1*/}
+  else if(whichDY == 2) { version = 2; alternative = 2;/*1*/}
   else if(whichDY == 3) { version = 3; alternative = 3;/*0*/}
   TString theOutputName = Form("/afs/cern.ch/user/c/ceballos/public/zpt/folders_dressedleptons/outputs%s%s_nsel%d",theSuffix.Data(),theHistName.Data(),nsel);
 
