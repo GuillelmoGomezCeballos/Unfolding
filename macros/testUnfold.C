@@ -13,6 +13,7 @@
 void helper_function(int nsel=0,int whichDY=0, int rebin=1, TString theHistName = "Pt", TString suffix = "", int suffixStat = -1){
   printf("TORUN: nsel = %d whichDY = %d rebin = %d theHistName = %s  suffix = %s, suffixStat = %d\n",nsel,whichDY,rebin,theHistName.Data(),suffix.Data(),suffixStat);
   TString theInputFolder = "inputs";
+  TString theTheorySubFolder = "v_001_0";
 
   TFile *_file0;
   TFile *_file1;
@@ -21,24 +22,24 @@ void helper_function(int nsel=0,int whichDY=0, int rebin=1, TString theHistName 
   double theLumi = 35800.0;
   if     (whichDY == 0){
     _file0 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period3.root",theInputFolder.Data(),whichDY,theHistName.Data()));
-    _file1 = TFile::Open("/afs/cern.ch/work/c/ceballos/public/samples/panda/v_001_0/genZpt_LO.root");
+    _file1 = TFile::Open(Form("/afs/cern.ch/work/c/ceballos/public/samples/panda/%s/genZpt_LO.root",theTheorySubFolder.Data()));
     _file2 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period3.root",theInputFolder.Data(),1,theHistName.Data()));
   }
   else if(whichDY == 1){
     _file0 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period3.root",theInputFolder.Data(),whichDY,theHistName.Data()));
-    _file1 = TFile::Open("/afs/cern.ch/work/c/ceballos/public/samples/panda/v_001_0/DYJetsToLL_M-50_NLO.root");
+    _file1 = TFile::Open(Form("/afs/cern.ch/work/c/ceballos/public/samples/panda/%s/DYJetsToLL_M-50_NLO.root",theTheorySubFolder.Data()));
     _file2 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period3.root",theInputFolder.Data(),2,theHistName.Data()));
     theXS = 2075.14*3;
   }
   else if(whichDY == 2){
     _file0 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period3.root",theInputFolder.Data(),whichDY,theHistName.Data()));
-    _file1 = TFile::Open("/afs/cern.ch/work/c/ceballos/public/samples/panda/v_001_0/DYJetsToLL_POWHEG.root");
+    _file1 = TFile::Open(Form("/afs/cern.ch/work/c/ceballos/public/samples/panda/%s/DYJetsToLL_POWHEG.root",theTheorySubFolder.Data()));
     _file2 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period3.root",theInputFolder.Data(),1,theHistName.Data()));
     theXS = 1975.0*2075.14/2008.4*2;
   }
   else if(whichDY == 3){
     _file0 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period3.root",theInputFolder.Data(),whichDY,theHistName.Data()));
-    _file1 = TFile::Open("/afs/cern.ch/work/c/ceballos/public/samples/panda/v_001_0/genZpt_NLO.root");
+    _file1 = TFile::Open(Form("/afs/cern.ch/work/c/ceballos/public/samples/panda/%s/genZpt_NLO.root",theTheorySubFolder.Data()));
     _file2 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period3.root",theInputFolder.Data(),3,theHistName.Data()));
   }
 
@@ -257,7 +258,7 @@ outFilePlots->Close();
 
 void testUnfold(TString theHistName = "Pt", TString suffix = "", int suffixLepStat = -1, int rebin=1){
   for (int i=0;i<=1;i++){
-    for (int j=3;j<=3;j++){
+    for (int j=2;j<=3;j++){
   //for (int i=0;i<=0;i++){
   //  for (int j=0;j<=0;j++){
       helper_function(i,j,rebin,theHistName.Data(),suffix.Data(),suffixLepStat);

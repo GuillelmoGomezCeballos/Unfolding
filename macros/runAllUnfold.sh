@@ -5,9 +5,9 @@ echo 'TOO FEW PARAMATERS'
 exit
 fi
 
-export MACRO="testUnfold";
+export MACRO="../testUnfold";
 if [ $3 == 'LL' ]; then
-  export MACRO="testUnfoldLL";
+  export MACRO="../testUnfoldLL";
 fi
 
 echo 'PARAMETERS: ' $1 $2 ${MACRO}
