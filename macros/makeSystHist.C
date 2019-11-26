@@ -79,7 +79,7 @@ void helper_function(TString theSuffix, int nsel = 0, int whichDY = 3, TString t
   if     (whichDY == 0) { version = 0; alternative = 0;/*1*/}
   else if(whichDY == 2) { version = 2; alternative = 2;/*1*/}
   else if(whichDY == 3) { version = 3; alternative = 3;/*0*/}
-  TString theOutputName = Form("/afs/cern.ch/user/c/ceballos/public/zpt/folders_dressedleptons/outputs%s%s_nsel%d",theSuffix.Data(),theHistName.Data(),nsel);
+  TString theOutputName = Form("outputs%s%s_nsel%d",theSuffix.Data(),theHistName.Data(),nsel);
 
   TH1D *histoSystCov[allNuisancesCov], *histoSystPlot[allNuisancesPlot];
   if       (theHistName == "Pt"){
@@ -489,7 +489,7 @@ void helper_function(TString theSuffix, int nsel = 0, int whichDY = 3, TString t
 void makeSystHist(TString theSuffix, TString theHistName = "Pt"){
   if(theSuffix != "LL") theSuffix = "";
   char output[200];
-  for (int j=3;j<=3;j++){ // dy versions
+  for (int j=2;j<=3;j++){ // dy versions
     for (int nr=0; nr<=1; nr++) {
       TString theXSRatioName = "";
       if(nr == 1) theXSRatioName = "_XSRatio";

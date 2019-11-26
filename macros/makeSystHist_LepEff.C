@@ -46,7 +46,7 @@ void atributes(TH1D *histo, TString xtitle="", Int_t COLOR = 1, TString ytitle="
 }
 
 void helper_function(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", bool doXSRatio = false){
-  TString theOutputName = Form("folders_dressedleptons/outputs%s_nsel%d",theHistName.Data(),nsel);
+  TString theOutputName = Form("outputs%s_nsel%d",theHistName.Data(),nsel);
 
   const int nBinPt = 36; Float_t xbinsPt[nBinPt+1] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,18,20,22,25,28,32,37,43,52,65,85,120,160,190,220,250,300,400,500,800,1500};
   const int nBinRap = 12; Float_t xbinsRap[nBinRap+1] = {0.0,0.2,0.4,0.6,0.8,1.0,1.2,1.4,1.6,1.8,2.0,2.2,2.4};
@@ -261,7 +261,7 @@ void helper_function(int nsel = 0, int whichDY = 3, TString theHistName = "Pt", 
 
 void makeSystHist_LepEff(TString theHistName = "Pt"){
   for (int i=0;i<=1;i++){
-    for (int j=3;j<=3;j++){
+    for (int j=2;j<=3;j++){
       helper_function(i, j, theHistName, false);
       helper_function(i, j, theHistName, true);
     }

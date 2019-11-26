@@ -1,4 +1,4 @@
-g#include "TROOT.h"
+#include "TROOT.h"
 #include "TInterpreter.h"
 #include "TFile.h"
 #include "TCanvas.h"
