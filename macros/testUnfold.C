@@ -31,11 +31,17 @@ void helper_function(int nsel=0,int whichDY=0, int rebin=1, TString theHistName 
     _file2 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period3.root",theInputFolder.Data(),2,theHistName.Data()));
     theXS = 2075.14*3;
   }
-  else if(whichDY == 2){
+  else if(whichDY == 2 && nsel == 0){
     _file0 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period3.root",theInputFolder.Data(),whichDY,theHistName.Data()));
-    _file1 = TFile::Open(Form("/afs/cern.ch/work/c/ceballos/public/samples/panda/%s/DYJetsToLL_POWHEG.root",theTheorySubFolder.Data()));
+    _file1 = TFile::Open(Form("/afs/cern.ch/work/c/ceballos/public/samples/panda/%s/DYJetsToMM_POWHEG.root",theTheorySubFolder.Data()));
     _file2 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period3.root",theInputFolder.Data(),1,theHistName.Data()));
-    theXS = 1975.0*2075.14/2008.4*2;
+    theXS = 1975.0*2075.14/2008.4;
+  }
+  else if(whichDY == 2 && nsel == 1){
+    _file0 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period3.root",theInputFolder.Data(),whichDY,theHistName.Data()));
+    _file1 = TFile::Open(Form("/afs/cern.ch/work/c/ceballos/public/samples/panda/%s/DYJetsToEE_POWHEG.root",theTheorySubFolder.Data()));
+    _file2 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period3.root",theInputFolder.Data(),1,theHistName.Data()));
+    theXS = 1975.0*2075.14/2008.4;
   }
   else if(whichDY == 3){
     _file0 = TFile::Open(Form("%s/histoDY%dzll%sRecGen_period3.root",theInputFolder.Data(),whichDY,theHistName.Data()));
