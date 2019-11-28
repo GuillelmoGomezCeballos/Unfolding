@@ -128,6 +128,8 @@ void helper_function(int me=0, int DY=3, TString theHistName = "Pt", TString pat
   _extraLabel->Draw("same");
   if(theHistName.Contains("Pt")) c1->SetLogx();
   if(theHistName.Contains("Pt")) c1->SetLogy();
+  if(theHistName.Contains("PhiStar")) c1->SetLogx();
+  if(theHistName.Contains("PhiStar")) c1->SetLogy();
   //c1->SetLogz();
   gStyle->SetOptStat(0);
   covariance_totsum->SetTitle("");
