@@ -54,6 +54,7 @@ void atributes(TH1D *histo, TString xtitle = "", TString ytitle = "Fraction", TS
   histo->SetFillColor(12);
   histo->SetFillStyle(3345);
   histo->SetLineColor  (kBlack);
+  histo->SetMarkerSize(0.8);
   histo->SetMarkerStyle(kFullCircle);
 }
 
@@ -158,11 +159,11 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   else if(!isNormalized && keyLabel0.Contains("PTL2"))   theYTitle = "d#sigma/dp_{T}^{mix} [pb/GeV]";
   else if(!isNormalized && keyLabel0.Contains("PTLL"))   theYTitle = "d#sigma/dp_{T}^{ll} [pb/GeV]";
   else if(!isNormalized && keyLabel0.Contains("NJET"))   theYTitle = "d#sigma/dn_{jets}";
-  else if( isNormalized && keyLabel0.Contains("MLL"))    theYTitle = "1/#sigma d#sigma/dm_{ll} [1/GeV]";
-  else if( isNormalized && keyLabel0.Contains("DPHILL")) theYTitle = "1/#sigma d#sigma/d#Delta#phi_{ll} [1/rad]";
-  else if( isNormalized && keyLabel0.Contains("PTL1"))   theYTitle = "1/#sigma d#sigma/dp_{T}^{max} [1/GeV]";
-  else if( isNormalized && keyLabel0.Contains("PTL2"))   theYTitle = "1/#sigma d#sigma/dp_{T}^{mix} [1/GeV]";
-  else if( isNormalized && keyLabel0.Contains("PTLL"))   theYTitle = "1/#sigma d#sigma/dp_{T}^{ll} [1/GeV]";
+  else if( isNormalized && keyLabel0.Contains("MLL"))    theYTitle = "1/#sigma d#sigma/dm_{ll} [1/bin]";
+  else if( isNormalized && keyLabel0.Contains("DPHILL")) theYTitle = "1/#sigma d#sigma/d#Delta#phi_{ll} [1/bin]";
+  else if( isNormalized && keyLabel0.Contains("PTL1"))   theYTitle = "1/#sigma d#sigma/dp_{T}^{max} [1/bin]";
+  else if( isNormalized && keyLabel0.Contains("PTL2"))   theYTitle = "1/#sigma d#sigma/dp_{T}^{mix} [1/bin]";
+  else if( isNormalized && keyLabel0.Contains("PTLL"))   theYTitle = "1/#sigma d#sigma/dp_{T}^{ll} [1/bin]";
   else if( isNormalized && keyLabel0.Contains("NJET"))   theYTitle = "1/#sigma d#sigma/dn_{jets}";
   else if(                 keyLabel0.Contains("N0JET"))  theYTitle = "#sigma [pb]";
   else {printf("PROBLEM!\n"); return;}
@@ -184,9 +185,11 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   hPred1->GetXaxis()->SetTitleSize  (0.060);
   hPred1->GetXaxis()->SetTickLength (0.07 );
  
-  hData->SetLineColor  (kBlack);
+  hData->SetMarkerSize(0.8);
+  hData->SetMarkerStyle(kFullCircle);
   hData->SetMarkerSize(1.5);
   hData->SetMarkerStyle(4);
+  hData->SetLineColor  (kBlack);
 
   hPred1->SetLineColor(kBlack);
   hPred1->SetMarkerStyle(3);
@@ -209,21 +212,39 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
 
   if(isLogY == true) hPred1->GetYaxis()->SetRangeUser(hPred1->GetMinimum()/10,hPred1->GetMaximum()*100);
   else               hPred1->GetYaxis()->SetRangeUser(0.0,hPred1->GetMaximum()*1.5);
-  hPred1->Draw("hist,e");
-  hData->Draw("ep,same");
+  hPred1->Draw("hist,x0");
+  hData->Draw("epx0,same");
+
+  TGraphAsymmErrors * gsyst = new TGraphAsymmErrors(hPred1);
+  bool plotSystErrorBars = true;
+  if(plotSystErrorBars == true) {
+    for (int i = 0; i < gsyst->GetN(); ++i) {
+      double systBck = 0;
+      gsyst->SetPointEYlow (i, sqrt(hPred1->GetBinError(i+1)*hPred1->GetBinError(i+1)+hPred1->GetBinContent(i+1)*hPred1->GetBinContent(i+1)*systBck*systBck));
+      gsyst->SetPointEYhigh(i, sqrt(hPred1->GetBinError(i+1)*hPred1->GetBinError(i+1)+hPred1->GetBinContent(i+1)*hPred1->GetBinContent(i+1)*systBck*systBck));
+    }
+    gsyst->SetFillColor(12);
+    gsyst->SetFillStyle(3345);
+    gsyst->SetMarkerSize(0);
+    gsyst->SetLineWidth(0);
+    gsyst->SetLineColor(kWhite);
+    gsyst->Draw("E2same");
+    //TExec *setex1 = new TExec("setex1","gStyle->SetErrorX(0)");
+    //setex1->Draw();
+  }
 
   gStyle->SetOptStat(0);
-  TLegend* legend = new TLegend(0.62,0.65,0.82,0.85);
+  TLegend* legend = new TLegend(0.62,0.70,0.82,0.85);
   legend->SetBorderSize(     0);
   legend->SetFillColor (     0);
   legend->SetTextAlign (    12);
   legend->SetTextFont  (    42);
   legend->SetTextSize  (0.04);
-  legend->AddEntry(hData,  "Data");
-  legend->AddEntry(hPred1, "POWHEG");
+  legend->AddEntry(hData,  "Data", "ep");
+  legend->AddEntry(hPred1, "POWHEG+PYTHIA", "f");
   legend->Draw();
 
-  CMS_lumi( pad1, 4, 11 );
+  CMS_lumi( pad1, 4, 1 );
 
   pad2->cd();
   gStyle->SetOptStat(0);
@@ -264,20 +285,20 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   units = units.ReplaceAll("BIN","");
   atributes(hRatio,XTitle.Data(),"#frac{POWHEG}{Data}",units.Data());
 
-  hRatio->Draw("e");
+  hRatio->Draw("ex0");
   hBand->SetFillColor(12);
-  hBand->SetFillStyle(3003);
+  hBand->SetFillStyle(3002);
   hBand->SetMarkerSize(0);
   hBand->SetLineWidth(0);
   hBand->Draw("E2same");
   
-  TLegend* leg = new TLegend(0.20,0.75,0.30,0.90);                                                    
+  TLegend* leg = new TLegend(0.20,0.70,0.30,0.85);                                                    
   leg ->SetFillStyle(0);
   leg ->SetFillColor(kWhite);
   leg ->SetBorderSize(0);
-  leg->SetTextSize(0.04);                                                                         
+  leg->SetTextSize(0.08);                                                                         
   leg->AddEntry(hBand,"Theory prediction","f");
-  leg->AddEntry(hRatio,"Experimental data","lpe");
+  leg->AddEntry(hRatio,"Experimental data","pe");
   leg->Draw();
 
   // Draw a line throgh y=0
