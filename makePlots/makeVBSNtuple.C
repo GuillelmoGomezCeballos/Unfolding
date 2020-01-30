@@ -22,10 +22,15 @@ void makeVBSResult(TString type, TString state = "WW", bool isNormalized = true)
   Float_t xbinsVBSMLL[nBinVBSMLL+1];
     xbinsVBSMLL[ 0] = 20;      xbinsVBSMLL[ 1] = 80;      xbinsVBSMLL[ 2] = 140;      xbinsVBSMLL[ 3] = 240;      xbinsVBSMLL[ 4] = 500;
 
+  const int nBinVBSPTL1 = 4;
+  Float_t xbinsVBSPTL1[nBinVBSPTL1+1];
+    xbinsVBSPTL1[ 0] = 20;      xbinsVBSPTL1[ 1] = 65;      xbinsVBSPTL1[ 2] = 100;      xbinsVBSPTL1[ 3] = 150;      xbinsVBSPTL1[ 4] = 300;
+
   TString xsfname("input_files_vbs/");
   TH1D* histoResult;
-  if     (type == "MJJ")    {histoResult = new TH1D(Form("hDAll%s%s",state.Data(),type.Data()), Form("hDAll%s%s",state.Data(),type.Data()),    nBinVBSMJJ,   xbinsVBSMJJ); xsfname = xsfname + Form("%s%s",state.Data(),type.Data());}
-  else if(type == "MLL")    {histoResult = new TH1D(Form("hDAll%s%s",state.Data(),type.Data()), Form("hDAll%s%s",state.Data(),type.Data()),    nBinVBSMLL,   xbinsVBSMLL); xsfname = xsfname + Form("%s%s",state.Data(),type.Data());}
+  if     (type == "MJJ")    {histoResult = new TH1D(Form("hDAll%s%s",state.Data(),type.Data()), Form("hDAll%s%s",state.Data(),type.Data()), nBinVBSMJJ,  xbinsVBSMJJ);  xsfname = xsfname + Form("%s%s",state.Data(),type.Data());}
+  else if(type == "MLL")    {histoResult = new TH1D(Form("hDAll%s%s",state.Data(),type.Data()), Form("hDAll%s%s",state.Data(),type.Data()), nBinVBSMLL,  xbinsVBSMLL);  xsfname = xsfname + Form("%s%s",state.Data(),type.Data());}
+  else if(type == "PTL1")   {histoResult = new TH1D(Form("hDAll%s%s",state.Data(),type.Data()), Form("hDAll%s%s",state.Data(),type.Data()), nBinVBSPTL1, xbinsVBSPTL1); xsfname = xsfname + Form("%s%s",state.Data(),type.Data());}
   else {printf("WRONG TYPE\n"); return;}
 
   if(isNormalized) xsfname = xsfname + "_normalized.txt";
@@ -59,9 +64,11 @@ void makeVBSResult(TString type, TString state = "WW", bool isNormalized = true)
 void makeVBSNtuple(){
  makeVBSResult("MJJ", "WW" , true);
  makeVBSResult("MLL", "WW" , true);
+ makeVBSResult("PTL1", "WW" , true);
  makeVBSResult("MJJ", "WZ" , true);
  makeVBSResult("MJJ", "WW" , false);
  makeVBSResult("MLL", "WW" , false);
+ makeVBSResult("PTL1", "WW" , false);
  makeVBSResult("MJJ", "WZ" , false);
 
 }

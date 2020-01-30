@@ -67,6 +67,7 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
 
   if     (keyLabel0 == "WWMLL") {XTitle = "m_{ll}";}
   else if(keyLabel0 == "WWMJJ" || keyLabel0 == "WZMJJ") {XTitle = "m_{jj}";}
+  else if(keyLabel0 == "WWPTL1") {XTitle = "p_{T}^{max}";}
 
   gInterpreter->ExecuteMacro("PaperStyle.C");
   gStyle->SetOptStat(0);
@@ -181,8 +182,10 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
   TString theYTitle = "#sigma / GeV [pb]";
   if     ( isNormalized && keyLabel0.Contains("MLL"))    theYTitle = "1/#sigma d#sigma/dm_{ll} [1/bin]";
   else if( isNormalized && keyLabel0.Contains("MJJ"))    theYTitle = "1/#sigma d#sigma/dm_{jj} [1/bin]";
+  else if( isNormalized && keyLabel0.Contains("PTL1"))   theYTitle = "1/#sigma d#sigma/dp_{T}^{max} [1/bin]";
   else if(!isNormalized && keyLabel0.Contains("MLL"))    theYTitle = "d#sigma/dm_{ll} [pb/GeV]";
   else if(!isNormalized && keyLabel0.Contains("MJJ"))    theYTitle = "d#sigma/dm_{jj} [pb/GeV]";
+  else if(!isNormalized && keyLabel0.Contains("PTL1"))   theYTitle = "d#sigma/dp_{T}^{max} [pb/GeV]";
   else {printf("PROBLEM!\n"); return;}
 
   hPred1->GetYaxis()->SetTitle(theYTitle.Data());
