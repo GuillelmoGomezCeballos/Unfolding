@@ -74,33 +74,74 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
 
   bool isDebug = true;
 
-  double scaleDFSF = 1.0;
+  double diff[2];
+  double scaleXS = 1000.0;
 
   TFile *_fileGenVBS = TFile::Open("/afs/cern.ch/work/c/ceballos/public/samples/panda/v_001_0/genVBS.root");
-  TH1D* hPred1     = (TH1D*)_fileGenVBS->Get(Form("hDNoEWKCorrEWK%s",keyLabel0.Data()));
-  TH1D* hPred1_PDF = (TH1D*)_fileGenVBS->Get(Form("hDNoEWKCorrEWK%s_PDF",keyLabel0.Data()));
-  TH1D* hPred1_QCD = (TH1D*)_fileGenVBS->Get(Form("hDNoEWKCorrEWK%s_QCD",keyLabel0.Data()));
-  TH1D* hQCDPred1     = (TH1D*)_fileGenVBS->Get(Form("hDQCD%s",keyLabel0.Data()));
-  TH1D* hQCDPred1_PDF = (TH1D*)_fileGenVBS->Get(Form("hDQCD%s_PDF",keyLabel0.Data()));
-  TH1D* hQCDPred1_QCD = (TH1D*)_fileGenVBS->Get(Form("hDQCD%s_QCD",keyLabel0.Data()));
+  TH1D* hPred1     = (TH1D*)_fileGenVBS->Get(Form("hDNoEWKCorrEWK%s",keyLabel0.Data()));     hPred1    ->Scale(scaleXS); hPred1    ->SetDirectory(0);
+  TH1D* hPred1_PDF = (TH1D*)_fileGenVBS->Get(Form("hDNoEWKCorrEWK%s_PDF",keyLabel0.Data())); hPred1_PDF->Scale(scaleXS); hPred1_PDF->SetDirectory(0);
+  TH1D* hPred1_QCD = (TH1D*)_fileGenVBS->Get(Form("hDNoEWKCorrEWK%s_QCD",keyLabel0.Data())); hPred1_QCD->Scale(scaleXS); hPred1_QCD->SetDirectory(0);
+
+  TH1D* hQCDPred1     = (TH1D*)_fileGenVBS->Get(Form("hDNoEWKCorrQCD%s",keyLabel0.Data()));     hQCDPred1    ->Scale(scaleXS); hQCDPred1    ->SetDirectory(0);
+  TH1D* hQCDPred1_PDF = (TH1D*)_fileGenVBS->Get(Form("hDNoEWKCorrQCD%s_PDF",keyLabel0.Data())); hQCDPred1_PDF->Scale(scaleXS); hQCDPred1_PDF->SetDirectory(0);
+  TH1D* hQCDPred1_QCD = (TH1D*)_fileGenVBS->Get(Form("hDNoEWKCorrQCD%s_QCD",keyLabel0.Data())); hQCDPred1_QCD->Scale(scaleXS); hQCDPred1_QCD->SetDirectory(0);
+
+  TH1D* hINTPred1     = (TH1D*)_fileGenVBS->Get(Form("hDNoEWKCorrINT%s",keyLabel0.Data()));     hINTPred1    ->Scale(scaleXS); hINTPred1    ->SetDirectory(0);
+  TH1D* hINTPred1_PDF = (TH1D*)_fileGenVBS->Get(Form("hDNoEWKCorrINT%s_PDF",keyLabel0.Data())); hINTPred1_PDF->Scale(scaleXS); hINTPred1_PDF->SetDirectory(0);
+  TH1D* hINTPred1_QCD = (TH1D*)_fileGenVBS->Get(Form("hDNoEWKCorrINT%s_QCD",keyLabel0.Data())); hINTPred1_QCD->Scale(scaleXS); hINTPred1_QCD->SetDirectory(0);
+
+  TH1D* hPred2     = (TH1D*)_fileGenVBS->Get(Form("hDEWK%s",keyLabel0.Data()));     hPred2    ->Scale(scaleXS); hPred2    ->SetDirectory(0);
+  TH1D* hPred2_PDF = (TH1D*)_fileGenVBS->Get(Form("hDEWK%s_PDF",keyLabel0.Data())); hPred2_PDF->Scale(scaleXS); hPred2_PDF->SetDirectory(0);
+  TH1D* hPred2_QCD = (TH1D*)_fileGenVBS->Get(Form("hDEWK%s_QCD",keyLabel0.Data())); hPred2_QCD->Scale(scaleXS); hPred2_QCD->SetDirectory(0);
+
+  TH1D* hQCDPred2     = (TH1D*)_fileGenVBS->Get(Form("hDNoEWKCorrQCD%s",keyLabel0.Data()));     hQCDPred2    ->Scale(scaleXS); hQCDPred2    ->SetDirectory(0);
+  TH1D* hQCDPred2_PDF = (TH1D*)_fileGenVBS->Get(Form("hDNoEWKCorrQCD%s_PDF",keyLabel0.Data())); hQCDPred2_PDF->Scale(scaleXS); hQCDPred2_PDF->SetDirectory(0);
+  TH1D* hQCDPred2_QCD = (TH1D*)_fileGenVBS->Get(Form("hDNoEWKCorrQCD%s_QCD",keyLabel0.Data())); hQCDPred2_QCD->Scale(scaleXS); hQCDPred2_QCD->SetDirectory(0);
+
+  TH1D* hINTPred2     = (TH1D*)_fileGenVBS->Get(Form("hDNoEWKCorrINT%s",keyLabel0.Data()));     hINTPred2    ->Scale(scaleXS); hINTPred2    ->SetDirectory(0);
+  TH1D* hINTPred2_PDF = (TH1D*)_fileGenVBS->Get(Form("hDNoEWKCorrINT%s_PDF",keyLabel0.Data())); hINTPred2_PDF->Scale(scaleXS); hINTPred2_PDF->SetDirectory(0);
+  TH1D* hINTPred2_QCD = (TH1D*)_fileGenVBS->Get(Form("hDNoEWKCorrINT%s_QCD",keyLabel0.Data())); hINTPred2_QCD->Scale(scaleXS); hINTPred2_QCD->SetDirectory(0);
+
+  hPred1    ->Add(hINTPred1    );
+  hPred1_PDF->Add(hINTPred1_PDF);
+  hPred1_QCD->Add(hINTPred1_QCD);
+
+  hPred2    ->Add(hINTPred2    );
+  hPred2_PDF->Add(hINTPred2_PDF);
+  hPred2_QCD->Add(hINTPred2_QCD);
+
+  diff[0] = (hPred1_PDF->GetSumOfWeights()-hPred1->GetSumOfWeights());
+  diff[1] = (hPred1_QCD->GetSumOfWeights()-hPred1->GetSumOfWeights());
+  printf("PredNoEWKCorrEWK: %.2f %.2f %.2f (%.2f)\n",hPred1->GetSumOfWeights(),diff[0],diff[1],TMath::Sqrt(TMath::Power(diff[0],2)+TMath::Power(diff[1],2)));
+
+  diff[0] = (hPred2_PDF->GetSumOfWeights()-hPred2->GetSumOfWeights());
+  diff[1] = (hPred2_QCD->GetSumOfWeights()-hPred2->GetSumOfWeights());
+  printf("PredEWK: %.2f %.2f %.2f (%.2f)\n",hPred2->GetSumOfWeights(),diff[0],diff[1],TMath::Sqrt(TMath::Power(diff[0],2)+TMath::Power(diff[1],2)));
+
+  diff[0] = (hQCDPred1_PDF->GetSumOfWeights()-hQCDPred1->GetSumOfWeights());
+  diff[1] = (hQCDPred1_QCD->GetSumOfWeights()-hQCDPred1->GetSumOfWeights());
+  printf("PredQCD: %.2f %.2f %.2f (%.2f)\n",hQCDPred1->GetSumOfWeights(),diff[0],diff[1],TMath::Sqrt(TMath::Power(diff[0],2)+TMath::Power(diff[1],2)));
+
   hPred1    ->Add(hQCDPred1    );
   hPred1_PDF->Add(hQCDPred1_PDF);
   hPred1_QCD->Add(hQCDPred1_QCD);
 
-  TH1D* hPred2     = (TH1D*)_fileGenVBS->Get(Form("hDEWK%s",keyLabel0.Data()));
-  TH1D* hPred2_PDF = (TH1D*)_fileGenVBS->Get(Form("hDEWK%s_PDF",keyLabel0.Data()));
-  TH1D* hPred2_QCD = (TH1D*)_fileGenVBS->Get(Form("hDEWK%s_QCD",keyLabel0.Data()));
-  TH1D* hQCDPred2     = (TH1D*)_fileGenVBS->Get(Form("hDQCD%s",keyLabel0.Data()));
-  TH1D* hQCDPred2_PDF = (TH1D*)_fileGenVBS->Get(Form("hDQCD%s_PDF",keyLabel0.Data()));
-  TH1D* hQCDPred2_QCD = (TH1D*)_fileGenVBS->Get(Form("hDQCD%s_QCD",keyLabel0.Data()));
   hPred2    ->Add(hQCDPred2    );
   hPred2_PDF->Add(hQCDPred2_PDF);
   hPred2_QCD->Add(hQCDPred2_QCD);
 
+  diff[0] = (hPred1_PDF->GetSumOfWeights()-hPred1->GetSumOfWeights());
+  diff[1] = (hPred1_QCD->GetSumOfWeights()-hPred1->GetSumOfWeights());
+  printf("PredNoEWKCorr: %.2f %.2f %.2f (%.2f)\n",hPred1->GetSumOfWeights(),diff[0],diff[1],TMath::Sqrt(TMath::Power(diff[0],2)+TMath::Power(diff[1],2)));
+
+  diff[0] = (hPred2_PDF->GetSumOfWeights()-hPred2->GetSumOfWeights());
+  diff[1] = (hPred2_QCD->GetSumOfWeights()-hPred2->GetSumOfWeights());
+  printf("Pred: %.2f %.2f %.2f (%.2f)\n",hPred2->GetSumOfWeights(),diff[0],diff[1],TMath::Sqrt(TMath::Power(diff[0],2)+TMath::Power(diff[1],2)));
+
   TString plotName = Form("input_files_vbs/xs_%s_normalized%d.root", keyLabel0.Data(), isNormalized);
   TFile *_file0 = TFile::Open(plotName.Data());
-  TH1D* hData = (TH1D*)_file0->Get(Form("hDAll%s",keyLabel0.Data()));
-  
+  TH1D* hData = (TH1D*)_file0->Get(Form("hDAll%s",keyLabel0.Data())); hData->SetDirectory(0);
+
   double totalUnc1[2] = {TMath::Abs(1-hPred1_PDF->GetSumOfWeights() /hPred1->GetSumOfWeights()),
                          TMath::Abs(1-hPred1_QCD->GetSumOfWeights() /hPred1->GetSumOfWeights())};
   double totalUnc2[2] = {TMath::Abs(1-hPred2_PDF->GetSumOfWeights() /hPred2->GetSumOfWeights()),
@@ -130,10 +171,6 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
     if(isDebug) printf("hPredSyst2 (%2d) %5.2f %5.2f %5.2f -> %5.2f\n",i,100*diff2[0],100*diff2[1],100*diff2[2],100*hPred2->GetBinError(i)/hPred2->GetBinContent(i));
   }
 
-  hData ->Scale(scaleDFSF);
-  hPred1->Scale(scaleDFSF);
-  hPred2->Scale(scaleDFSF);
-  
   if(!isNormalized) {
     hData ->Scale(1,"width");
     hPred1->Scale(1,"width");
@@ -179,13 +216,13 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
     hPred2->GetXaxis()->SetTitleOffset(  1.1);
   }
 
-  TString theYTitle = "#sigma / GeV [pb]";
+  TString theYTitle = "#sigma / GeV [fb]";
   if     ( isNormalized && keyLabel0.Contains("MLL"))    theYTitle = "1/#sigma d#sigma/dm_{ll} [1/bin]";
   else if( isNormalized && keyLabel0.Contains("MJJ"))    theYTitle = "1/#sigma d#sigma/dm_{jj} [1/bin]";
   else if( isNormalized && keyLabel0.Contains("PTL1"))   theYTitle = "1/#sigma d#sigma/dp_{T}^{max} [1/bin]";
-  else if(!isNormalized && keyLabel0.Contains("MLL"))    theYTitle = "d#sigma/dm_{ll} [pb/GeV]";
-  else if(!isNormalized && keyLabel0.Contains("MJJ"))    theYTitle = "d#sigma/dm_{jj} [pb/GeV]";
-  else if(!isNormalized && keyLabel0.Contains("PTL1"))   theYTitle = "d#sigma/dp_{T}^{max} [pb/GeV]";
+  else if(!isNormalized && keyLabel0.Contains("MLL"))    theYTitle = "d#sigma/dm_{ll} [fb/GeV]";
+  else if(!isNormalized && keyLabel0.Contains("MJJ"))    theYTitle = "d#sigma/dm_{jj} [fb/GeV]";
+  else if(!isNormalized && keyLabel0.Contains("PTL1"))   theYTitle = "d#sigma/dp_{T}^{max} [fb/GeV]";
   else {printf("PROBLEM!\n"); return;}
 
   hPred1->GetYaxis()->SetTitle(theYTitle.Data());
@@ -325,7 +362,7 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
         printf("0 events in %d\n",i);
       }
       if(isDebug) printf("ratio(%2d): pred/data = %.3f +/- %.3f predUnc: %.3f\n",i,pull,pullerr,hNum1->GetBinError(i)/hNum1->GetBinContent(i));
-      if(isDebug) printf("ratio(%2d): data/pred = %.3f +/- %.3f, sigma = %.3f pb\n",i,pullinv,pullinverr,hNum1->GetBinContent(i));
+      if(isDebug) printf("ratio(%2d): data/pred = %.3f +/- %.3f, sigma = %.3f fb\n",i,pullinv,pullinverr,hNum1->GetBinContent(i));
       hRatio1->SetBinContent(i,pull);
       hRatio1->SetBinError(i,pullerr);
       hBand1->SetBinContent(i,1);
