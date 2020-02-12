@@ -324,8 +324,8 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
   legend->SetTextFont  (    42);
   legend->SetTextSize  (0.04);
   legend->AddEntry(hData,  "Data", "ep");
-  legend->AddEntry(hPred1, "MADGRAPH+PYTHIA without EWK corr.", "f");
-  legend->AddEntry(hPred2, "MADGRAPH+PYTHIA with EWK corr.", "f");
+  legend->AddEntry(hPred1, "MADGRAPH+PYTHIA without NLO corr.", "f");
+  legend->AddEntry(hPred2, "MADGRAPH+PYTHIA with NLO corr.", "f");
   legend->Draw();
 
   CMS_lumi( pad1, 5, 1 );
@@ -420,8 +420,8 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
   leg ->SetFillColor(kWhite);
   leg ->SetBorderSize(0);
   leg->SetTextSize(0.05);                                                                         
-  leg->AddEntry(hBand1,"Theory prediction without EWK corr.","f");
-  leg->AddEntry(hBand2,"Theory prediction with EWK corr.","l");
+  leg->AddEntry(hBand1,"Theory prediction without NLO corr.","f");
+  leg->AddEntry(hBand2,"Theory prediction with NLO corr.","l");
   leg->AddEntry(hRatio1,"Experimental data","pe");
   leg->Draw();
 
