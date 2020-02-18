@@ -38,7 +38,7 @@ void atributes(TH1D *histo, TString xtitle = "", TString ytitle = "Fraction", TS
   histo->GetXaxis()->SetLabelSize  (0.110);
   histo->GetXaxis()->SetNdivisions (  505);
   histo->GetXaxis()->SetTitleFont  (   42);
-  histo->GetXaxis()->SetTitleOffset( 0.95);
+  histo->GetXaxis()->SetTitleOffset(  1.3);
   histo->GetXaxis()->SetTitleSize  (0.140);
   histo->GetXaxis()->SetTickLength (0.07 );
 
@@ -231,8 +231,8 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
   hPred1->GetYaxis()->SetLabelSize  (0.050);
   hPred1->GetYaxis()->SetNdivisions (  505);
   hPred1->GetYaxis()->SetTitleFont  (   42);
-  hPred1->GetYaxis()->SetTitleOffset(  1.2);
-  hPred1->GetYaxis()->SetTitleSize  (0.060);
+  hPred1->GetYaxis()->SetTitleOffset(  1.0);
+  hPred1->GetYaxis()->SetTitleSize  (0.080);
   hPred1->GetYaxis()->SetTickLength (0.03 );
   hPred1->GetXaxis()->SetLabelFont  (   42);
   hPred1->GetXaxis()->SetLabelSize  (0.040);
@@ -257,19 +257,30 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
   hPred2->GetXaxis()->SetTitleSize  (0.060);
   hPred2->GetXaxis()->SetTickLength (0.07 );
  
-  hData->SetMarkerSize(0.8);
-  hData->SetMarkerStyle(kFullCircle);
-  hData->SetMarkerSize(1.5);
-  hData->SetMarkerStyle(4);
-  hData->SetLineColor  (kBlack);
+  hData->SetFillStyle(3004);
+  hData->SetFillColor(TColor::GetColor("#828282"));
+  hData->GetYaxis()->SetTitleFont(42);
+  hData->GetYaxis()->SetLabelFont(42);
+  hData->GetXaxis()->SetTitleFont(42);
+  hData->GetXaxis()->SetLabelFont(42);
+  hData->GetYaxis()->SetTitleSize(0.055);
+  hData->GetXaxis()->SetTitleSize(0.055);
+  hData->GetYaxis()->SetLabelSize(0.039);
+  hData->GetXaxis()->SetLabelSize(0.039);
+  hData->GetYaxis()->SetTitleOffset(1.30);
+  hData->GetXaxis()->SetTitleOffset(1.20);
+  hData->GetYaxis()->SetLabelOffset(0.015);
+  hData->GetXaxis()->SetLabelOffset(0.015);
 
   hPred1->SetLineColor(kBlack);
   hPred1->SetMarkerStyle(3);
   hPred1->SetMarkerColor(kBlack);
+  hPred1->SetLineWidth(2);
 
   hPred2->SetLineColor(kBlue);
   hPred2->SetMarkerStyle(5);
   hPred2->SetMarkerColor(kBlue);
+  hPred2->SetLineWidth(2);
 
   TAxis *xa = hData->GetXaxis();
   hPred1->SetTitle("");
@@ -285,9 +296,20 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
                         TMath::Max(hPred1->GetMaximum(),hPred2->GetMaximum())};
   if(isLogY == true) hPred1->GetYaxis()->SetRangeUser(theEdges[0]/10,theEdges[1]*100);
   else               hPred1->GetYaxis()->SetRangeUser(0.0,theEdges[1]*1.5);
-  hPred1->Draw("hist,x0");
-  hPred2->Draw("hist,x0,same");
-  hData->Draw("epx0,same");
+  hPred1->Draw("hist");
+  hPred2->Draw("hist,same");
+  hData->Draw("ep,same");
+
+  gStyle->SetOptStat(0);
+  TLegend* legend = new TLegend(0.42,0.70,0.82,0.85);
+  legend->SetBorderSize(     0);
+  legend->SetFillColor (     0);
+  legend->SetTextAlign (    12);
+  legend->SetTextFont  (    42);
+  legend->SetTextSize  (0.04);
+  legend->AddEntry(hData,  "Data", "ep");
+  legend->AddEntry(hPred1, "MADGRAPH+PYTHIA without NLO corr.", "l");
+  legend->AddEntry(hPred2, "MADGRAPH+PYTHIA with NLO corr.", "l");
 
   bool plotSystErrorBars = true;
   if(plotSystErrorBars == true) {
@@ -297,7 +319,7 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
       gsyst1->SetPointEYhigh(i,hPred1->GetBinError(i+1));
     }
     gsyst1->SetFillColor(12);
-    gsyst1->SetFillStyle(3345);
+    gsyst1->SetFillStyle(3001);
     gsyst1->SetMarkerSize(0);
     gsyst1->SetLineWidth(0);
     gsyst1->SetLineColor(kWhite);
@@ -309,23 +331,13 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
       gsyst2->SetPointEYhigh(i,hPred1->GetBinError(i+1));
     }
     gsyst2->SetFillColor(12);
-    gsyst2->SetFillStyle(3544);
+    gsyst2->SetFillStyle(3002);
     gsyst2->SetMarkerSize(0);
     gsyst2->SetLineWidth(0);
     gsyst2->SetLineColor(kWhite);
-    gsyst2->Draw("E2same");
+    //gsyst2->Draw("E2same");
+    legend->AddEntry(gsyst1, "Theory uncertainty", "f");
   }
-
-  gStyle->SetOptStat(0);
-  TLegend* legend = new TLegend(0.42,0.70,0.82,0.85);
-  legend->SetBorderSize(     0);
-  legend->SetFillColor (     0);
-  legend->SetTextAlign (    12);
-  legend->SetTextFont  (    42);
-  legend->SetTextSize  (0.04);
-  legend->AddEntry(hData,  "Data", "ep");
-  legend->AddEntry(hPred1, "MADGRAPH+PYTHIA without NLO corr.", "f");
-  legend->AddEntry(hPred2, "MADGRAPH+PYTHIA with NLO corr.", "f");
   legend->Draw();
 
   CMS_lumi( pad1, 5, 1 );
@@ -371,15 +383,15 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
   units = units.ReplaceAll("BIN","");
   atributes(hRatio1,XTitle.Data(),"#frac{Theory}{Data}",units.Data());
 
-  hRatio1->Draw("ex0");
+  hRatio1->Draw("e");
   hBand1->SetFillColor(12);
-  hBand1->SetFillStyle(3345);
+  hBand1->SetFillStyle(3001);
   hBand1->SetMarkerSize(0);
   hBand1->SetLineWidth(0);
   hBand1->Draw("E2same");
   
   // Band w.r.t. Pred2
-  TH1D* hBand2  = (TH1D*) hData->Clone(); hBand2->Reset();
+  TH1D* hBand2  = (TH1D*) hPred2->Clone(); hBand2->Reset();
   for(int i=1; i<=hNum1->GetNbinsX(); i++){
       pull = 1.0; pullerr = 0.0;
       pullinv = 1.0; pullinverr = 0.0;
@@ -411,8 +423,6 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
   hBand2->GetXaxis()->SetTickLength (0.07 );
  
   hBand2->SetLineColor(kBlue);
-  hBand2->SetMarkerStyle(5);
-  hBand2->SetMarkerColor(kBlue);
   hBand2->Draw("same,hist");
   
   TLegend* leg = new TLegend(0.20,0.70,0.30,0.85);                                                    
@@ -423,7 +433,7 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
   leg->AddEntry(hBand1,"Theory prediction without NLO corr.","f");
   leg->AddEntry(hBand2,"Theory prediction with NLO corr.","l");
   leg->AddEntry(hRatio1,"Experimental data","pe");
-  leg->Draw();
+  //leg->Draw();
 
   // Draw a line throgh y=0
   double theLines[2] = {1.0, 0.5};
