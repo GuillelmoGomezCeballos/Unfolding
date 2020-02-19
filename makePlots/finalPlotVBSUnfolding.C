@@ -275,12 +275,12 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
   hPred1->SetLineColor(kBlack);
   hPred1->SetMarkerStyle(3);
   hPred1->SetMarkerColor(kBlack);
-  hPred1->SetLineWidth(2);
+  hPred1->SetLineWidth(3);
 
   hPred2->SetLineColor(kBlue);
   hPred2->SetMarkerStyle(5);
   hPred2->SetMarkerColor(kBlue);
-  hPred2->SetLineWidth(2);
+  hPred2->SetLineWidth(3);
 
   TAxis *xa = hData->GetXaxis();
   hPred1->SetTitle("");
@@ -422,6 +422,7 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
   hBand2->GetXaxis()->SetTitleSize  (0.060);
   hBand2->GetXaxis()->SetTickLength (0.07 );
  
+  hBand2->SetLineWidth(3);
   hBand2->SetLineColor(kBlue);
   hBand2->Draw("same,hist");
   
