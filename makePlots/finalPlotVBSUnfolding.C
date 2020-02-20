@@ -38,7 +38,7 @@ void atributes(TH1D *histo, TString xtitle = "", TString ytitle = "Fraction", TS
   histo->GetXaxis()->SetLabelSize  (0.110);
   histo->GetXaxis()->SetNdivisions (  505);
   histo->GetXaxis()->SetTitleFont  (   42);
-  histo->GetXaxis()->SetTitleOffset(  1.3);
+  histo->GetXaxis()->SetTitleOffset(  0.9);
   histo->GetXaxis()->SetTitleSize  (0.140);
   histo->GetXaxis()->SetTickLength (0.07 );
 
