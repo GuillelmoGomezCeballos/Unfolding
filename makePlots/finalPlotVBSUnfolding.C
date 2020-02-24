@@ -292,6 +292,8 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
   hPred2->Scale(1./normalization[1]);
   hData ->Scale(1./normalization[2]);
 
+  TH1D* unfold = (TH1D*) hData->Clone("unfold");
+
   double theEdges[2] = {TMath::Min(hPred1->GetMinimum(),hPred2->GetMinimum()),
                         TMath::Max(hPred1->GetMaximum(),hPred2->GetMaximum())};
   if(isLogY == true) hPred1->GetYaxis()->SetRangeUser(theEdges[0]/10,theEdges[1]*100);
@@ -459,11 +461,14 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
   TString outputName = Form("unf_%s_normalized%d",keyLabel0.Data(),isNormalized);
   if(strcmp(outputName.Data(),"") != 0){
     TString myOutputFile;
-    myOutputFile = Form("plotsvbs/%s.eps",outputName.Data());
-    //c1->SaveAs(myOutputFile.Data());
     myOutputFile = Form("plotsvbs/%s.png",outputName.Data());
     c1->SaveAs(myOutputFile.Data());
     myOutputFile = Form("plotsvbs/%s.pdf",outputName.Data());
     c1->SaveAs(myOutputFile.Data());
+    myOutputFile = Form("plotsvbs/%s.root",outputName.Data());
+    TFile *outRoot = TFile::Open(myOutputFile.Data(),"recreate");
+    outRoot->cd();
+    unfold->Write();
+    outRoot->Close();
   }
 }

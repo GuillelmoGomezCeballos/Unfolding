@@ -38,8 +38,8 @@ void atributes(TH1D *histo, TString xtitle = "", TString ytitle = "Fraction", TS
   histo->GetXaxis()->SetLabelSize  (0.110);
   histo->GetXaxis()->SetNdivisions (  505);
   histo->GetXaxis()->SetTitleFont  (   42);
-  histo->GetXaxis()->SetTitleOffset( 0.95);
-  histo->GetXaxis()->SetTitleSize  (0.140);
+  histo->GetXaxis()->SetTitleOffset( 1.15);
+  histo->GetXaxis()->SetTitleSize  (0.120);
   histo->GetXaxis()->SetTickLength (0.07 );
 
   histo->GetYaxis()->SetTitle(ytitle.Data());
@@ -67,8 +67,8 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
 
   if     (keyLabel0 == "MLL"    || keyLabel0 == "MLL0JET")    {XTitle = "m_{ll}"; isLogX = true;}
   else if(keyLabel0 == "DPHILL" || keyLabel0 == "DPHILL0JET") {XTitle = "#Delta#phi_{ll}"; units = "rad";}
-  else if(keyLabel0 == "PTL1"   || keyLabel0 == "PTL10JET")   {XTitle = "p_{T}^{max}"; isLogX = true;}
-  else if(keyLabel0 == "PTL2"   || keyLabel0 == "PTL20JET")   {XTitle = "p_{T}^{min}"; isLogX = true;}
+  else if(keyLabel0 == "PTL1"   || keyLabel0 == "PTL10JET")   {XTitle = "p_{T}^{\el max}"; isLogX = true;}
+  else if(keyLabel0 == "PTL2"   || keyLabel0 == "PTL20JET")   {XTitle = "p_{T}^{\el min}"; isLogX = true;}
   else if(keyLabel0 == "PTLL"   || keyLabel0 == "PTLL0JET")   {XTitle = "p_{T}^{ll}"; isLogX = true;}
   else if(keyLabel0 == "NJET")  {XTitle = "N_{jets}"; units = "";}
   else if(keyLabel0 == "N0JET") {XTitle = ""; units = "";}
