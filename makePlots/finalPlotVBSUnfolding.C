@@ -102,6 +102,8 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
   TH1D* hINTPred2_PDF = (TH1D*)_fileGenVBS->Get(Form("hDNoEWKCorrINT%s_PDF",keyLabel0.Data())); hINTPred2_PDF->Scale(scaleXS); hINTPred2_PDF->SetDirectory(0);
   TH1D* hINTPred2_QCD = (TH1D*)_fileGenVBS->Get(Form("hDNoEWKCorrINT%s_QCD",keyLabel0.Data())); hINTPred2_QCD->Scale(scaleXS); hINTPred2_QCD->SetDirectory(0);
 
+  TH1D* hEWKOnly = (TH1D*)_fileGenVBS->Get(Form("hDNoEWKCorrEWK%s",keyLabel0.Data())); hEWKOnly->Scale(scaleXS); hEWKOnly->SetDirectory(0);
+
   hPred1    ->Add(hINTPred1    );
   hPred1_PDF->Add(hINTPred1_PDF);
   hPred1_QCD->Add(hINTPred1_QCD);
@@ -175,6 +177,7 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
     hData ->Scale(1,"width");
     hPred1->Scale(1,"width");
     hPred2->Scale(1,"width");
+    hEWKOnly->Scale(1,"width");
   }
 
   Int_t ww = 800;
@@ -282,15 +285,20 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
   hPred2->SetMarkerColor(kBlue);
   hPred2->SetLineWidth(3);
 
+  hEWKOnly->SetFillColor(TColor::GetColor(248,206,104));
+  hEWKOnly->SetFillStyle(1001);
+
+
   TAxis *xa = hData->GetXaxis();
   hPred1->SetTitle("");
   hPred2->SetTitle("");
   hData ->SetTitle("");
-  double normalization[3] = {1.0, 1.0, 1.0};
-  if(isNormalized) {normalization[0] = hPred1->GetSumOfWeights(); normalization[1] = hPred2->GetSumOfWeights(); normalization[2] = hData->GetSumOfWeights();};
-  hPred1->Scale(1./normalization[0]);
-  hPred2->Scale(1./normalization[1]);
-  hData ->Scale(1./normalization[2]);
+  double normalization[4] = {1.0, 1.0, 1.0,1.0};
+  if(isNormalized) {normalization[0] = hPred1->GetSumOfWeights(); normalization[1] = hPred2->GetSumOfWeights(); normalization[2] = hData->GetSumOfWeights(); normalization[3] = hEWKOnly->GetSumOfWeights();};
+  hPred1  ->Scale(1./normalization[0]);
+  hPred2  ->Scale(1./normalization[1]);
+  hData   ->Scale(1./normalization[2]);
+  hEWKOnly->Scale(1./normalization[3]);
 
   TH1D* unfold = (TH1D*) hData->Clone("unfold");
 
@@ -301,9 +309,10 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
   hPred1->Draw("hist");
   hPred2->Draw("hist,same");
   hData->Draw("ep,same");
+  if(!isNormalized && keyLabel0.Contains("WZ")) hEWKOnly->Draw("hist,same");
 
   gStyle->SetOptStat(0);
-  TLegend* legend = new TLegend(0.42,0.70,0.82,0.85);
+  TLegend* legend = new TLegend(0.42,0.65,0.82,0.85);
   legend->SetBorderSize(     0);
   legend->SetFillColor (     0);
   legend->SetTextAlign (    12);
@@ -312,6 +321,7 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
   legend->AddEntry(hData,  "Data", "ep");
   legend->AddEntry(hPred1, "MADGRAPH+PYTHIA without NLO corr.", "l");
   legend->AddEntry(hPred2, "MADGRAPH+PYTHIA with NLO corr.", "l");
+  if(!isNormalized && keyLabel0.Contains("WZ")) legend->AddEntry(hEWKOnly, "EW + Interference WZ", "f");
 
   bool plotSystErrorBars = true;
   if(plotSystErrorBars == true) {
