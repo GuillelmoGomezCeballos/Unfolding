@@ -26,3 +26,4 @@ root -l -b -q finalPlotWWUnfolding.C+'("PTLL0JET", true)';
 root -l -b -q finalPlotWWUnfolding.C+'("NJET",     false)';
 root -l -b -q finalPlotWWUnfolding.C+'("NJET",     true)';
 root -l -b -q finalPlotWWUnfolding.C+'("N0JET",    false)';
+root -l -b -q finalPlotWWUnfolding.C+'("NJETS",    false)';

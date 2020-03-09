@@ -70,7 +70,7 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   else if(keyLabel0 == "PTL1"   || keyLabel0 == "PTL10JET")   {XTitle = "p_{T}^{\el max}"; isLogX = true;}
   else if(keyLabel0 == "PTL2"   || keyLabel0 == "PTL20JET")   {XTitle = "p_{T}^{\el min}"; isLogX = true;}
   else if(keyLabel0 == "PTLL"   || keyLabel0 == "PTLL0JET")   {XTitle = "p_{T}^{ll}"; isLogX = true;}
-  else if(keyLabel0 == "NJET")  {XTitle = "N_{jets}"; units = "";}
+  else if(keyLabel0 == "NJET" || keyLabel0 == "NJETS")  {XTitle = "Number of jets"; units = "";}
   else if(keyLabel0 == "N0JET") {XTitle = ""; units = "";}
 
   gInterpreter->ExecuteMacro("PaperStyle.C");
@@ -164,7 +164,8 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   else if( isNormalized && keyLabel0.Contains("PTL1"))   theYTitle = "1/#sigma d#sigma/dp_{T}^{max} [1/bin]";
   else if( isNormalized && keyLabel0.Contains("PTL2"))   theYTitle = "1/#sigma d#sigma/dp_{T}^{mix} [1/bin]";
   else if( isNormalized && keyLabel0.Contains("PTLL"))   theYTitle = "1/#sigma d#sigma/dp_{T}^{ll} [1/bin]";
-  else if( isNormalized && keyLabel0.Contains("NJET"))   theYTitle = "1/#sigma d#sigma/dn_{jets}";
+  else if(                 keyLabel0.Contains("NJETS"))  theYTitle = "1/#sigma d#sigma/dN_{j}";
+  else if( isNormalized && keyLabel0.Contains("NJET"))   theYTitle = "1/#sigma d#sigma/dN_{j}";
   else if(                 keyLabel0.Contains("N0JET"))  theYTitle = "#sigma [pb]";
   else {printf("PROBLEM!\n"); return;}
 
@@ -195,13 +196,18 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   hPred1->SetMarkerStyle(3);
   hPred1->SetMarkerColor(kBlack);
 
-  TAxis *xa = hData->GetXaxis();
-  if(keyLabel0.Contains("N0JET")){
-   xa->SetBinLabel(1 ,"p_{T}^{j} < 25 GeV");
-   xa->SetBinLabel(2 ,"p_{T}^{j} < 30 GeV");
-   xa->SetBinLabel(3 ,"p_{T}^{j} < 35 GeV");
-   xa->SetBinLabel(4 ,"p_{T}^{j} < 45 GeV");
-   xa->SetBinLabel(5 ,"p_{T}^{j} < 60 GeV");
+  TAxis *xa = hData->GetXaxis(); TAxis *xb = hPred1->GetXaxis();
+  if     (keyLabel0.Contains("N0JET")){
+   xa->SetBinLabel(1 ,"p_{T}^{j} < 25 GeV"); xb->SetBinLabel(1 ,"p_{T}^{j} < 25 GeV");
+   xa->SetBinLabel(2 ,"p_{T}^{j} < 30 GeV"); xb->SetBinLabel(2 ,"p_{T}^{j} < 30 GeV");
+   xa->SetBinLabel(3 ,"p_{T}^{j} < 35 GeV"); xb->SetBinLabel(3 ,"p_{T}^{j} < 35 GeV");
+   xa->SetBinLabel(4 ,"p_{T}^{j} < 45 GeV"); xb->SetBinLabel(4 ,"p_{T}^{j} < 45 GeV");
+   xa->SetBinLabel(5 ,"p_{T}^{j} < 60 GeV"); xb->SetBinLabel(5 ,"p_{T}^{j} < 60 GeV");
+  }
+  else if(keyLabel0.Contains("NJETS")){
+   xa->SetBinLabel(1 ,"0");      xb->SetBinLabel(1 ,"0");
+   xa->SetBinLabel(2 ,"1");      xb->SetBinLabel(2 ,"1");
+   xa->SetBinLabel(3 ,"#geq 2"); xb->SetBinLabel(3 ,"#geq 2");
   }
   hPred1->SetTitle("");
   hData ->SetTitle("");
@@ -223,8 +229,8 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
       gsyst->SetPointEYlow (i, sqrt(hPred1->GetBinError(i+1)*hPred1->GetBinError(i+1)+hPred1->GetBinContent(i+1)*hPred1->GetBinContent(i+1)*systBck*systBck));
       gsyst->SetPointEYhigh(i, sqrt(hPred1->GetBinError(i+1)*hPred1->GetBinError(i+1)+hPred1->GetBinContent(i+1)*hPred1->GetBinContent(i+1)*systBck*systBck));
     }
-    gsyst->SetFillColor(12);
-    gsyst->SetFillStyle(3345);
+    gsyst->SetFillColor(22);
+    gsyst->SetFillStyle(3001);
     gsyst->SetMarkerSize(0);
     gsyst->SetLineWidth(0);
     gsyst->SetLineColor(kWhite);
@@ -249,11 +255,11 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   pad2->cd();
   gStyle->SetOptStat(0);
 
-  TH1D* hNum = (TH1D*) hData->Clone(); hNum->Reset();
-  TH1D* hDen = (TH1D*) hData->Clone(); hDen->Reset();
+  TH1D* hNum = (TH1D*) hPred1->Clone(); hNum->Reset();
+  TH1D* hDen = (TH1D*) hData ->Clone(); hDen->Reset();
 
-  TH1D* hRatio = (TH1D*) hData->Clone(); hRatio->Reset();
-  TH1D* hBand = (TH1D*) hData->Clone(); hBand->Reset();
+  TH1D* hRatio = (TH1D*) hPred1->Clone(); hRatio->Reset();
+  TH1D* hBand  = (TH1D*) hData ->Clone(); hBand ->Reset();
 
   hNum->Add(hPred1);
   hDen->Add(hData);
@@ -286,8 +292,8 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   atributes(hRatio,XTitle.Data(),"#frac{POWHEG}{Data}",units.Data());
 
   hRatio->Draw("ex0");
-  hBand->SetFillColor(12);
-  hBand->SetFillStyle(3002);
+  hBand->SetFillColor(22);
+  hBand->SetFillStyle(3001);
   hBand->SetMarkerSize(0);
   hBand->SetLineWidth(0);
   hBand->Draw("E2same");
@@ -311,7 +317,9 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   Double_t dy = TMath::Max(TMath::Abs(hRatio->GetMaximum()),
                            TMath::Abs(hRatio->GetMinimum())) + theLines[1];
   // Double_t dy = TMath::Max(TMath::Abs(TMath::Abs(hRatio->GetMaximum())-1),TMath::Abs(TMath::Abs(hRatio->GetMinimum()))-1);
-  hRatio->GetYaxis()->SetRangeUser(0.201,1.999);
+  double maxValue = 1.999;
+  if(keyLabel0.Contains("NJETS")) maxValue = 2.499;
+  hRatio->GetYaxis()->SetRangeUser(0.201,maxValue);
   hRatio->GetYaxis()->CenterTitle();
   eraselabel(pad1,hData->GetXaxis()->GetLabelSize());
 

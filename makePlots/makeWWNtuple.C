@@ -60,6 +60,7 @@ void makeWWResult(TString type, TString the0J = "", bool isNormalized = false){
   else if(type == "PTL2")   {histoResult = new TH1D(Form("hDWWPTL2%s",the0J.Data()),   Form("hDWWPTL2%s",the0J.Data()),   nBinWWPTL2,   xbinsWWPTL2  ); xsfname = xsfname + Form("WWPTL2%s",the0J.Data());}
   else if(type == "PTLL")   {histoResult = new TH1D(Form("hDWWPTLL%s",the0J.Data()),   Form("hDWWPTLL%s",the0J.Data()),   nBinWWPTLL,   xbinsWWPTLL  ); xsfname = xsfname + Form("WWPTLL%s",the0J.Data());}
   else if(type == "NJET")   {histoResult = new TH1D(Form("hDWWNJET"),                  Form("hDWWNJET"),                  nBinWWNJET,   xbinsWWNJET  ); xsfname = xsfname + "WWNJET";}
+  else if(type == "NJETS")  {histoResult = new TH1D(Form("hDWWNJETS"),                 Form("hDWWNJETS"),                 nBinWWNJET,   xbinsWWNJET  ); xsfname = xsfname + "WWNJETS";}
   else if(type == "N0JET")  {histoResult = new TH1D(Form("hDWWN0JET"),                 Form("hDWWN0JET"),                 nBinWWN0JET,  xbinsWWN0JET ); xsfname = xsfname + "WWN0JET";}
   else {printf("WRONG TYPE\n"); return;}
 
@@ -118,6 +119,7 @@ void makeWWNtuple(){
 
  makeWWResult("NJET", ""    , false);
  makeWWResult("NJET", ""    , true);
+ makeWWResult("NJETS", ""   , false);
  makeWWResult("N0JET", ""   , false);
 
 }
