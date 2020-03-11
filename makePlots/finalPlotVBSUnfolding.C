@@ -14,6 +14,22 @@
 #include "CMS_lumi.C"
 #include "TTree.h"
 
+Float_t GetMaximumIncludingErrors(TH1D* h, bool doApplyBinWidth)
+{
+    Float_t maxWithErrors = 0;
+
+    for (Int_t i=1; i<=h->GetNbinsX(); i++) {
+
+        Float_t binHeight = h->GetBinContent(i) + h->GetBinError(i);
+
+        if(doApplyBinWidth) binHeight = binHeight/h->GetBinWidth(i);
+
+        if (binHeight > maxWithErrors) maxWithErrors = binHeight;
+    }
+
+    return maxWithErrors;
+}
+
 void eraselabel(TPad *p,Double_t h){
   p->cd();
   TPad *pe = new TPad("pe","pe",0.02,0,p->GetLeftMargin(),h);	   
@@ -281,11 +297,12 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
   hPred1->SetLineWidth(3);
 
   hPred2->SetLineColor(kBlue);
+  hPred2->SetLineStyle(2);
   hPred2->SetMarkerStyle(5);
   hPred2->SetMarkerColor(kBlue);
   hPred2->SetLineWidth(3);
 
-  hEWKOnly->SetFillColor(TColor::GetColor(248,206,104));
+  hEWKOnly->SetFillColor(kCyan+3);
   hEWKOnly->SetFillStyle(1001);
 
 
@@ -302,6 +319,9 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
 
   TH1D* unfold = (TH1D*) hData->Clone("unfold");
 
+  Float_t dataMax = GetMaximumIncludingErrors(hPred1,false);
+  hPred1->SetMaximum(1.15 * dataMax);
+
   double theEdges[2] = {TMath::Min(hPred1->GetMinimum(),hPred2->GetMinimum()),
                         TMath::Max(hPred1->GetMaximum(),hPred2->GetMaximum())};
   if(isLogY == true) hPred1->GetYaxis()->SetRangeUser(theEdges[0]/10,theEdges[1]*100);
@@ -312,16 +332,16 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
   if(!isNormalized && keyLabel0.Contains("WZ")) hEWKOnly->Draw("hist,same");
 
   gStyle->SetOptStat(0);
-  TLegend* legend = new TLegend(0.42,0.65,0.82,0.85);
+  TLegend* legend = new TLegend(0.42,0.60,0.82,0.85);
   legend->SetBorderSize(     0);
   legend->SetFillColor (     0);
   legend->SetTextAlign (    12);
   legend->SetTextFont  (    42);
-  legend->SetTextSize  (0.04);
+  legend->SetTextSize  (0.035);
   legend->AddEntry(hData,  "Data", "ep");
-  legend->AddEntry(hPred1, "MADGRAPH+PYTHIA without NLO corr.", "l");
-  legend->AddEntry(hPred2, "MADGRAPH+PYTHIA with NLO corr.", "l");
-  if(!isNormalized && keyLabel0.Contains("WZ")) legend->AddEntry(hEWKOnly, "EW + Interference WZ", "f");
+  legend->AddEntry(hPred1, "MG5_aMC@NLO+Pythia8 without NLO corr.", "l");
+  legend->AddEntry(hPred2, "MG5_aMC@NLO+Pythia8 with NLO corr.", "l");
+  if(!isNormalized && keyLabel0.Contains("WZ")) legend->AddEntry(hEWKOnly, "EW WZ", "f");
 
   bool plotSystErrorBars = true;
   if(plotSystErrorBars == true) {
@@ -435,6 +455,7 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
   hBand2->GetXaxis()->SetTickLength (0.07 );
  
   hBand2->SetLineWidth(3);
+  hBand2->SetLineStyle(2);
   hBand2->SetLineColor(kBlue);
   hBand2->Draw("same,hist");
   
