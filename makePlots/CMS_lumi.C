@@ -1,20 +1,23 @@
 #include "CMS_lumi.h"
+#include <iostream>
 
 void 
 CMS_lumi( TPad* pad, int iPeriod, int iPosX )
 {            
   bool outOfFrame    = false;
-  if( iPosX/10==0 ) 
+  if( iPosX/10==1 ) 
     {
       outOfFrame = true;
     }
   int alignY_=3;
   int alignX_=2;
   if( iPosX/10==0 ) alignX_=1;
+  if( iPosX==0    ) alignX_=1;
   if( iPosX==0    ) alignY_=1;
   if( iPosX/10==1 ) alignX_=1;
   if( iPosX/10==2 ) alignX_=2;
   if( iPosX/10==3 ) alignX_=3;
+  //if( iPosX == 0  ) relPosX = 0.12;
   int align_ = 10*alignX_ + alignY_;
 
   float H = pad->GetWh();
@@ -23,6 +26,7 @@ CMS_lumi( TPad* pad, int iPeriod, int iPosX )
   float t = pad->GetTopMargin();
   float r = pad->GetRightMargin();
   float b = pad->GetBottomMargin();
+  //  float e = 0.025;
 
   pad->cd();
 
@@ -45,21 +49,31 @@ CMS_lumi( TPad* pad, int iPeriod, int iPosX )
       lumiText += lumi_7TeV;
       lumiText += " (7 TeV)";
     }
-  else if ( iPeriod==4 )
+  else if ( iPeriod==2016 )
     {
-      lumiText += lumi_13TeV;
-      lumiText += " (13 TeV)";
+      lumiText += lumi_13TeV_2016;
+      lumiText += " (13 TeV 2016)";
     }
-  else if ( iPeriod==5 )
+  else if ( iPeriod==2017 )
     {
-      lumiText += lumi_13TeV_all;
+      lumiText += lumi_13TeV_2017;
+      lumiText += " (13 TeV 2017)";
+    }
+  else if ( iPeriod==2018 )
+    {
+      lumiText += lumi_13TeV_2018;
+      lumiText += " (13 TeV 2018)";
+    }
+  else if ( iPeriod==2019 )
+    {
+      lumiText += lumi_13TeV_2019;
       lumiText += " (13 TeV)";
     }
   else if ( iPeriod==7 )
     { 
       if( outOfFrame ) lumiText += "#scale[0.85]{";
-      lumiText += lumi_13TeV; 
-      lumiText += " (13 TeV)";
+      lumiText += lumi_13TeV_2016; 
+      lumiText += " (13 TeV 2016)";
       lumiText += " + ";
       lumiText += lumi_8TeV; 
       lumiText += " (8 TeV)";
@@ -72,8 +86,12 @@ CMS_lumi( TPad* pad, int iPeriod, int iPosX )
     {
       lumiText += "8 TeV";
     }
+  else if ( iPeriod==0 )
+    {
+      lumiText += lumi_sqrtS;
+    }
    
-  cout << lumiText << endl;
+  std::cout << lumiText << endl;
 
   TLatex latex;
   latex.SetNDC();
@@ -97,7 +115,7 @@ CMS_lumi( TPad* pad, int iPeriod, int iPosX )
   
   pad->cd();
 
-  float posX_ = 0;
+  float posX_=0;
   if( iPosX%10<=1 )
     {
       posX_ =   l + relPosX*(1-l-r);
@@ -134,13 +152,13 @@ CMS_lumi( TPad* pad, int iPeriod, int iPosX )
 	  latex.SetTextFont(cmsTextFont);
 	  latex.SetTextSize(cmsTextSize*t);
 	  latex.SetTextAlign(align_);
-	  latex.DrawLatex(posX_+0.1, posY_-0.01, cmsText);
+	  latex.DrawLatex(posX_, posY_, cmsText);
 	  if( writeExtraText ) 
 	    {
 	      latex.SetTextFont(extraTextFont);
 	      latex.SetTextAlign(align_);
 	      latex.SetTextSize(extraTextSize*t);
-	      latex.DrawLatex(posX_+0.1, posY_- relExtraDY*cmsTextSize*t, extraText);
+	      latex.DrawLatex(posX_, posY_- relExtraDY*cmsTextSize*t, extraText);
 	    }
 	}
     }
@@ -154,7 +172,7 @@ CMS_lumi( TPad* pad, int iPeriod, int iPosX )
       latex.SetTextFont(extraTextFont);
       latex.SetTextSize(extraTextSize*t);
       latex.SetTextAlign(align_);
-      latex.DrawLatex(posX_+0.1, posY_, extraText);      
+      latex.DrawLatex(posX_, posY_, extraText);      
     }
   return;
 }

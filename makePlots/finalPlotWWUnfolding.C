@@ -36,7 +36,7 @@ void atributes(TH1D *histo, TString xtitle = "", TString ytitle = "Fraction", TS
   histo->GetXaxis()->SetLabelFont  (   42);
   histo->GetXaxis()->SetLabelOffset(0.015);
   histo->GetXaxis()->SetLabelSize  (0.110);
-  histo->GetXaxis()->SetNdivisions (  505);
+  histo->GetXaxis()->SetNdivisions (  510);
   histo->GetXaxis()->SetTitleFont  (   42);
   histo->GetXaxis()->SetTitleOffset( 1.15);
   histo->GetXaxis()->SetTitleSize  (0.120);
@@ -48,7 +48,7 @@ void atributes(TH1D *histo, TString xtitle = "", TString ytitle = "Fraction", TS
   histo->GetYaxis()->SetLabelSize  (0.120);
   histo->GetYaxis()->SetNdivisions (  505);
   histo->GetYaxis()->SetTitleFont  (   42);
-  histo->GetYaxis()->SetTitleOffset(  0.5);
+  histo->GetYaxis()->SetTitleOffset(  0.6);
   histo->GetYaxis()->SetTitleSize  (0.120);
   histo->GetYaxis()->SetTickLength (0.03 );
   histo->SetFillColor(12);
@@ -230,7 +230,7 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
       gsyst->SetPointEYhigh(i, sqrt(hPred1->GetBinError(i+1)*hPred1->GetBinError(i+1)+hPred1->GetBinContent(i+1)*hPred1->GetBinContent(i+1)*systBck*systBck));
     }
     gsyst->SetFillColor(22);
-    gsyst->SetFillStyle(3001);
+    gsyst->SetFillStyle(3002);
     gsyst->SetMarkerSize(0);
     gsyst->SetLineWidth(0);
     gsyst->SetLineColor(kWhite);
@@ -238,6 +238,8 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
     //TExec *setex1 = new TExec("setex1","gStyle->SetErrorX(0)");
     //setex1->Draw();
   }
+  hPred1->Draw("hist,x0,same");
+  hData->Draw("epx0,same");
 
   gStyle->SetOptStat(0);
   TLegend* legend = new TLegend(0.62,0.70,0.82,0.85);
@@ -247,7 +249,7 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   legend->SetTextFont  (    42);
   legend->SetTextSize  (0.04);
   legend->AddEntry(hData,  "Data", "ep");
-  legend->AddEntry(hPred1, "POWHEG+PYTHIA", "f");
+  legend->AddEntry(hPred1, "POWHEG+PYTHIA", "lf");
   legend->Draw();
 
   CMS_lumi( pad1, 4, 1 );
@@ -293,11 +295,11 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
 
   hRatio->Draw("ex0");
   hBand->SetFillColor(22);
-  hBand->SetFillStyle(3001);
+  hBand->SetFillStyle(3002);
   hBand->SetMarkerSize(0);
   hBand->SetLineWidth(0);
   hBand->Draw("E2same");
-  
+
   TLegend* leg = new TLegend(0.20,0.70,0.30,0.85);                                                    
   leg ->SetFillStyle(0);
   leg ->SetFillColor(kWhite);
@@ -313,6 +315,7 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
                               hRatio->GetXaxis()->GetXmax(), theLines[0]);
   baseline->SetLineStyle(kDashed);
   baseline->Draw();
+  hRatio->Draw("ex0,same");
   // Set the y-axis range symmetric around y=0
   Double_t dy = TMath::Max(TMath::Abs(hRatio->GetMaximum()),
                            TMath::Abs(hRatio->GetMinimum())) + theLines[1];
