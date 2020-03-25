@@ -153,18 +153,18 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   }
 
   TString theYTitle = "#sigma / GeV [pb]";
-  if     (!isNormalized && keyLabel0.Contains("MLL"))    theYTitle = "d#sigma/dm_{ll} [pb/GeV]";
+  if     (                 keyLabel0.Contains("NJETS"))  theYTitle = "1/#sigma d#sigma/dN_{j}";
+  else if(!isNormalized && keyLabel0.Contains("MLL"))    theYTitle = "d#sigma/dm_{ll} [pb/GeV]";
   else if(!isNormalized && keyLabel0.Contains("DPHILL")) theYTitle = "d#sigma/d#Delta#phi_{ll} [pb/rad]";
   else if(!isNormalized && keyLabel0.Contains("PTL1"))   theYTitle = "d#sigma/dp_{T}^{max} [pb/GeV]";
   else if(!isNormalized && keyLabel0.Contains("PTL2"))   theYTitle = "d#sigma/dp_{T}^{mix} [pb/GeV]";
   else if(!isNormalized && keyLabel0.Contains("PTLL"))   theYTitle = "d#sigma/dp_{T}^{ll} [pb/GeV]";
-  else if(!isNormalized && keyLabel0.Contains("NJET"))   theYTitle = "d#sigma/dn_{jets}";
+  else if(!isNormalized && keyLabel0.Contains("NJET"))   theYTitle = "d#sigma/dN_{j}";
   else if( isNormalized && keyLabel0.Contains("MLL"))    theYTitle = "1/#sigma d#sigma/dm_{ll} [1/bin]";
   else if( isNormalized && keyLabel0.Contains("DPHILL")) theYTitle = "1/#sigma d#sigma/d#Delta#phi_{ll} [1/bin]";
   else if( isNormalized && keyLabel0.Contains("PTL1"))   theYTitle = "1/#sigma d#sigma/dp_{T}^{max} [1/bin]";
   else if( isNormalized && keyLabel0.Contains("PTL2"))   theYTitle = "1/#sigma d#sigma/dp_{T}^{mix} [1/bin]";
   else if( isNormalized && keyLabel0.Contains("PTLL"))   theYTitle = "1/#sigma d#sigma/dp_{T}^{ll} [1/bin]";
-  else if(                 keyLabel0.Contains("NJETS"))  theYTitle = "1/#sigma d#sigma/dN_{j}";
   else if( isNormalized && keyLabel0.Contains("NJET"))   theYTitle = "1/#sigma d#sigma/dN_{j}";
   else if(                 keyLabel0.Contains("N0JET"))  theYTitle = "#sigma [pb]";
   else {printf("PROBLEM!\n"); return;}
@@ -252,7 +252,7 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   legend->AddEntry(hPred1, "POWHEG+PYTHIA", "lf");
   legend->Draw();
 
-  CMS_lumi( pad1, 4, 1 );
+  CMS_lumi( pad1, 2019, 10 );
 
   pad2->cd();
   gStyle->SetOptStat(0);
