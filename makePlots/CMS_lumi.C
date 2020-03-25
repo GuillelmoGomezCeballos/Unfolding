@@ -52,17 +52,17 @@ CMS_lumi( TPad* pad, int iPeriod, int iPosX )
   else if ( iPeriod==2016 )
     {
       lumiText += lumi_13TeV_2016;
-      lumiText += " (13 TeV 2016)";
+      lumiText += " (13 TeV)";
     }
   else if ( iPeriod==2017 )
     {
       lumiText += lumi_13TeV_2017;
-      lumiText += " (13 TeV 2017)";
+      lumiText += " (13 TeV)";
     }
   else if ( iPeriod==2018 )
     {
       lumiText += lumi_13TeV_2018;
-      lumiText += " (13 TeV 2018)";
+      lumiText += " (13 TeV)";
     }
   else if ( iPeriod==2019 )
     {
