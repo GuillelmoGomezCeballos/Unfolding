@@ -252,7 +252,7 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   legend->AddEntry(hPred1, "POWHEG+PYTHIA", "lf");
   legend->Draw();
 
-  CMS_lumi( pad1, 2016, 10 );
+  CMS_lumi( pad1, 2016, 11 );
 
   pad2->cd();
   gStyle->SetOptStat(0);

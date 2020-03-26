@@ -372,7 +372,7 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
   }
   legend->Draw();
 
-  CMS_lumi( pad1, 2019, 10 );
+  CMS_lumi( pad1, 2019, 11 );
 
   pad2->cd();
   gStyle->SetOptStat(0);

@@ -111,6 +111,7 @@ CMS_lumi( TPad* pad, int iPeriod, int iPosX )
       latex.SetTextAlign(11); 
       latex.SetTextSize(cmsTextSize*t);    
       latex.DrawLatex(l,1-t+lumiTextOffset*t,cmsText);
+printf("A %f %f\n",l,1-t+lumiTextOffset*t);
     }
   
   pad->cd();
@@ -164,15 +165,16 @@ CMS_lumi( TPad* pad, int iPeriod, int iPosX )
     }
   else if( writeExtraText )
     {
-      if( iPosX==0) 
+      if( iPosX==11) 
 	{
-	  posX_ =   l +  relPosX*(1-l-r);
+	  posX_ =   l +  0.11*(1-l-r);
 	  posY_ =   1-t+lumiTextOffset*t;
 	}
       latex.SetTextFont(extraTextFont);
       latex.SetTextSize(extraTextSize*t);
-      latex.SetTextAlign(align_);
+      latex.SetTextAlign(11);
       latex.DrawLatex(posX_, posY_, extraText);      
+printf("A %f %f\n",posX_, posY_);
     }
   return;
 }
