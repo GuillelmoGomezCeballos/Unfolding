@@ -305,7 +305,7 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   leg ->SetFillColor(kWhite);
   leg ->SetBorderSize(0);
   leg->SetTextSize(0.08);                                                                         
-  leg->AddEntry(hBand,"Theory prediction","f");
+  leg->AddEntry(hBand,"Theoretical prediction","f");
   leg->AddEntry(hRatio,"Experimental data","pe");
   leg->Draw();
 

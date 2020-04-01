@@ -368,7 +368,7 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
     gsyst2->SetLineWidth(0);
     gsyst2->SetLineColor(kWhite);
     //gsyst2->Draw("E2same");
-    legend->AddEntry(gsyst1, "Theory uncertainty", "f");
+    legend->AddEntry(gsyst1, "Theoretical uncertainty", "f");
   }
   legend->Draw();
 
@@ -464,8 +464,8 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
   leg ->SetFillColor(kWhite);
   leg ->SetBorderSize(0);
   leg->SetTextSize(0.05);                                                                         
-  leg->AddEntry(hBand1,"Theory prediction without NLO corr.","f");
-  leg->AddEntry(hBand2,"Theory prediction with NLO corr.","l");
+  leg->AddEntry(hBand1,"Theoretical prediction without NLO corr.","f");
+  leg->AddEntry(hBand2,"Theoretical prediction with NLO corr.","l");
   leg->AddEntry(hRatio1,"Experimental data","pe");
   //leg->Draw();
 
