@@ -276,8 +276,8 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
   hPred2->GetXaxis()->SetTitleSize  (0.060);
   hPred2->GetXaxis()->SetTickLength (0.07 );
  
-  hData->SetFillStyle(3004);
-  hData->SetFillColor(TColor::GetColor("#828282"));
+  hData->SetFillColor(12);
+  hData->SetFillStyle(3003);
   hData->GetYaxis()->SetTitleFont(42);
   hData->GetYaxis()->SetLabelFont(42);
   hData->GetXaxis()->SetTitleFont(42);
@@ -338,20 +338,20 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
   legend->SetTextAlign (    12);
   legend->SetTextFont  (    42);
   legend->SetTextSize  (0.035);
-  legend->AddEntry(hData,  "Data", "ep");
+  legend->AddEntry(hData,  "Data", "pfl");
   legend->AddEntry(hPred1, "MG5_aMC@NLO+Pythia8 without NLO corr.", "l");
   legend->AddEntry(hPred2, "MG5_aMC@NLO+Pythia8 with NLO corr.", "l");
   if(!isNormalized && keyLabel0.Contains("WZ")) legend->AddEntry(hEWKOnly, "EW WZ", "f");
 
   bool plotSystErrorBars = true;
   if(plotSystErrorBars == true) {
-    TGraphAsymmErrors * gsyst1 = new TGraphAsymmErrors(hPred1);
+    TGraphAsymmErrors * gsyst1 = new TGraphAsymmErrors(hData);
     for (int i = 0; i < gsyst1->GetN(); ++i) {
-      gsyst1->SetPointEYlow (i,hPred1->GetBinError(i+1));
-      gsyst1->SetPointEYhigh(i,hPred1->GetBinError(i+1));
+      gsyst1->SetPointEYlow (i,hData->GetBinError(i+1));
+      gsyst1->SetPointEYhigh(i,hData->GetBinError(i+1));
     }
     gsyst1->SetFillColor(12);
-    gsyst1->SetFillStyle(3001);
+    gsyst1->SetFillStyle(3003);
     gsyst1->SetMarkerSize(0);
     gsyst1->SetLineWidth(0);
     gsyst1->SetLineColor(kWhite);
@@ -359,18 +359,23 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
 
     TGraphAsymmErrors * gsyst2 = new TGraphAsymmErrors(hPred2);
     for (int i = 0; i < gsyst2->GetN(); ++i) {
-      gsyst2->SetPointEYlow (i,hPred1->GetBinError(i+1));
-      gsyst2->SetPointEYhigh(i,hPred1->GetBinError(i+1));
+      gsyst2->SetPointEYlow (i,hData->GetBinError(i+1));
+      gsyst2->SetPointEYhigh(i,hData->GetBinError(i+1));
     }
     gsyst2->SetFillColor(12);
-    gsyst2->SetFillStyle(3002);
+    gsyst2->SetFillStyle(3003);
     gsyst2->SetMarkerSize(0);
     gsyst2->SetLineWidth(0);
     gsyst2->SetLineColor(kWhite);
     //gsyst2->Draw("E2same");
-    legend->AddEntry(gsyst1, "Theoretical uncertainty", "f");
+    //legend->AddEntry(gsyst1, "Theoretical uncertainty", "f");
   }
   legend->Draw();
+  // plotting again
+  hPred1->Draw("hist,same");
+  hPred2->Draw("hist,same");
+  hData->Draw("ep,same");
+  if(!isNormalized && keyLabel0.Contains("WZ")) hEWKOnly->Draw("hist,same");
 
   CMS_lumi( pad1, 2019, 11 );
 
@@ -390,17 +395,17 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
   double pullinv; 
   double pullinverr;
 
-  // Ratio w.r.t. Pred1
+  // hPred1 w.r.t. hData
   TH1D* hRatio1 = (TH1D*) hData->Clone(); hRatio1->Reset();
-  TH1D* hBand1  = (TH1D*) hData->Clone(); hBand1->Reset();
-  for(int i=1; i<=hNum1->GetNbinsX(); i++){
+  TH1D* hBand   = (TH1D*) hData->Clone(); hBand->Reset();
+  for(int i=1; i<=hDen->GetNbinsX(); i++){
       pull = 1.0; pullerr = 0.0;
       pullinv = 1.0; pullinverr = 0.0;
       if(hNum1->GetBinContent(i) > 0 && hDen->GetBinContent(i) > 0){
-        pull = (hNum1->GetBinContent(i)/hDen->GetBinContent(i));
-	pullerr = pull*hDen->GetBinError(i)/hDen->GetBinContent(i);
-        pullinv = (hDen->GetBinContent(i)/hNum1->GetBinContent(i));
-	pullinverr = pullinv*hDen->GetBinError(i)/hDen->GetBinContent(i);
+        pull    = (hNum1->GetBinContent(i)/hDen ->GetBinContent(i));
+        pullinv = (hDen ->GetBinContent(i)/hNum1->GetBinContent(i));
+	pullerr    = pull*   hNum1->GetBinError(i)/hNum1->GetBinContent(i);
+	pullinverr = pullinv*hNum1->GetBinError(i)/hNum1->GetBinContent(i);
       }
       else {
         printf("0 events in %d\n",i);
@@ -409,65 +414,68 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
       if(isDebug) printf("ratio(%2d): data/pred = %.3f +/- %.3f, sigma = %.3f fb\n",i,pullinv,pullinverr,hNum1->GetBinContent(i));
       hRatio1->SetBinContent(i,pull);
       hRatio1->SetBinError(i,pullerr);
-      hBand1->SetBinContent(i,1);
-      hBand1->SetBinError  (i,hNum1->GetBinError(i)/hNum1->GetBinContent(i)); 
+      hBand->SetBinContent(i,1);
+      hBand->SetBinError  (i,hDen->GetBinError(i)/hDen->GetBinContent(i)); 
   }
   units = units.ReplaceAll("BIN","");
   atributes(hRatio1,XTitle.Data(),"#frac{Theory}{Data}",units.Data());
 
   hRatio1->Draw("e");
-  hBand1->SetFillColor(12);
-  hBand1->SetFillStyle(3001);
-  hBand1->SetMarkerSize(0);
-  hBand1->SetLineWidth(0);
-  hBand1->Draw("E2same");
+  hBand->SetFillColor(12);
+  hBand->SetFillStyle(3003);
+  hBand->SetMarkerSize(0);
+  hBand->SetLineWidth(0);
+  hBand->Draw("E2same");
   
-  // Band w.r.t. Pred2
-  TH1D* hBand2  = (TH1D*) hPred2->Clone(); hBand2->Reset();
-  for(int i=1; i<=hNum1->GetNbinsX(); i++){
+  // hPred2 w.r.t. hData
+  TH1D* hRatio2  = (TH1D*) hPred2->Clone(); hRatio2->Reset();
+  for(int i=1; i<=hDen->GetNbinsX(); i++){
       pull = 1.0; pullerr = 0.0;
       pullinv = 1.0; pullinverr = 0.0;
-      if(hNum1->GetBinContent(i) > 0 && hNum2->GetBinContent(i) > 0){
-        pull = (hNum2->GetBinContent(i)/hNum1->GetBinContent(i));
+      if(hNum2->GetBinContent(i) > 0 && hDen->GetBinContent(i) > 0){
+        pull = (hNum2->GetBinContent(i)/hDen->GetBinContent(i));
 	pullerr = pull*hNum2->GetBinError(i)/hNum2->GetBinContent(i);
       }
       else {
         printf("0 events in %d\n",i);
       }
-      if(isDebug) printf("ratio(%2d): pred/pred2 = %.3f +/- %.3f predUnc: %.3f\n",i,pull,pullerr,hNum1->GetBinError(i)/hNum1->GetBinContent(i));
-      hBand2->SetBinContent(i,pull);
-      hBand2->SetBinError(i,pullerr);
+      if(isDebug) printf("ratio(%2d): pred/pred2 = %.3f +/- %.3f predUnc: %.3f\n",i,pull,pullerr,hNum2->GetBinError(i)/hNum2->GetBinContent(i));
+      hRatio2->SetBinContent(i,pull);
+      hRatio2->SetBinError(i,pullerr);
   }
 
-  hBand2->GetYaxis()->SetLabelFont  (   42);
-  hBand2->GetYaxis()->SetLabelOffset(0.015);
-  hBand2->GetYaxis()->SetLabelSize  (0.050);
-  hBand2->GetYaxis()->SetNdivisions (  505);
-  hBand2->GetYaxis()->SetTitleFont  (   42);
-  hBand2->GetYaxis()->SetTitleOffset(  1.2);
-  hBand2->GetYaxis()->SetTitleSize  (0.060);
-  hBand2->GetYaxis()->SetTickLength (0.03 );
-  hBand2->GetXaxis()->SetLabelFont  (   42);
-  hBand2->GetXaxis()->SetLabelSize  (0.040);
-  hBand2->GetXaxis()->SetNdivisions (  505);
-  hBand2->GetXaxis()->SetTitleFont  (   42);
-  hBand2->GetXaxis()->SetTitleSize  (0.060);
-  hBand2->GetXaxis()->SetTickLength (0.07 );
+  hRatio2->GetYaxis()->SetLabelFont  (   42);
+  hRatio2->GetYaxis()->SetLabelOffset(0.015);
+  hRatio2->GetYaxis()->SetLabelSize  (0.050);
+  hRatio2->GetYaxis()->SetNdivisions (  505);
+  hRatio2->GetYaxis()->SetTitleFont  (   42);
+  hRatio2->GetYaxis()->SetTitleOffset(  1.2);
+  hRatio2->GetYaxis()->SetTitleSize  (0.060);
+  hRatio2->GetYaxis()->SetTickLength (0.03 );
+  hRatio2->GetXaxis()->SetLabelFont  (   42);
+  hRatio2->GetXaxis()->SetLabelSize  (0.040);
+  hRatio2->GetXaxis()->SetNdivisions (  505);
+  hRatio2->GetXaxis()->SetTitleFont  (   42);
+  hRatio2->GetXaxis()->SetTitleSize  (0.060);
+  hRatio2->GetXaxis()->SetTickLength (0.07 );
  
-  hBand2->SetLineWidth(3);
-  hBand2->SetLineStyle(2);
-  hBand2->SetLineColor(kBlue);
-  hBand2->Draw("same,hist");
+  hRatio2->SetLineWidth(3);
+  hRatio2->SetLineStyle(2);
+  hRatio2->SetLineColor(kBlue);
+  hRatio2->Draw("same,hist");
   
   TLegend* leg = new TLegend(0.20,0.70,0.30,0.85);                                                    
   leg ->SetFillStyle(0);
   leg ->SetFillColor(kWhite);
   leg ->SetBorderSize(0);
   leg->SetTextSize(0.05);                                                                         
-  leg->AddEntry(hBand1,"Theoretical prediction without NLO corr.","f");
-  leg->AddEntry(hBand2,"Theoretical prediction with NLO corr.","l");
-  leg->AddEntry(hRatio1,"Experimental data","pe");
+  leg->AddEntry(hRatio1,"Theoretical prediction without NLO corr.","f");
+  leg->AddEntry(hRatio2,"Theoretical prediction with NLO corr.","l");
+  leg->AddEntry(hBand,"Experimental data","pe");
   //leg->Draw();
+  // plotting again
+  hRatio1->Draw("e,same");
+  hRatio2->Draw("same,hist");
 
   // Draw a line throgh y=0
   double theLines[2] = {1.0, 0.5};
