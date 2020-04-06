@@ -357,7 +357,7 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
     gsyst1->SetLineColor(kWhite);
     gsyst1->Draw("E2same");
 
-    TGraphAsymmErrors * gsyst2 = new TGraphAsymmErrors(hPred2);
+    TGraphAsymmErrors * gsyst2 = new TGraphAsymmErrors(hData);
     for (int i = 0; i < gsyst2->GetN(); ++i) {
       gsyst2->SetPointEYlow (i,hData->GetBinError(i+1));
       gsyst2->SetPointEYhigh(i,hData->GetBinError(i+1));

@@ -304,9 +304,9 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   leg ->SetFillStyle(0);
   leg ->SetFillColor(kWhite);
   leg ->SetBorderSize(0);
-  leg->SetTextSize(0.08);                                                                         
-  leg->AddEntry(hBand,"Theoretical prediction","f");
-  leg->AddEntry(hRatio,"Experimental data","pe");
+  leg->SetTextSize(0.075);                                                                         
+  leg->AddEntry(hBand,"Theo. uncertainty","f");
+  leg->AddEntry(hRatio,"Theo. prediction / measurement","pe");
   leg->Draw();
 
   // Draw a line throgh y=0
