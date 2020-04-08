@@ -38,7 +38,7 @@ void eraselabel(TPad *p,Double_t h){
   pe->SetBorderMode(0);
 }
 
-void atributes(TH1D *histo, TString xtitle = "", TString ytitle = "Fraction", TString units = ""){
+void atributes(TH1D *histo, TString xtitle = "", TString ytitle = "Fraction", TString units = "", Int_t color = 1){
 
   histo->SetTitle("");
   //histo->SetMarkerStyle(20);
@@ -67,9 +67,9 @@ void atributes(TH1D *histo, TString xtitle = "", TString ytitle = "Fraction", TS
   histo->GetYaxis()->SetTitleOffset(  0.5);
   histo->GetYaxis()->SetTitleSize  (0.120);
   histo->GetYaxis()->SetTickLength (0.03 );
-  histo->SetFillColor(12);
+  histo->SetFillColor(color);
+  histo->SetMarkerColor(color);
   histo->SetFillStyle(3345);
-  histo->SetLineColor  (kBlack);
   histo->SetMarkerSize(0.8);
   histo->SetMarkerStyle(kFullCircle);
 }
@@ -291,9 +291,9 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
   hData->GetYaxis()->SetLabelOffset(0.015);
   hData->GetXaxis()->SetLabelOffset(0.015);
 
-  hPred1->SetLineColor(kBlack);
+  hPred1->SetLineColor(kRed+2);
   hPred1->SetMarkerStyle(3);
-  hPred1->SetMarkerColor(kBlack);
+  hPred1->SetMarkerColor(kRed+2);
   hPred1->SetLineWidth(3);
 
   hPred2->SetLineColor(kBlue);
@@ -382,9 +382,9 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
   pad2->cd();
   gStyle->SetOptStat(0);
 
-  TH1D* hNum1 = (TH1D*) hData->Clone(); hNum1->Reset();
-  TH1D* hNum2 = (TH1D*) hData->Clone(); hNum2->Reset();
-  TH1D* hDen  = (TH1D*) hData->Clone(); hDen->Reset();
+  TH1D* hNum1 = (TH1D*) hPred1->Clone(); hNum1->Reset();
+  TH1D* hNum2 = (TH1D*) hPred2->Clone(); hNum2->Reset();
+  TH1D* hDen  = (TH1D*) hData ->Clone(); hDen->Reset();
 
   hNum1->Add(hPred1);
   hNum2->Add(hPred2);
@@ -396,8 +396,8 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
   double pullinverr;
 
   // hPred1 w.r.t. hData
-  TH1D* hRatio1 = (TH1D*) hData->Clone(); hRatio1->Reset();
-  TH1D* hBand   = (TH1D*) hData->Clone(); hBand->Reset();
+  TH1D* hRatio1 = (TH1D*) hPred1->Clone(); hRatio1->Reset();
+  TH1D* hBand   = (TH1D*) hData ->Clone(); hBand  ->Reset();
   for(int i=1; i<=hDen->GetNbinsX(); i++){
       pull = 1.0; pullerr = 0.0;
       pullinv = 1.0; pullinverr = 0.0;
@@ -418,7 +418,7 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
       hBand->SetBinError  (i,hDen->GetBinError(i)/hDen->GetBinContent(i)); 
   }
   units = units.ReplaceAll("BIN","");
-  atributes(hRatio1,XTitle.Data(),"#frac{Theory}{Data}",units.Data());
+  atributes(hRatio1,XTitle.Data(),"#frac{Theory}{Data}",units.Data(),kRed+2);
 
   hRatio1->Draw("e");
   hBand->SetFillColor(12);
@@ -475,7 +475,7 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
   //leg->Draw();
   // plotting again
   hRatio1->Draw("e,same");
-  hRatio2->Draw("same,hist");
+  hRatio2->Draw("same,hist,e");
 
   // Draw a line throgh y=0
   double theLines[2] = {1.0, 0.5};
