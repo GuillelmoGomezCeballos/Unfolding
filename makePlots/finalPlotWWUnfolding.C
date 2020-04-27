@@ -332,14 +332,19 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   sprintf(CommandToExec,"mkdir -p plotsww");
   gSystem->Exec(CommandToExec);  
 
+  TH1D* unfold = (TH1D*) hData->Clone("unfold");
+
   TString outputName = Form("unf_WW%s_normalized%d",keyLabel0.Data(),isNormalized);
   if(strcmp(outputName.Data(),"") != 0){
     TString myOutputFile;
-    myOutputFile = Form("plotsww/%s.eps",outputName.Data());
-    //c1->SaveAs(myOutputFile.Data());
     myOutputFile = Form("plotsww/%s.png",outputName.Data());
     c1->SaveAs(myOutputFile.Data());
     myOutputFile = Form("plotsww/%s.pdf",outputName.Data());
     c1->SaveAs(myOutputFile.Data());
+    myOutputFile = Form("plotsww/%s.root",outputName.Data());
+    TFile *outRoot = TFile::Open(myOutputFile.Data(),"recreate");
+    outRoot->cd();
+    unfold->Write();
+    outRoot->Close();
   }
 }

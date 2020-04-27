@@ -320,7 +320,7 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
   TH1D* unfold = (TH1D*) hData->Clone("unfold");
 
   Float_t dataMax = GetMaximumIncludingErrors(hPred1,false);
-  hPred1->SetMaximum(1.15 * dataMax);
+  hPred1->SetMaximum(1.40 * dataMax);
 
   double theEdges[2] = {TMath::Min(hPred1->GetMinimum(),hPred2->GetMinimum()),
                         TMath::Max(hPred1->GetMaximum(),hPred2->GetMaximum())};
@@ -332,15 +332,15 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
   if(!isNormalized && keyLabel0.Contains("WZ")) hEWKOnly->Draw("hist,same");
 
   gStyle->SetOptStat(0);
-  TLegend* legend = new TLegend(0.42,0.60,0.82,0.85);
+  TLegend* legend = new TLegend(0.20,0.65,0.80,0.85);
   legend->SetBorderSize(     0);
   legend->SetFillColor (     0);
   legend->SetTextAlign (    12);
   legend->SetTextFont  (    42);
-  legend->SetTextSize  (0.035);
+  legend->SetTextSize  (0.043);
   legend->AddEntry(hData,  "Data", "pfl");
-  legend->AddEntry(hPred1, "MG5_aMC@NLO+Pythia8 without NLO corr.", "l");
-  legend->AddEntry(hPred2, "MG5_aMC@NLO+Pythia8 with NLO corr.", "l");
+  legend->AddEntry(hPred1, "MADGRAPH5_aMC@NLO+Pythia8 without NLO corr.", "l");
+  legend->AddEntry(hPred2, "MADGRAPH5_aMC@NLO+Pythia8 with NLO corr.", "l");
   if(!isNormalized && keyLabel0.Contains("WZ")) legend->AddEntry(hEWKOnly, "EW WZ", "f");
 
   bool plotSystErrorBars = true;
