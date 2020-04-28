@@ -333,11 +333,11 @@ void finalPlotVBSUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false)
 
   gStyle->SetOptStat(0);
   TLegend* legend = new TLegend(0.20,0.65,0.80,0.85);
-  legend->SetBorderSize(     0);
-  legend->SetFillColor (     0);
-  legend->SetTextAlign (    12);
-  legend->SetTextFont  (    42);
-  legend->SetTextSize  (0.043);
+  legend->SetBorderSize(    0);
+  legend->SetFillColor (    0);
+  legend->SetTextAlign (   12);
+  legend->SetTextFont  (   62);
+  legend->SetTextSize  (0.040);
   legend->AddEntry(hData,  "Data", "pfl");
   legend->AddEntry(hPred1, "MADGRAPH5_aMC@NLO+Pythia8 without NLO corr.", "l");
   legend->AddEntry(hPred2, "MADGRAPH5_aMC@NLO+Pythia8 with NLO corr.", "l");
