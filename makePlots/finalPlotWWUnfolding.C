@@ -22,7 +22,7 @@ void eraselabel(TPad *p,Double_t h){
   pe->SetBorderMode(0);
 }
 
-void atributes(TH1D *histo, TString xtitle = "", TString ytitle = "Fraction", TString units = ""){
+void atributes(TH1D *histo, TString xtitle = "", TString ytitle = "Fraction", TString units = "", Int_t color = 1){
 
   histo->SetTitle("");
   //histo->SetMarkerStyle(20);
@@ -35,11 +35,11 @@ void atributes(TH1D *histo, TString xtitle = "", TString ytitle = "Fraction", TS
   }
   histo->GetXaxis()->SetLabelFont  (   42);
   histo->GetXaxis()->SetLabelOffset(0.015);
-  histo->GetXaxis()->SetLabelSize  (0.110);
-  histo->GetXaxis()->SetNdivisions (  510);
+  histo->GetXaxis()->SetLabelSize  (0.120);
+  histo->GetXaxis()->SetNdivisions (  505);
   histo->GetXaxis()->SetTitleFont  (   42);
-  histo->GetXaxis()->SetTitleOffset( 1.15);
-  histo->GetXaxis()->SetTitleSize  (0.120);
+  histo->GetXaxis()->SetTitleOffset(  0.9);
+  histo->GetXaxis()->SetTitleSize  (0.140);
   histo->GetXaxis()->SetTickLength (0.07 );
 
   histo->GetYaxis()->SetTitle(ytitle.Data());
@@ -48,12 +48,12 @@ void atributes(TH1D *histo, TString xtitle = "", TString ytitle = "Fraction", TS
   histo->GetYaxis()->SetLabelSize  (0.120);
   histo->GetYaxis()->SetNdivisions (  505);
   histo->GetYaxis()->SetTitleFont  (   42);
-  histo->GetYaxis()->SetTitleOffset(  0.6);
+  histo->GetYaxis()->SetTitleOffset(  0.5);
   histo->GetYaxis()->SetTitleSize  (0.120);
   histo->GetYaxis()->SetTickLength (0.03 );
-  histo->SetFillColor(12);
+  histo->SetFillColor(color);
+  histo->SetMarkerColor(color);
   histo->SetFillStyle(3345);
-  histo->SetLineColor  (kBlack);
   histo->SetMarkerSize(0.8);
   histo->SetMarkerStyle(kFullCircle);
 }
@@ -124,7 +124,7 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
 
   TCanvas *c1 = new TCanvas("c1", "c1", ww, wh);
 
-  TPad* pad1 = new TPad("pad1", "pad1", 0, 0.355, 1, 0.975);
+  TPad* pad1 = new TPad("pad1", "pad1", 0, 0.350, 1, 0.975);
   TPad* pad2 = new TPad("pad2", "pad2", 0, 0.000, 1, 0.345);
 
   pad1->SetTopMargin   (0.08);
@@ -229,8 +229,8 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
       gsyst->SetPointEYlow (i, sqrt(hPred1->GetBinError(i+1)*hPred1->GetBinError(i+1)+hPred1->GetBinContent(i+1)*hPred1->GetBinContent(i+1)*systBck*systBck));
       gsyst->SetPointEYhigh(i, sqrt(hPred1->GetBinError(i+1)*hPred1->GetBinError(i+1)+hPred1->GetBinContent(i+1)*hPred1->GetBinContent(i+1)*systBck*systBck));
     }
-    gsyst->SetFillColor(22);
-    gsyst->SetFillStyle(3002);
+    gsyst->SetFillColor(12);
+    gsyst->SetFillStyle(3003);
     gsyst->SetMarkerSize(0);
     gsyst->SetLineWidth(0);
     gsyst->SetLineColor(kWhite);
@@ -242,12 +242,12 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   hData->Draw("epx0,same");
 
   gStyle->SetOptStat(0);
-  TLegend* legend = new TLegend(0.62,0.70,0.82,0.85);
-  legend->SetBorderSize(     0);
-  legend->SetFillColor (     0);
-  legend->SetTextAlign (    12);
-  legend->SetTextFont  (    42);
-  legend->SetTextSize  (0.04);
+  TLegend* legend = new TLegend(0.60,0.70,0.80,0.85);
+  legend->SetBorderSize(    0);
+  legend->SetFillColor (    0);
+  legend->SetTextAlign (   12);
+  legend->SetTextFont  (   62);
+  legend->SetTextSize  (0.050);
   legend->AddEntry(hData,  "Data", "ep");
   legend->AddEntry(hPred1, "POWHEG+PYTHIA", "lf");
   legend->Draw();
@@ -294,17 +294,18 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   atributes(hRatio,XTitle.Data(),"#frac{POWHEG}{Data}",units.Data());
 
   hRatio->Draw("ex0");
-  hBand->SetFillColor(22);
-  hBand->SetFillStyle(3002);
+  hBand->SetFillColor(12);
+  hBand->SetFillStyle(3003);
   hBand->SetMarkerSize(0);
   hBand->SetLineWidth(0);
   hBand->Draw("E2same");
 
   TLegend* leg = new TLegend(0.20,0.70,0.30,0.85);                                                    
-  leg ->SetFillStyle(0);
-  leg ->SetFillColor(kWhite);
-  leg ->SetBorderSize(0);
-  leg->SetTextSize(0.075);                                                                         
+  leg->SetBorderSize(	 0);
+  leg->SetFillColor (	 0);
+  leg->SetTextAlign (	12);
+  leg->SetTextFont  (	62);
+  leg->SetTextSize  (0.060);
   leg->AddEntry(hBand,"Theo. uncertainty","f");
   leg->AddEntry(hRatio,"Theo. prediction / measurement","pe");
   leg->Draw();
