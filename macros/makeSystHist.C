@@ -521,14 +521,17 @@ void makeSystHist(TString theSuffix, TString theHistName = "Pt"){
 	for(int i=0; i<allNuisancesCov; i++)  histoSystCov1[i]  = (TH1D*)inpFilePlots1->Get(Form("histoSystCov_%d",i));
 	for(int i=0; i<allNuisancesPlot; i++) histoSystPlot1[i] = (TH1D*)inpFilePlots1->Get(Form("histoSystPlot_%d",i));
 
-	histDef0      ->Add(histDef1	  );
-	histDefNoLumi0->Add(histDefNoLumi1);
-	histPred0     ->Add(histPred1	  );
-	histPredStat0 ->Add(histPredStat1 );
-	histDef0      ->Scale(0.5);
-	histDefNoLumi0->Scale(0.5);
-	histPred0     ->Scale(0.5);
-	histPredStat0 ->Scale(0.5);
+        for(Int_t nb=1;nb<=histDef0->GetNbinsX();++nb){
+          histDef0	->SetBinContent(nb,(histDef0	  ->GetBinContent(nb)+histDef1      ->GetBinContent(nb))/2.0);
+          histDefNoLumi0->SetBinContent(nb,(histDefNoLumi0->GetBinContent(nb)+histDefNoLumi1->GetBinContent(nb))/2.0);
+          histPred0	->SetBinContent(nb,(histPred0	  ->GetBinContent(nb)+histPred1     ->GetBinContent(nb))/2.0);
+          histPredStat0 ->SetBinContent(nb,(histPredStat0 ->GetBinContent(nb)+histPredStat1 ->GetBinContent(nb))/2.0);
+
+          histDef0	->SetBinError(nb,(histDef0      ->GetBinError(nb)+histDef1      ->GetBinError(nb))/2.0);
+          histDefNoLumi0->SetBinError(nb,(histDefNoLumi0->GetBinError(nb)+histDefNoLumi1->GetBinError(nb))/2.0);
+          histPred0	->SetBinError(nb,(histPred0     ->GetBinError(nb)+histPred1     ->GetBinError(nb))/2.0);
+          histPredStat0 ->SetBinError(nb,(histPredStat0 ->GetBinError(nb)+histPredStat1 ->GetBinError(nb))/2.0);
+        }
 	histDef0      ->SetNameTitle("unfold"	                              , "unfold"                                 );
 	histDefNoLumi0->SetNameTitle("unfoldNoLumi"                           , "unfoldNoLumi"                           );
 	histPred0     ->SetNameTitle(Form("hDDil%sLL",theHistName.Data()     ), Form("hDDil%sLL",theHistName.Data())     );
@@ -550,6 +553,11 @@ void makeSystHist(TString theSuffix, TString theHistName = "Pt"){
             histoSystPlot0[1]->GetBinContent(nb),histoSystPlot0[2]->GetBinContent(nb),histoSystPlot0[3]->GetBinContent(nb),
             histoSystPlot0[4]->GetBinContent(nb),histoSystPlot0[5]->GetBinContent(nb),histoSystPlot0[6]->GetBinContent(nb),histoSystPlot0[7]->GetBinContent(nb),
             histoSystPlot0[0]->GetBinContent(nb));
+        }
+
+        for(int i=1; i<=histDef0->GetNbinsX(); i++){
+          histDef0      ->SetBinError(i,histDef0->GetBinContent(i)*histoSystPlot0[0]->GetBinContent(i)/100.);
+          histDefNoLumi0->SetBinError(i,histDef0->GetBinContent(i)*histoSystPlot0[8]->GetBinContent(i)/100.);
         }
 
 	sprintf(output,"histoUnfolding%sSyst%s_nsel%d_dy%d_rebin1_default.root",theXSRatioName.Data(),theHistName.Data(),2,j); 
