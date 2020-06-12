@@ -61,26 +61,45 @@ root -l -b -q finalPlotUnfolding.C+'(0,1,"p_{T}","GeV","../macros/outputs/histoU
 
 #root -l -b -q ratio_test.C+'(0,1,"p_{T}","GeV","../macros/outputs/histoUnfolding_XSRatioSystPt","ratio_unf_normalized_zmm_dy_pt", 1,1,"Pt","MM",1)'
 
-root -l -b -q matrix.C'("Pt")';
-root -l -b -q convert.C'("Pt","totsum")';
-root -l -b -q convert.C'("Pt","lepeff")';
-root -l -b -q convert.C'("Pt","lepeffSyst")';
-root -l -b -q convert.C'("Pt","lepeffStat")';
-root -l -b -q convert.C'("Pt","momres")';
+root -l -b -q matrix.C'("SystPt")';
+root -l -b -q convert.C'("SystPt","totsum")';
+root -l -b -q convert.C'("SystPt","lepeff")';
+root -l -b -q convert.C'("SystPt","lepeffSyst")';
+root -l -b -q convert.C'("SystPt","lepeffStat")';
+root -l -b -q convert.C'("SystPt","momres")';
 
-root -l -b -q matrix.C'("Pt","../macros/folders_dressedleptons/outputs/")';
-root -l -b -q matrix.C'("PhiStar","../macros/folders_dressedleptons/outputs/")';
-root -l -b -q matrix.C'("Rap","../macros/folders_dressedleptons/outputs/")';
-root -l -b -q matrix.C'("PtRap0","../macros/folders_dressedleptons/outputs/")';
-root -l -b -q matrix.C'("PtRap1","../macros/folders_dressedleptons/outputs/")';
-root -l -b -q matrix.C'("PtRap2","../macros/folders_dressedleptons/outputs/")';
-root -l -b -q matrix.C'("PtRap3","../macros/folders_dressedleptons/outputs/")';
-root -l -b -q matrix.C'("PtRap4","../macros/folders_dressedleptons/outputs/")';
-root -l -b -q matrix.C'("Pt","../macros/folders_bornleptons/outputs/")';
-root -l -b -q matrix.C'("PhiStar","../macros/folders_bornleptons/outputs/")';
-root -l -b -q matrix.C'("Rap","../macros/folders_bornleptons/outputs/")';
-root -l -b -q matrix.C'("PtRap0","../macros/folders_bornleptons/outputs/")';
-root -l -b -q matrix.C'("PtRap1","../macros/folders_bornleptons/outputs/")';
-root -l -b -q matrix.C'("PtRap2","../macros/folders_bornleptons/outputs/")';
-root -l -b -q matrix.C'("PtRap3","../macros/folders_bornleptons/outputs/")';
-root -l -b -q matrix.C'("PtRap4","../macros/folders_bornleptons/outputs/")';
+root -l -b -q matrix.C'("SystPt","../macros/folders_dressedleptons/outputs/")';
+root -l -b -q matrix.C'("SystPhiStar","../macros/folders_dressedleptons/outputs/")';
+root -l -b -q matrix.C'("SystRap","../macros/folders_dressedleptons/outputs/")';
+root -l -b -q matrix.C'("SystPtRap0","../macros/folders_dressedleptons/outputs/")';
+root -l -b -q matrix.C'("SystPtRap1","../macros/folders_dressedleptons/outputs/")';
+root -l -b -q matrix.C'("SystPtRap2","../macros/folders_dressedleptons/outputs/")';
+root -l -b -q matrix.C'("SystPtRap3","../macros/folders_dressedleptons/outputs/")';
+root -l -b -q matrix.C'("SystPtRap4","../macros/folders_dressedleptons/outputs/")';
+
+root -l -b -q matrix.C'("_XSRatioSystPt","../macros/folders_dressedleptons/outputs/")';
+root -l -b -q matrix.C'("_XSRatioSystPhiStar","../macros/folders_dressedleptons/outputs/")';
+root -l -b -q matrix.C'("_XSRatioSystRap","../macros/folders_dressedleptons/outputs/")';
+root -l -b -q matrix.C'("_XSRatioSystPtRap0","../macros/folders_dressedleptons/outputs/")';
+root -l -b -q matrix.C'("_XSRatioSystPtRap1","../macros/folders_dressedleptons/outputs/")';
+root -l -b -q matrix.C'("_XSRatioSystPtRap2","../macros/folders_dressedleptons/outputs/")';
+root -l -b -q matrix.C'("_XSRatioSystPtRap3","../macros/folders_dressedleptons/outputs/")';
+root -l -b -q matrix.C'("_XSRatioSystPtRap4","../macros/folders_dressedleptons/outputs/")';
+
+root -l -b -q matrix.C'("SystPt","../macros/folders_bornleptons/outputs/")';
+root -l -b -q matrix.C'("SystPhiStar","../macros/folders_bornleptons/outputs/")';
+root -l -b -q matrix.C'("SystRap","../macros/folders_bornleptons/outputs/")';
+root -l -b -q matrix.C'("SystPtRap0","../macros/folders_bornleptons/outputs/")';
+root -l -b -q matrix.C'("SystPtRap1","../macros/folders_bornleptons/outputs/")';
+root -l -b -q matrix.C'("SystPtRap2","../macros/folders_bornleptons/outputs/")';
+root -l -b -q matrix.C'("SystPtRap3","../macros/folders_bornleptons/outputs/")';
+root -l -b -q matrix.C'("SystPtRap4","../macros/folders_bornleptons/outputs/")';
+
+root -l -b -q matrix.C'("_XSRatioSystPt","../macros/folders_bornleptons/outputs/")';
+root -l -b -q matrix.C'("_XSRatioSystPhiStar","../macros/folders_bornleptons/outputs/")';
+root -l -b -q matrix.C'("_XSRatioSystRap","../macros/folders_bornleptons/outputs/")';
+root -l -b -q matrix.C'("_XSRatioSystPtRap0","../macros/folders_bornleptons/outputs/")';
+root -l -b -q matrix.C'("_XSRatioSystPtRap1","../macros/folders_bornleptons/outputs/")';
+root -l -b -q matrix.C'("_XSRatioSystPtRap2","../macros/folders_bornleptons/outputs/")';
+root -l -b -q matrix.C'("_XSRatioSystPtRap3","../macros/folders_bornleptons/outputs/")';
+root -l -b -q matrix.C'("_XSRatioSystPtRap4","../macros/folders_bornleptons/outputs/")';

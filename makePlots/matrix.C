@@ -15,7 +15,7 @@ void helper_function(int me=0, int DY=3, TString theHistName = "Pt", TString pat
 
   double TotalLumi = 35800.0;
   char filename[300];
-  sprintf(filename,"%s/histoUnfoldingSyst%s_nsel%d_dy%d_rebin%d_default.root",path.Data(),theHistName.Data(),me,DY,reBin);
+  sprintf(filename,"%s/histoUnfolding%s_nsel%d_dy%d_rebin%d_default.root",path.Data(),theHistName.Data(),me,DY,reBin);
 
   TFile* _file0 = new TFile(Form("%s",filename),  "read"); if(!_file0) {printf("File does not exist\n"); return;}
   printf("Filename: %s\n",filename);
@@ -89,8 +89,9 @@ void helper_function(int me=0, int DY=3, TString theHistName = "Pt", TString pat
   outFileLimits->Close();
 
   TString XName = "Z p_{T} [GeV]";
-  if     (theHistName == "Rap") XName = "|y^{Z}|";
-  else if(theHistName == "PhiStar") XName = "#phi*";
+  if     (theHistName.Contains("Pt"))      XName = "Z p_{T} [GeV]";
+  else if(theHistName.Contains("Rap"))     XName = "|y^{Z}|";
+  else if(theHistName.Contains("PhiStar")) XName = "#phi*";
 
   /********** draw+save pdf*********/
   TCanvas* c1 = new TCanvas("c1", "c1",5,5,650,500);
@@ -112,11 +113,11 @@ void helper_function(int me=0, int DY=3, TString theHistName = "Pt", TString pat
   TString theLabel = "";
   TString leptonLegend = "#mu^{+}#mu^{-} sample";
   if(me == 1) leptonLegend = "e^{+}e^{-} sample";
-  if	 (theHistName == "PtRap0") theLabel = Form("#splitline{0 < |y^{l^{+}l^{-}}| < 0.4}{%s}",leptonLegend.Data());
-  else if(theHistName == "PtRap1") theLabel = Form("#splitline{0.4 < |y^{l^{+}l^{-}}| < 0.8}{%s}",leptonLegend.Data());
-  else if(theHistName == "PtRap2") theLabel = Form("#splitline{0.8 < |y^{l^{+}l^{-}}| < 1.2}{%s}",leptonLegend.Data());
-  else if(theHistName == "PtRap3") theLabel = Form("#splitline{1.2 < |y^{l^{+}l^{-}}| < 1.6}{%s}",leptonLegend.Data());
-  else if(theHistName == "PtRap4") theLabel = Form("#splitline{1.6 < |y^{l^{+}l^{-}}| < 2.4}{%s}",leptonLegend.Data());
+  if	 (theHistName.Contains("PtRap0")) theLabel = Form("#splitline{0 < |y^{l^{+}l^{-}}| < 0.4}{%s}",leptonLegend.Data());
+  else if(theHistName.Contains("PtRap1")) theLabel = Form("#splitline{0.4 < |y^{l^{+}l^{-}}| < 0.8}{%s}",leptonLegend.Data());
+  else if(theHistName.Contains("PtRap2")) theLabel = Form("#splitline{0.8 < |y^{l^{+}l^{-}}| < 1.2}{%s}",leptonLegend.Data());
+  else if(theHistName.Contains("PtRap3")) theLabel = Form("#splitline{1.2 < |y^{l^{+}l^{-}}| < 1.6}{%s}",leptonLegend.Data());
+  else if(theHistName.Contains("PtRap4")) theLabel = Form("#splitline{1.6 < |y^{l^{+}l^{-}}| < 2.4}{%s}",leptonLegend.Data());
   else if(me == 0		 ) theLabel = leptonLegend.Data();
   else if(me == 1		 ) theLabel = leptonLegend.Data();
   TLatex *_extraLabel = new TLatex(0.85, 0.8, theLabel.Data());
@@ -165,7 +166,7 @@ void helper_function(int me=0, int DY=3, TString theHistName = "Pt", TString pat
   c1->SaveAs(myOutputFile.Data());
 
 }
-void matrix(TString theHistName = "Pt", TString path = "../macros/folders_dressedleptons/outputs/"){
+void matrix(TString theHistName = "SystPt", TString path = "../macros/folders_dressedleptons/outputs/"){
   for(int i=0;i<=1;i++){
     for(int j=3;j<=3;j++){
       helper_function(i,j,theHistName.Data(),path.Data());
