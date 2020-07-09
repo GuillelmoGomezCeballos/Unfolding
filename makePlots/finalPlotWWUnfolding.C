@@ -16,7 +16,7 @@
 
 void eraselabel(TPad *p,Double_t h){
   p->cd();
-  TPad *pe = new TPad("pe","pe",0.02,0,p->GetLeftMargin(),h);	   
+  TPad *pe = new TPad("pe","pe",0.02,0,p->GetLeftMargin()-0.005,h);	   
   pe->Draw();
   pe->SetFillColor(p->GetFillColor()); 
   pe->SetBorderMode(0);
@@ -35,11 +35,11 @@ void atributes(TH1D *histo, TString xtitle = "", TString ytitle = "Fraction", TS
   }
   histo->GetXaxis()->SetLabelFont  (   42);
   histo->GetXaxis()->SetLabelOffset(0.015);
-  histo->GetXaxis()->SetLabelSize  (0.120);
+  histo->GetXaxis()->SetLabelSize  (0.110);
   histo->GetXaxis()->SetNdivisions (  505);
   histo->GetXaxis()->SetTitleFont  (   42);
-  histo->GetXaxis()->SetTitleOffset(  0.9);
-  histo->GetXaxis()->SetTitleSize  (0.140);
+  histo->GetXaxis()->SetTitleOffset(  1.2);
+  histo->GetXaxis()->SetTitleSize  (0.110);
   histo->GetXaxis()->SetTickLength (0.07 );
 
   histo->GetYaxis()->SetTitle(ytitle.Data());
