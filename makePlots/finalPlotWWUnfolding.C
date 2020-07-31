@@ -48,7 +48,7 @@ void atributes(TH1D *histo, TString xtitle = "", TString ytitle = "Fraction", TS
   histo->GetYaxis()->SetLabelSize  (0.120);
   histo->GetYaxis()->SetNdivisions (  505);
   histo->GetYaxis()->SetTitleFont  (   42);
-  histo->GetYaxis()->SetTitleOffset(  0.5);
+  histo->GetYaxis()->SetTitleOffset(  0.6);
   histo->GetYaxis()->SetTitleSize  (0.120);
   histo->GetYaxis()->SetTickLength (0.03 );
   histo->SetFillColor(color);
@@ -124,8 +124,8 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
 
   TCanvas *c1 = new TCanvas("c1", "c1", ww, wh);
 
-  TPad* pad1 = new TPad("pad1", "pad1", 0, 0.350, 1, 0.975);
-  TPad* pad2 = new TPad("pad2", "pad2", 0, 0.000, 1, 0.345);
+  TPad* pad1 = new TPad("pad1", "pad1", 0, 0.390, 1, 0.975);
+  TPad* pad2 = new TPad("pad2", "pad2", 0, 0.000, 1, 0.385);
 
   pad1->SetTopMargin   (0.08);
   pad1->SetBottomMargin(0.00);  // 0.02
@@ -175,8 +175,8 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   hPred1->GetYaxis()->SetLabelSize  (0.050);
   hPred1->GetYaxis()->SetNdivisions (  505);
   hPred1->GetYaxis()->SetTitleFont  (   42);
-  hPred1->GetYaxis()->SetTitleOffset(  1.2);
-  hPred1->GetYaxis()->SetTitleSize  (0.060);
+  hPred1->GetYaxis()->SetTitleOffset(  1.0);
+  hPred1->GetYaxis()->SetTitleSize  (0.080);
   hPred1->GetYaxis()->SetTickLength (0.03 );
 
   hPred1->GetXaxis()->SetLabelFont  (   42);
@@ -188,8 +188,6 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
  
   hData->SetMarkerSize(0.8);
   hData->SetMarkerStyle(kFullCircle);
-  hData->SetMarkerSize(1.5);
-  hData->SetMarkerStyle(4);
   hData->SetLineColor  (kBlack);
 
   hPred1->SetLineColor(kBlack);
