@@ -33,28 +33,28 @@ void atributes(TH1D *histo, TString xtitle = "", TString ytitle = "Fraction", TS
   } else {
     histo->GetXaxis()->SetTitle(Form("%s [%s]",xtitle.Data(),units.Data()));
   }
-  histo->GetXaxis()->SetLabelFont  (   42);
+  histo->GetXaxis()->SetLabelFont  (   62);
   histo->GetXaxis()->SetLabelOffset(0.015);
   histo->GetXaxis()->SetLabelSize  (0.110);
   histo->GetXaxis()->SetNdivisions (  505);
-  histo->GetXaxis()->SetTitleFont  (   42);
+  histo->GetXaxis()->SetTitleFont  (   62);
   histo->GetXaxis()->SetTitleOffset(  1.2);
   histo->GetXaxis()->SetTitleSize  (0.110);
   histo->GetXaxis()->SetTickLength (0.07 );
 
   histo->GetYaxis()->SetTitle(ytitle.Data());
-  histo->GetYaxis()->SetLabelFont  (   42);
+  histo->GetYaxis()->SetLabelFont  (   62);
   histo->GetYaxis()->SetLabelOffset(0.015);
   histo->GetYaxis()->SetLabelSize  (0.120);
   histo->GetYaxis()->SetNdivisions (  505);
-  histo->GetYaxis()->SetTitleFont  (   42);
+  histo->GetYaxis()->SetTitleFont  (   62);
   histo->GetYaxis()->SetTitleOffset(  0.6);
   histo->GetYaxis()->SetTitleSize  (0.120);
   histo->GetYaxis()->SetTickLength (0.03 );
   histo->SetFillColor(color);
   histo->SetMarkerColor(color);
   histo->SetFillStyle(3345);
-  histo->SetMarkerSize(0.8);
+  histo->SetMarkerSize(1.0);
   histo->SetMarkerStyle(kFullCircle);
 }
 
@@ -170,23 +170,23 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   else {printf("PROBLEM!\n"); return;}
 
   hPred1->GetYaxis()->SetTitle(theYTitle.Data());
-  hPred1->GetYaxis()->SetLabelFont  (   42);
+  hPred1->GetYaxis()->SetLabelFont  (   62);
   hPred1->GetYaxis()->SetLabelOffset(0.015);
   hPred1->GetYaxis()->SetLabelSize  (0.050);
   hPred1->GetYaxis()->SetNdivisions (  505);
-  hPred1->GetYaxis()->SetTitleFont  (   42);
+  hPred1->GetYaxis()->SetTitleFont  (   62);
   hPred1->GetYaxis()->SetTitleOffset(  1.0);
   hPred1->GetYaxis()->SetTitleSize  (0.080);
   hPred1->GetYaxis()->SetTickLength (0.03 );
 
-  hPred1->GetXaxis()->SetLabelFont  (   42);
+  hPred1->GetXaxis()->SetLabelFont  (   62);
   hPred1->GetXaxis()->SetLabelSize  (0.040);
   hPred1->GetXaxis()->SetNdivisions (  505);
-  hPred1->GetXaxis()->SetTitleFont  (   42);
+  hPred1->GetXaxis()->SetTitleFont  (   62);
   hPred1->GetXaxis()->SetTitleSize  (0.060);
   hPred1->GetXaxis()->SetTickLength (0.07 );
  
-  hData->SetMarkerSize(0.8);
+  hData->SetMarkerSize(1);
   hData->SetMarkerStyle(kFullCircle);
   hData->SetLineColor  (kBlack);
 
@@ -240,14 +240,15 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   hData->Draw("epx0,same");
 
   gStyle->SetOptStat(0);
-  TLegend* legend = new TLegend(0.60,0.70,0.80,0.85);
+  TLegend* legend = new TLegend(0.45,0.65,0.75,0.85);
   legend->SetBorderSize(    0);
   legend->SetFillColor (    0);
   legend->SetTextAlign (   12);
   legend->SetTextFont  (   62);
-  legend->SetTextSize  (0.050);
+  legend->SetTextSize  (0.060);
   legend->AddEntry(hData,  "Data", "ep");
   legend->AddEntry(hPred1, "POWHEG+PYTHIA", "lf");
+  legend->AddEntry(gsyst, "Theo. uncertainty", "f");
   legend->Draw();
 
   CMS_lumi( pad1, 2016, 11 );
