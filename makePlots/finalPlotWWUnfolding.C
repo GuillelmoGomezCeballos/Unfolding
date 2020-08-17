@@ -239,16 +239,19 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   hPred1->Draw("hist,x0,same");
   hData->Draw("epx0,same");
 
+  TH1D* hColorDummy = (TH1D*) hPred1->Clone();
+  hColorDummy->SetFillColor(12);
+  hColorDummy->SetFillStyle(3003);
+
   gStyle->SetOptStat(0);
-  TLegend* legend = new TLegend(0.45,0.65,0.75,0.85);
+  TLegend* legend = new TLegend(0.45,0.66,0.73,0.86);
   legend->SetBorderSize(    0);
   legend->SetFillColor (    0);
   legend->SetTextAlign (   12);
   legend->SetTextFont  (   62);
   legend->SetTextSize  (0.060);
   legend->AddEntry(hData,  "Data", "ep");
-  legend->AddEntry(hPred1, "POWHEG+PYTHIA", "lf");
-  legend->AddEntry(gsyst, "Theo. uncertainty", "f");
+  legend->AddEntry(hColorDummy, "POWHEG+PYTHIA", "lf");
   legend->Draw();
 
   CMS_lumi( pad1, 2016, 11 );
