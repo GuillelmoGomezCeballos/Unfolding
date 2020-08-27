@@ -16,7 +16,7 @@
 
 void eraselabel(TPad *p,Double_t h){
   p->cd();
-  TPad *pe = new TPad("pe","pe",0.02,0,p->GetLeftMargin()-0.005,h);	   
+  TPad *pe = new TPad("pe","pe",0.02,0,p->GetLeftMargin()-0.007,h);	   
   pe->Draw();
   pe->SetFillColor(p->GetFillColor()); 
   pe->SetBorderMode(0);
@@ -35,7 +35,8 @@ void atributes(TH1D *histo, TString xtitle = "", TString ytitle = "Fraction", TS
   }
   histo->GetXaxis()->SetLabelFont  (   62);
   histo->GetXaxis()->SetLabelOffset(0.015);
-  histo->GetXaxis()->SetLabelSize  (0.110);
+  if(xtitle == "Number of jets") histo->GetXaxis()->SetLabelSize  (0.150);
+  else                           histo->GetXaxis()->SetLabelSize  (0.110);
   histo->GetXaxis()->SetNdivisions (  505);
   histo->GetXaxis()->SetTitleFont  (   62);
   histo->GetXaxis()->SetTitleOffset(  1.2);
@@ -45,7 +46,7 @@ void atributes(TH1D *histo, TString xtitle = "", TString ytitle = "Fraction", TS
   histo->GetYaxis()->SetTitle(ytitle.Data());
   histo->GetYaxis()->SetLabelFont  (   62);
   histo->GetYaxis()->SetLabelOffset(0.015);
-  histo->GetYaxis()->SetLabelSize  (0.120);
+  histo->GetYaxis()->SetLabelSize  (0.090);
   histo->GetYaxis()->SetNdivisions (  505);
   histo->GetYaxis()->SetTitleFont  (   62);
   histo->GetYaxis()->SetTitleOffset(  0.6);
@@ -54,7 +55,7 @@ void atributes(TH1D *histo, TString xtitle = "", TString ytitle = "Fraction", TS
   histo->SetFillColor(color);
   histo->SetMarkerColor(color);
   histo->SetFillStyle(3345);
-  histo->SetMarkerSize(1.0);
+  histo->SetMarkerSize(1.3);
   histo->SetMarkerStyle(kFullCircle);
 }
 
@@ -172,7 +173,7 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   hPred1->GetYaxis()->SetTitle(theYTitle.Data());
   hPred1->GetYaxis()->SetLabelFont  (   62);
   hPred1->GetYaxis()->SetLabelOffset(0.015);
-  hPred1->GetYaxis()->SetLabelSize  (0.050);
+  hPred1->GetYaxis()->SetLabelSize  (0.060);
   hPred1->GetYaxis()->SetNdivisions (  505);
   hPred1->GetYaxis()->SetTitleFont  (   62);
   hPred1->GetYaxis()->SetTitleOffset(  1.0);
@@ -186,7 +187,7 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   hPred1->GetXaxis()->SetTitleSize  (0.060);
   hPred1->GetXaxis()->SetTickLength (0.07 );
  
-  hData->SetMarkerSize(1);
+  hData->SetMarkerSize(1.3);
   hData->SetMarkerStyle(kFullCircle);
   hData->SetLineColor  (kBlack);
 
@@ -215,7 +216,7 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   hData ->Scale(1./normalization[1]);
 
   if(isLogY == true) hPred1->GetYaxis()->SetRangeUser(hPred1->GetMinimum()/10,hPred1->GetMaximum()*100);
-  else               hPred1->GetYaxis()->SetRangeUser(0.0,hPred1->GetMaximum()*1.5);
+  else               hPred1->GetYaxis()->SetRangeUser(0.0,hPred1->GetMaximum()*1.7);
   hPred1->Draw("hist,x0");
   hData->Draw("epx0,same");
 
@@ -244,7 +245,7 @@ void finalPlotWWUnfolding(TString keyLabel0 = "MLL", bool isNormalized = false) 
   hColorDummy->SetFillStyle(3003);
 
   gStyle->SetOptStat(0);
-  TLegend* legend = new TLegend(0.45,0.66,0.73,0.86);
+  TLegend* legend = new TLegend(0.58,0.65,0.78,0.85);
   legend->SetBorderSize(    0);
   legend->SetFillColor (    0);
   legend->SetTextAlign (   12);
