@@ -1,3 +1,3 @@
 #!/bin/sh
 
-root -l -q -b ../MITStyle.C ../makeBRILTDR.C+
+root -l -q -b ../TDRStyle.C ../makeBRILTDR.C+

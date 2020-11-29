@@ -11,14 +11,6 @@
 #include <iostream>
 #include <fstream>
 
-const int nGenSyst = 11;
-const int nEffSyst = 11+480;
-const int nStaSyst = 72;
-const int nOthSyst = 2;
-
-const int allNuisancesCov  = nGenSyst+nEffSyst+nStaSyst+nOthSyst;
-const int allNuisancesPlot = 9;
-
 void atributes(TH1D *histo, TString xtitle="", Int_t COLOR = 1, TString ytitle="Fraction", Int_t style = 1, Bool_t increaseSize = kFALSE){
 
   histo->ResetAttLine();
@@ -100,10 +92,10 @@ void helper_function(TString theSuffix, int nsel = 0, int whichDY = 3, TString t
   atributes(histoSystPlot[4],XName.Data(),46,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 5, increaseSize);
   atributes(histoSystPlot[5],XName.Data(),49,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 6, increaseSize);
   //atributes(histoSystPlot[6],XName.Data(), 8,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 7, increaseSize);
-  atributes(histoSystPlot[7],XName.Data(),11,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 8, increaseSize);
+  //atributes(histoSystPlot[7],XName.Data(),11,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 8, increaseSize);
   atributes(histoSystPlot[8],XName.Data(),46,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 9, increaseSize);
-  atributes(histoSystPlot[ 9],XName.Data(), 8,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 7, increaseSize);
-  atributes(histoSystPlot[10],XName.Data(),11,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 8, increaseSize);
+  atributes(histoSystPlot[ 9],XName.Data(), 1,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 7, increaseSize);
+  atributes(histoSystPlot[10],XName.Data(), 1,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 8, increaseSize);
 
   TCanvas* c1 = new TCanvas("c1", "c1",5,5,500,500);
   c1->cd();
@@ -116,12 +108,12 @@ void helper_function(TString theSuffix, int nsel = 0, int whichDY = 3, TString t
   else if(theHistName == "PhiStar" && doXSRatio == true)  histoSystPlot[0]->SetMaximum( 3.0);
   else                                                    histoSystPlot[0]->SetMaximum(16.0);
   histoSystPlot[0]->Draw();
-  ////histoSystPlot[1]->Draw("same,hist");
-  ////histoSystPlot[2]->Draw("same,hist");
-  ////histoSystPlot[3]->Draw("same,hist");
-  ////histoSystPlot[4]->Draw("same,hist");
-  ////histoSystPlot[5]->Draw("same,hist");
-  ////histoSystPlot[6]->Draw("same,hist");
+  histoSystPlot[1]->Draw("same,hist");
+  histoSystPlot[2]->Draw("same,hist");
+  histoSystPlot[3]->Draw("same,hist");
+  histoSystPlot[4]->Draw("same,hist");
+  histoSystPlot[5]->Draw("same,hist");
+  histoSystPlot[6]->Draw("same,hist");
   //if(!doXSRatio) histoSystPlot[7]->Draw("same,hist");
   histoSystPlot[8]->Draw("same,hist");
   histoSystPlot[ 9]->Draw("same,hist");
@@ -141,28 +133,30 @@ void helper_function(TString theSuffix, int nsel = 0, int whichDY = 3, TString t
   _lumiLabel->SetTextFont (42);
   _lumiLabel->SetTextSize (0.04);
   _lumiLabel->Draw ("same") ;
-  //TLegend* leg = new TLegend(0.20,0.60,0.50,0.90);                                                    
-  TLegend* leg = new TLegend(0.20,0.73,0.50,0.90);                                                    
-  leg ->SetFillStyle(0);
-  leg ->SetFillColor(kWhite);
-  leg ->SetBorderSize(0);
-  leg->SetTextSize(0.035);                                                                         
+  TLegend* leg = new TLegend(0.20,0.60,0.50,0.90);                                                    
+  //TLegend* leg = new TLegend(0.20,0.73,0.50,0.90);                                                    
+  leg->SetBorderSize  (    0);
+  leg->SetFillColor   (    0);
+  leg->SetTextAlign   (   12);
+  leg->SetTextFont    (   42);
+  leg->SetTextSize    (0.035);
+  leg->SetShadowColor(     0);
   leg->AddEntry(histoSystPlot[0],"Total uncertainty (with 2.5% lumi. unc.)","l");
   leg->AddEntry(histoSystPlot[9],"Total uncertainty (with 2% lumi. unc.)","l");
   leg->AddEntry(histoSystPlot[10],"Total uncertainty (with 1% lumi. unc.)","l");
   leg->AddEntry(histoSystPlot[8],"Total uncertainty (excluding lumi. unc.)","l");
-  ////leg->AddEntry(histoSystPlot[1],"Unfolding","l");
-  ////leg->AddEntry(histoSystPlot[2],"Momentum resolution","l");
-  ////leg->AddEntry(histoSystPlot[3],"Background","l");
-  ////leg->AddEntry(histoSystPlot[4],"Identification & trigger","l");
-  ////leg->AddEntry(histoSystPlot[5],"Reconstruction","l");
+  leg->AddEntry(histoSystPlot[4],"Identification & trigger","l");
+  leg->AddEntry(histoSystPlot[5],"Reconstruction","l");
+  leg->AddEntry(histoSystPlot[2],"Momentum resolution","l");
+  leg->AddEntry(histoSystPlot[1],"Unfolding","l");
+  leg->AddEntry(histoSystPlot[3],"Background","l");
   //leg->AddEntry(histoSystPlot[6],"Statistical","l");
   //if(!doXSRatio) leg->AddEntry(histoSystPlot[7],"Integrated luminosity","l");
   leg->Draw();
   if(1){
-    TString theLabel = "";
+    TString theLabel = ""; double addY= 0;
     TString leptonLegend = "#mu^{+}#mu^{-} sample";
-    if(nsel == 1) leptonLegend = "e^{+}e^{-} sample";
+    if(nsel == 1) {leptonLegend = "e^{+}e^{-} sample"; addY = 0.05;}
     if     (theHistName == "PtRap0") theLabel = Form("#splitline{0 < |y^{l^{+}l^{-}}| < 0.4}{%s}",leptonLegend.Data());
     else if(theHistName == "PtRap1") theLabel = Form("#splitline{0.4 < |y^{l^{+}l^{-}}| < 0.8}{%s}",leptonLegend.Data());
     else if(theHistName == "PtRap2") theLabel = Form("#splitline{0.8 < |y^{l^{+}l^{-}}| < 1.2}{%s}",leptonLegend.Data());
@@ -170,13 +164,21 @@ void helper_function(TString theSuffix, int nsel = 0, int whichDY = 3, TString t
     else if(theHistName == "PtRap4") theLabel = Form("#splitline{1.6 < |y^{l^{+}l^{-}}| < 2.4}{%s}",leptonLegend.Data());
     else if(nsel == 0              ) theLabel = leptonLegend.Data();
     else if(nsel == 1              ) theLabel = leptonLegend.Data();
-    TLatex *_extraLabel = new TLatex(0.85, 0.7, theLabel.Data());
+    TLatex *_extraLabel = new TLatex(0.45, 0.35+addY, theLabel.Data());
     _extraLabel->SetNDC();
     _extraLabel->SetTextAlign(32);
     _extraLabel->SetTextFont(42);
     _extraLabel->SetTextSize(0.05);
     _extraLabel->Draw("same");
   }
+
+  //printf("       unf     monres  bkg     receff  lepeff  totnol  totl1p0 totl2p0 totl2p5\n");
+  //for(int i=1; i<=histoSystPlot[0]->GetNbinsX(); i++){
+  //  printf("(%2d) %7.1f %7.1f %7.1f %7.1f %7.1f %7.1f %7.1f %7.1f %7.1f\n",i,
+  //          histoSystPlot[3]->GetBinContent(i),histoSystPlot[1]->GetBinContent(i),histoSystPlot[2]->GetBinContent(i),
+  //          histoSystPlot[5]->GetBinContent(i),histoSystPlot[4]->GetBinContent(i),histoSystPlot[8]->GetBinContent(i),
+  //          histoSystPlot[10]->GetBinContent(i),histoSystPlot[9]->GetBinContent(i),histoSystPlot[0]->GetBinContent(i));
+  //}
 
   TString myOutputFile = Form("histoUnfolding%sSyst%s%s_nsel%d_dy%d.pdf",theXSRatioName.Data(),theSuffix.Data(),theHistName.Data(),nsel,whichDY);
   c1->SaveAs(myOutputFile.Data());
