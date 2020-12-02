@@ -85,7 +85,7 @@ void helper_function(TString theSuffix, int nsel = 0, int whichDY = 3, TString t
   TString XName = "p^{Z}_{T} [GeV]";
   if     (theHistName == "Rap") XName = "|y^{Z}|";
   else if(theHistName == "PhiStar") {XName = "#phi_{#eta}*"; increaseSize = kTRUE;}
-  atributes(histoSystPlot[0],XName.Data(), 1,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 1, increaseSize);
+  atributes(histoSystPlot[0],XName.Data(), 1,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 8, increaseSize);
   atributes(histoSystPlot[1],XName.Data(), 2,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 2, increaseSize);
   atributes(histoSystPlot[2],XName.Data(), 4,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 3, increaseSize);
   atributes(histoSystPlot[3],XName.Data(),40,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 4, increaseSize);
@@ -95,7 +95,7 @@ void helper_function(TString theSuffix, int nsel = 0, int whichDY = 3, TString t
   //atributes(histoSystPlot[7],XName.Data(),11,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 8, increaseSize);
   atributes(histoSystPlot[8],XName.Data(),46,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 9, increaseSize);
   atributes(histoSystPlot[ 9],XName.Data(), 1,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 7, increaseSize);
-  atributes(histoSystPlot[10],XName.Data(), 1,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 8, increaseSize);
+  atributes(histoSystPlot[10],XName.Data(), 1,Form("Uncertainty in %s (%%)",theUncLabel.Data()), 1, increaseSize);
 
   TCanvas* c1 = new TCanvas("c1", "c1",5,5,500,500);
   c1->cd();
@@ -119,15 +119,13 @@ void helper_function(TString theSuffix, int nsel = 0, int whichDY = 3, TString t
   histoSystPlot[ 9]->Draw("same,hist");
   histoSystPlot[10]->Draw("same,hist");
 
-  TLatex * CMSLabel = new TLatex (0.15, 0.93, "#bf{CMS} #scale[0.75]{#it{Projection}}");
-  //TLatex * CMSLabel = new TLatex (0.15, 0.93, "#bf{CMS}");
+  TLatex * CMSLabel = new TLatex (0.15, 0.93, "#bf{CMS} #scale[0.75]{#it{Phase-2 Projection}}");
   CMSLabel->SetNDC ();
   CMSLabel->SetTextAlign (10);
   CMSLabel->SetTextFont (42);
   CMSLabel->SetTextSize (0.04);
   CMSLabel->Draw ("same") ;
-  TLatex * _lumiLabel = new TLatex (0.95, 0.93, "13 TeV");
-  //TLatex * _lumiLabel = new TLatex (0.95, 0.93, "35.9 fb^{-1} (13 TeV)");
+  TLatex * _lumiLabel = new TLatex (0.95, 0.93, "3000 fb^{-1} (14 TeV)");
   _lumiLabel->SetNDC ();
   _lumiLabel->SetTextAlign (30);
   _lumiLabel->SetTextFont (42);
