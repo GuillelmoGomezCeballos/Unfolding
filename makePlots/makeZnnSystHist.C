@@ -48,20 +48,20 @@ void makeZnnSystHist(){
   Float_t xbinsZpt[nBinZpt+1] = {200,300,400,500,800,1500};
 
   // znn
-  Float_t xbins0Syst0[nBinZpt]     = {0.036464,0.023084,0.017473,0.011698,0.013891}; // MC Statistical
-  Float_t xbins0Syst1[nBinZpt]     = {0.027888,0.027326,0.027248,0.026905,0.025570}; // lumi
-  Float_t xbins0Syst2[nBinZpt]     = {0.038429,0.039722,0.036675,0.040048,0.043068}; // jes
-  Float_t xbins0Syst3[nBinZpt]     = {0.005226,0.004740,0.003892,0.002969,0.002026}; // leptoneff
-  Float_t xbins0Syst4[nBinZpt]     = {0.005936,0.007077,0.004506,0.003561,0.003919}; // theory
+  Float_t xbins0Syst0[nBinZpt]     = {0.036432,0.024671,0.020166,0.014283,0.012594}; // MC Statistical
+  Float_t xbins0Syst1[nBinZpt]     = {0.024306,0.025195,0.026930,0.026731,0.025446}; // lumi
+  Float_t xbins0Syst2[nBinZpt]     = {0.038252,0.041168,0.040992,0.044752,0.047547}; // jes
+  Float_t xbins0Syst3[nBinZpt]     = {0.011814,0.008865,0.007602,0.005508,0.003350}; // leptoneff
+  Float_t xbins0Syst4[nBinZpt]     = {0.007455,0.008349,0.005716,0.003320,0.002052}; // theory
   Float_t xbins0Syst5[nBinZpt]     = {0.000000,0.000000,0.000000,0.000000,0.000000}; // leptonres
-  Float_t xbins0Syst6[nBinZpt]     = {0.002219,0.006383,0.006477,0.009024,0.008019}; // pu
-  Float_t xbins0Syst7[nBinZpt]     = {0.005608,0.006055,0.005963,0.005692,0.005037}; // btag
-  Float_t xbins0Syst8[nBinZpt]     = {0.003898,0.011112,0.006347,0.006249,0.009423}; // bcknorm
-  Float_t xbins0Syst9[nBinZpt]     = {0.028983,0.019175,0.018394,0.015244,0.014351}; // trigger
-  Float_t xbins0Mu[nBinZpt]        = {1.135153,1.090550,1.072811,1.048761,0.967758}; // mu
-  Float_t xbins0totalSyst[nBinZpt] = {0.067434,0.061526,0.060690,0.063027,0.085371}; // totalSyst
-  Float_t xbins0daSyst[nBinZpt]    = {0.002987,0.016941,0.028264,0.033182,0.064674}; // dataStat
-  Float_t xbins0Syst[nBinZpt]      = {0.067367,0.059148,0.053707,0.053585,0.055727}; // syst
+  Float_t xbins0Syst6[nBinZpt]     = {0.001571,0.002594,0.002893,0.005336,0.004016}; // pu
+  Float_t xbins0Syst7[nBinZpt]     = {0.009560,0.009903,0.010644,0.010518,0.010026}; // btag
+  Float_t xbins0Syst8[nBinZpt]     = {0.007324,0.011525,0.007824,0.007856,0.010939}; // bcknorm
+  Float_t xbins0Syst9[nBinZpt]     = {0.028655,0.020982,0.021896,0.019008,0.017938}; // trigger
+  Float_t xbins0Mu[nBinZpt]        = {1.135028,1.090424,1.072696,1.048651,0.967665}; // mu
+  Float_t xbins0totalSyst[nBinZpt] = {0.067551,0.061721,0.061209,0.063204,0.085618}; // totalSyst
+  Float_t xbins0daSyst[nBinZpt]    = {0.004214,0.006699,0.013475,0.021679,0.060747}; // dataStat
+  Float_t xbins0Syst[nBinZpt]      = {0.067419,0.061356,0.059708,0.059369,0.060335}; // syst
 
   // znn normalized
   Float_t xbins1Syst0[nBinZpt]     = {0.006467,0.008362,0.013764,0.019561,0.024732}; // MC Statistical
@@ -80,20 +80,20 @@ void makeZnnSystHist(){
   Float_t xbins1Syst[nBinZpt]      = {0.009528,0.013250,0.017295,0.025133,0.034803}; // syst
 
   // zxx
-  Float_t xbins2Syst0[nBinZpt]     = {0.014189,0.011317,0.013912,0.016852,0.022654}; // MC Statistical
-  Float_t xbins2Syst1[nBinZpt]     = {0.027896,0.027246,0.027944,0.027972,0.027806}; // lumi
-  Float_t xbins2Syst2[nBinZpt]     = {0.007411,0.008768,0.009001,0.012332,0.020924}; // jes
-  Float_t xbins2Syst3[nBinZpt]     = {0.011661,0.011875,0.011220,0.011032,0.010482}; // leptoneff
-  Float_t xbins2Syst4[nBinZpt]     = {0.018108,0.014737,0.010607,0.010110,0.011306}; // theory
-  Float_t xbins2Syst5[nBinZpt]     = {0.006773,0.008574,0.008858,0.013069,0.021712}; // leptonres
-  Float_t xbins2Syst6[nBinZpt]     = {0.001098,0.001445,0.001682,0.002776,0.002026}; // pu
-  Float_t xbins2Syst7[nBinZpt]     = {0.000993,0.001403,0.001294,0.000760,0.000377}; // btag
-  Float_t xbins2Syst8[nBinZpt]     = {0.005341,0.008145,0.005777,0.006016,0.008365}; // bcknorm
-  Float_t xbins2Syst9[nBinZpt]     = {0.008897,0.002993,0.003123,0.001365,0.001029}; // trigger
-  Float_t xbins2Mu[nBinZpt]        = {1.124315,1.070993,1.079723,1.055649,1.016355}; // mu
-  Float_t xbins2totalSyst[nBinZpt] = {0.042262,0.039632,0.040437,0.042869,0.067452}; // totalSyst
-  Float_t xbins2daSyst[nBinZpt]    = {0.011491,0.010602,0.014672,0.013351,0.045180}; // dataStat
-  Float_t xbins2Syst[nBinZpt]      = {0.040670,0.038188,0.037682,0.040737,0.050085}; // syst
+  Float_t xbins2Syst0[nBinZpt]     = {0.007661,0.004572,0.009216,0.013531,0.019169}; // MC Statistical
+  Float_t xbins2Syst1[nBinZpt]     = {0.028035,0.027370,0.027920,0.027712,0.027504}; // lumi
+  Float_t xbins2Syst2[nBinZpt]     = {0.007140,0.009559,0.009239,0.012309,0.019605}; // jes
+  Float_t xbins2Syst3[nBinZpt]     = {0.015602,0.014332,0.013843,0.013536,0.012956}; // leptoneff
+  Float_t xbins2Syst4[nBinZpt]     = {0.018005,0.014050,0.010123,0.009180,0.010914}; // theory
+  Float_t xbins2Syst5[nBinZpt]     = {0.007574,0.008458,0.008585,0.012413,0.020786}; // leptonres
+  Float_t xbins2Syst6[nBinZpt]     = {0.001401,0.001038,0.001330,0.002204,0.001503}; // pu
+  Float_t xbins2Syst7[nBinZpt]     = {0.002035,0.002445,0.002770,0.002760,0.002665}; // btag
+  Float_t xbins2Syst8[nBinZpt]     = {0.003328,0.005239,0.002575,0.003001,0.006058}; // bcknorm
+  Float_t xbins2Syst9[nBinZpt]     = {0.009349,0.003602,0.003545,0.001874,0.001758}; // trigger
+  Float_t xbins2Mu[nBinZpt]        = {1.119393,1.066964,1.075830,1.051601,1.011912}; // mu
+  Float_t xbins2totalSyst[nBinZpt] = {0.041394,0.038688,0.039714,0.041939,0.066891}; // totalSyst
+  Float_t xbins2daSyst[nBinZpt]    = {0.009397,0.010655,0.015197,0.014485,0.046883}; // dataStat
+  Float_t xbins2Syst[nBinZpt]      = {0.040314,0.037192,0.036691,0.039359,0.047712}; // syst
 
   // zxx normalized
   Float_t xbins3Syst0[nBinZpt]     = {0.002170,0.006545,0.010727,0.014916,0.019910}; // MC Statistical
@@ -111,9 +111,41 @@ void makeZnnSystHist(){
   Float_t xbins3daSyst[nBinZpt]    = {0.000922,0.002616,0.002269,0.005079,0.038735}; // dataStat
   Float_t xbins3Syst[nBinZpt]      = {0.004376,0.015090,0.016638,0.021993,0.032629}; // syst
 
-  TH1D* histoResult[13][4];
+  // zll
+  Float_t xbins4Syst0[nBinZpt]     = {0.000909,0.000906,0.004098,0.005098,0.007523}; // MC Statistical
+  Float_t xbins4Syst1[nBinZpt]     = {0.028007,0.026754,0.028602,0.028724,0.030873}; // lumi
+  Float_t xbins4Syst2[nBinZpt]     = {0.000000,0.000000,0.000000,0.000000,0.000000}; // jes
+  Float_t xbins4Syst3[nBinZpt]     = {0.021229,0.019817,0.021047,0.020172,0.019713}; // leptoneff
+  Float_t xbins4Syst4[nBinZpt]     = {0.024865,0.020122,0.016765,0.011154,0.016586}; // theory
+  Float_t xbins4Syst5[nBinZpt]     = {0.011605,0.012331,0.013952,0.025200,0.054084}; // leptonres
+  Float_t xbins4Syst6[nBinZpt]     = {0.000000,0.000000,0.000000,0.000000,0.000000}; // pu
+  Float_t xbins4Syst7[nBinZpt]     = {0.000000,0.000000,0.000000,0.000000,0.000000}; // btag
+  Float_t xbins4Syst8[nBinZpt]     = {0.000553,0.001550,0.002638,0.003904,0.006578}; // bcknorm
+  Float_t xbins4Syst9[nBinZpt]     = {0.000000,0.000000,0.000000,0.000000,0.000000}; // trigger
+  Float_t xbins4Mu[nBinZpt]        = {1.116339,1.039740,1.109444,1.094439,1.140863}; // mu
+  Float_t xbins4totalSyst[nBinZpt] = {0.046628,0.042980,0.048243,0.054398,0.116250}; // totalSyst
+  Float_t xbins4daSyst[nBinZpt]    = {0.013605,0.013367,0.023809,0.030438,0.094192}; // dataStat
+  Float_t xbins4Syst[nBinZpt]      = {0.044599,0.040849,0.041958,0.045085,0.068131}; // syst
+
+  // zll normalized
+  Float_t xbins5Syst0[nBinZpt]     = {0.000204,0.000809,0.003339,0.004442,0.006689}; // MC Statistical
+  Float_t xbins5Syst1[nBinZpt]     = {0.000103,0.000428,0.000468,0.000966,0.001818}; // lumi
+  Float_t xbins5Syst2[nBinZpt]     = {0.000000,0.000000,0.000000,0.000000,0.000000}; // jes
+  Float_t xbins5Syst3[nBinZpt]     = {0.000546,0.001101,0.002820,0.004678,0.009359}; // leptoneff
+  Float_t xbins5Syst4[nBinZpt]     = {0.005902,0.022521,0.023138,0.020115,0.023433}; // theory
+  Float_t xbins5Syst5[nBinZpt]     = {0.001352,0.002874,0.006131,0.016129,0.042113}; // leptonres
+  Float_t xbins5Syst6[nBinZpt]     = {0.000000,0.000000,0.000000,0.000000,0.000000}; // pu
+  Float_t xbins5Syst7[nBinZpt]     = {0.000000,0.000000,0.000000,0.000000,0.000000}; // btag
+  Float_t xbins5Syst8[nBinZpt]     = {0.000263,0.000664,0.001608,0.002770,0.005159}; // bcknorm
+  Float_t xbins5Syst9[nBinZpt]     = {0.000000,0.000000,0.000000,0.000000,0.000000}; // trigger
+  Float_t xbins5Mu[nBinZpt]        = {1.012002,0.942669,1.005884,0.992231,1.034308}; // mu
+  Float_t xbins5totalSyst[nBinZpt] = {0.006491,0.024561,0.030350,0.036134,0.096934}; // totalSyst
+  Float_t xbins5daSyst[nBinZpt]    = {0.002249,0.009236,0.018063,0.024304,0.083135}; // dataStat
+  Float_t xbins5Syst[nBinZpt]      = {0.006089,0.022759,0.024389,0.026739,0.049849}; // syst
+
+  TH1D* histoResult[13][6];
   for(int i=0; i<13; i++){
-    for(int j=0; j<4; j++){
+    for(int j=0; j<6; j++){
       histoResult[i][j] = new TH1D(Form("histoResult_%d_%d",i,j), Form("histoResult_%d_%d",i,j), nBinZpt, xbinsZpt);
     }
   }
@@ -174,11 +206,39 @@ void makeZnnSystHist(){
   for(int i=0; i<nBinZpt; i++) histoResult[11][ 3]->SetBinContent(i+1,xbins3daSyst[i]   /xbins3Mu[i]);
   for(int i=0; i<nBinZpt; i++) histoResult[12][ 3]->SetBinContent(i+1,xbins3Syst[i]     /xbins3Mu[i]);
 
+  for(int i=0; i<nBinZpt; i++) histoResult[ 0][ 4]->SetBinContent(i+1,xbins4Syst0[i]/xbins4Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 1][ 4]->SetBinContent(i+1,xbins4Syst1[i]/xbins4Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 2][ 4]->SetBinContent(i+1,xbins4Syst2[i]/xbins4Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 3][ 4]->SetBinContent(i+1,xbins4Syst3[i]/xbins4Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 4][ 4]->SetBinContent(i+1,xbins4Syst4[i]/xbins4Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 5][ 4]->SetBinContent(i+1,xbins4Syst5[i]/xbins4Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 6][ 4]->SetBinContent(i+1,xbins4Syst6[i]/xbins4Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 7][ 4]->SetBinContent(i+1,xbins4Syst7[i]/xbins4Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 8][ 4]->SetBinContent(i+1,xbins4Syst8[i]/xbins4Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 9][ 4]->SetBinContent(i+1,xbins4Syst9[i]/xbins4Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[10][ 4]->SetBinContent(i+1,xbins4totalSyst[i]/xbins4Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[11][ 4]->SetBinContent(i+1,xbins4daSyst[i]   /xbins4Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[12][ 4]->SetBinContent(i+1,xbins4Syst[i]     /xbins4Mu[i]);
+
+  for(int i=0; i<nBinZpt; i++) histoResult[ 0][ 5]->SetBinContent(i+1,xbins5Syst0[i]/xbins5Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 1][ 5]->SetBinContent(i+1,xbins5Syst1[i]/xbins5Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 2][ 5]->SetBinContent(i+1,xbins5Syst2[i]/xbins5Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 3][ 5]->SetBinContent(i+1,xbins5Syst3[i]/xbins5Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 4][ 5]->SetBinContent(i+1,xbins5Syst4[i]/xbins5Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 5][ 5]->SetBinContent(i+1,xbins5Syst5[i]/xbins5Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 6][ 5]->SetBinContent(i+1,xbins5Syst6[i]/xbins5Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 7][ 5]->SetBinContent(i+1,xbins5Syst7[i]/xbins5Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 8][ 5]->SetBinContent(i+1,xbins5Syst8[i]/xbins5Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 9][ 5]->SetBinContent(i+1,xbins5Syst9[i]/xbins5Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[10][ 5]->SetBinContent(i+1,xbins5totalSyst[i]/xbins5Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[11][ 5]->SetBinContent(i+1,xbins5daSyst[i]   /xbins5Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[12][ 5]->SetBinContent(i+1,xbins5Syst[i]     /xbins5Mu[i]);
+
   TString outNtuplename = Form("ZnnSystHist.root");
   TFile *outtuple = TFile::Open(outNtuplename.Data(),"recreate");
   outtuple->cd();
   for(int i=0; i<13; i++){
-    for(int j=0; j<4; j++){
+    for(int j=0; j<6; j++){
       histoResult[i][j]->Write();
     }
   }
@@ -214,8 +274,8 @@ void makeZnnSystHist(){
   atributes(histoResult[10][ 0],XName.Data(),11,Form("Uncertainty in %s",theUncLabel.Data()), 1);
   atributes(histoResult[11][ 0],XName.Data(),12,Form("Uncertainty in %s",theUncLabel.Data()), 2);
   atributes(histoResult[12][ 0],XName.Data(),13,Form("Uncertainty in %s",theUncLabel.Data()), 3);
-  histoResult[10][ 0]->SetMinimum(0.00);
-  histoResult[10][ 0]->SetMaximum(0.13);
+  histoResult[10][ 0]->SetMinimum(0.000);
+  histoResult[10][ 0]->SetMaximum(0.149);
   histoResult[10][ 0]->Draw();
   histoResult[ 1][ 0]->Draw("same,hist");
   histoResult[ 2][ 0]->Draw("same,hist");
@@ -232,7 +292,7 @@ void makeZnnSystHist(){
   CMSLabel->Draw("same");
   _lumiLabel->Draw ("same") ;
 
-  TLegend* leg0 = new TLegend(0.20,0.60,0.50,0.90);						      
+  TLegend* leg0 = new TLegend(0.20,0.63,0.50,0.91);						      
   leg0 ->SetFillStyle(0);
   leg0 ->SetFillColor(kWhite);
   leg0 ->SetBorderSize(0);
@@ -251,7 +311,7 @@ void makeZnnSystHist(){
   leg0->AddEntry(histoResult[11][ 0],"Data statistical","l");
   leg0->AddEntry(histoResult[12][ 0],"Total systematic","l");
   leg0->Draw();
-  TLatex *_extraLabel0 = new TLatex(0.85, 0.8, "#nu#nu channel");
+  TLatex *_extraLabel0 = new TLatex(0.9, 0.8, "#nu#nu channel");
   _extraLabel0->SetNDC();
   _extraLabel0->SetTextAlign(32);
   _extraLabel0->SetTextFont(42);
@@ -277,8 +337,8 @@ void makeZnnSystHist(){
   atributes(histoResult[10][ 1],XName.Data(),11,Form("Uncertainty in %s",theUncLabel.Data()), 1);
   atributes(histoResult[11][ 1],XName.Data(),12,Form("Uncertainty in %s",theUncLabel.Data()), 2);
   atributes(histoResult[12][ 1],XName.Data(),13,Form("Uncertainty in %s",theUncLabel.Data()), 3);
-  histoResult[10][ 1]->SetMinimum(0.00);
-  histoResult[10][ 1]->SetMaximum(0.13);
+  histoResult[10][ 1]->SetMinimum(0.000);
+  histoResult[10][ 1]->SetMaximum(0.149);
   histoResult[10][ 1]->Draw();
   histoResult[ 1][ 1]->Draw("same,hist");
   histoResult[ 2][ 1]->Draw("same,hist");
@@ -295,7 +355,7 @@ void makeZnnSystHist(){
   CMSLabel->Draw("same");
   _lumiLabel->Draw ("same") ;
 
-  TLegend* leg1 = new TLegend(0.20,0.60,0.50,0.90);						      
+  TLegend* leg1 = new TLegend(0.20,0.63,0.50,0.91);						      
   leg1 ->SetFillStyle(0);
   leg1 ->SetFillColor(kWhite);
   leg1 ->SetBorderSize(0);
@@ -314,7 +374,7 @@ void makeZnnSystHist(){
   leg1->AddEntry(histoResult[11][ 1],"Data statistical","l");
   leg1->AddEntry(histoResult[12][ 1],"Total systematic","l");
   leg1->Draw();
-  TLatex *_extraLabel1 = new TLatex(0.85, 0.8, "#nu#nu channel");
+  TLatex *_extraLabel1 = new TLatex(0.9, 0.8, "#nu#nu channel");
   _extraLabel1->SetNDC();
   _extraLabel1->SetTextAlign(32);
   _extraLabel1->SetTextFont(42);
@@ -340,8 +400,8 @@ void makeZnnSystHist(){
   atributes(histoResult[10][ 2],XName.Data(),11,Form("Uncertainty in %s",theUncLabel.Data()), 1);
   atributes(histoResult[11][ 2],XName.Data(),12,Form("Uncertainty in %s",theUncLabel.Data()), 2);
   atributes(histoResult[12][ 2],XName.Data(),13,Form("Uncertainty in %s",theUncLabel.Data()), 3);
-  histoResult[10][ 2]->SetMinimum(0.00);
-  histoResult[10][ 2]->SetMaximum(0.13);
+  histoResult[10][ 2]->SetMinimum(0.000);
+  histoResult[10][ 2]->SetMaximum(0.149);
   histoResult[10][ 2]->Draw();
   histoResult[ 1][ 2]->Draw("same,hist");
   histoResult[ 2][ 2]->Draw("same,hist");
@@ -358,7 +418,7 @@ void makeZnnSystHist(){
   CMSLabel->Draw("same");
   _lumiLabel->Draw ("same") ;
 
-  TLegend* leg2 = new TLegend(0.20,0.60,0.50,0.90);						      
+  TLegend* leg2 = new TLegend(0.20,0.63,0.50,0.91);						      
   leg2 ->SetFillStyle(0);
   leg2 ->SetFillColor(kWhite);
   leg2 ->SetBorderSize(0);
@@ -377,7 +437,7 @@ void makeZnnSystHist(){
   leg2->AddEntry(histoResult[11][ 2],"Data statistical","l");
   leg2->AddEntry(histoResult[12][ 2],"Total systematic","l");
   leg2->Draw();
-  TLatex *_extraLabel2 = new TLatex(0.85, 0.8, "#nu#nu+ll channel");
+  TLatex *_extraLabel2 = new TLatex(0.9, 0.8, "#nu#nu+ll channel");
   _extraLabel2->SetNDC();
   _extraLabel2->SetTextAlign(32);
   _extraLabel2->SetTextFont(42);
@@ -403,8 +463,8 @@ void makeZnnSystHist(){
   atributes(histoResult[10][ 3],XName.Data(),11,Form("Uncertainty in %s",theUncLabel.Data()), 1);
   atributes(histoResult[11][ 3],XName.Data(),12,Form("Uncertainty in %s",theUncLabel.Data()), 2);
   atributes(histoResult[12][ 3],XName.Data(),13,Form("Uncertainty in %s",theUncLabel.Data()), 3);
-  histoResult[10][ 3]->SetMinimum(0.00);
-  histoResult[10][ 3]->SetMaximum(0.13);
+  histoResult[10][ 3]->SetMinimum(0.000);
+  histoResult[10][ 3]->SetMaximum(0.149);
   histoResult[10][ 3]->Draw();
   histoResult[ 1][ 3]->Draw("same,hist");
   histoResult[ 2][ 3]->Draw("same,hist");
@@ -421,7 +481,7 @@ void makeZnnSystHist(){
   CMSLabel->Draw("same");
   _lumiLabel->Draw ("same") ;
 
-  TLegend* leg3 = new TLegend(0.20,0.60,0.50,0.90);						      
+  TLegend* leg3 = new TLegend(0.20,0.63,0.50,0.91);						      
   leg3 ->SetFillStyle(0);
   leg3 ->SetFillColor(kWhite);
   leg3 ->SetBorderSize(0);
@@ -440,7 +500,7 @@ void makeZnnSystHist(){
   leg3->AddEntry(histoResult[11][ 3],"Data statistical","l");
   leg3->AddEntry(histoResult[12][ 3],"Total systematic","l");
   leg3->Draw();
-  TLatex *_extraLabel3 = new TLatex(0.85, 0.8, "#nu#nu+ll channel");
+  TLatex *_extraLabel3 = new TLatex(0.9, 0.8, "#nu#nu+ll channel");
   _extraLabel3->SetNDC();
   _extraLabel3->SetTextAlign(32);
   _extraLabel3->SetTextFont(42);
@@ -449,4 +509,130 @@ void makeZnnSystHist(){
 
   TString myOutputFile3 = Form("histoXSnorm_Zxx.pdf");
   c3->SaveAs(myOutputFile3.Data());
+
+  theUncLabel = "d#sigma/dp^{Z}_{T}";
+  TCanvas* c4 = new TCanvas("c4", "c4",5,5,500,500);
+  c4->cd();
+  atributes(histoResult[ 0][ 4],XName.Data(), 1,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 1][ 4],XName.Data(), 2,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 2][ 4],XName.Data(), 3,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 3][ 4],XName.Data(), 4,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 4][ 4],XName.Data(), 5,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 5][ 4],XName.Data(), 6,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 6][ 4],XName.Data(), 7,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 7][ 4],XName.Data(), 8,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 8][ 4],XName.Data(), 9,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 9][ 4],XName.Data(),46,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[10][ 4],XName.Data(),11,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[11][ 4],XName.Data(),12,Form("Uncertainty in %s",theUncLabel.Data()), 2);
+  atributes(histoResult[12][ 4],XName.Data(),13,Form("Uncertainty in %s",theUncLabel.Data()), 3);
+  histoResult[10][ 4]->SetMinimum(0.000);
+  histoResult[10][ 4]->SetMaximum(0.149);
+  histoResult[10][ 4]->Draw();
+  histoResult[ 1][ 4]->Draw("same,hist");
+  histoResult[ 2][ 4]->Draw("same,hist");
+  histoResult[ 3][ 4]->Draw("same,hist");
+  histoResult[ 4][ 4]->Draw("same,hist");
+  histoResult[ 5][ 4]->Draw("same,hist");
+  histoResult[ 6][ 4]->Draw("same,hist");
+  histoResult[ 7][ 4]->Draw("same,hist");
+  histoResult[ 8][ 4]->Draw("same,hist");
+  histoResult[ 9][ 4]->Draw("same,hist");
+  histoResult[12][ 4]->Draw("same,hist");
+  histoResult[11][ 4]->Draw("same,hist");
+
+  CMSLabel->Draw("same");
+  _lumiLabel->Draw ("same") ;
+
+  TLegend* leg4 = new TLegend(0.20,0.63,0.50,0.91);						      
+  leg4 ->SetFillStyle(0);
+  leg4 ->SetFillColor(kWhite);
+  leg4 ->SetBorderSize(0);
+  leg4->SetTextSize(0.025);									   
+  leg4->AddEntry(histoResult[10][ 4],"Total uncertainty","l");
+  leg4->AddEntry(histoResult[ 0][ 4],"MC statistical","l");
+  leg4->AddEntry(histoResult[ 1][ 4],"Luminosity","l");
+  leg4->AddEntry(histoResult[ 2][ 4],"Jet energy scale","l");
+  leg4->AddEntry(histoResult[ 3][ 4],"Lepton efficiency","l");
+  leg4->AddEntry(histoResult[ 4][ 4],"Theory","l");
+  leg4->AddEntry(histoResult[ 5][ 4],"Lepton momentum resolution","l");
+  leg4->AddEntry(histoResult[ 6][ 4],"Pileup","l");
+  leg4->AddEntry(histoResult[ 7][ 4],"B tagging","l");
+  leg4->AddEntry(histoResult[ 8][ 4],"Background normalization","l");
+  leg4->AddEntry(histoResult[ 9][ 4],"Trigger efficiency","l");
+  leg4->AddEntry(histoResult[11][ 4],"Data statistical","l");
+  leg4->AddEntry(histoResult[12][ 4],"Total systematic","l");
+  leg4->Draw();
+  TLatex *_extralabel4 = new TLatex(0.9, 0.8, "ll channel");
+  _extralabel4->SetNDC();
+  _extralabel4->SetTextAlign(32);
+  _extralabel4->SetTextFont(42);
+  _extralabel4->SetTextSize(0.05);
+  _extralabel4->Draw("same");
+
+  TString myOutputFile4 = Form("histoXS_Zll.pdf");
+  c4->SaveAs(myOutputFile4.Data());
+
+  theUncLabel = "1/#sigma d#sigma/dp^{Z}_{T}";
+  TCanvas* c5 = new TCanvas("c5", "c5",5,5,500,500);
+  c5->cd();
+  atributes(histoResult[ 0][ 5],XName.Data(), 1,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 1][ 5],XName.Data(), 2,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 2][ 5],XName.Data(), 3,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 3][ 5],XName.Data(), 4,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 4][ 5],XName.Data(), 5,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 5][ 5],XName.Data(), 6,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 6][ 5],XName.Data(), 7,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 7][ 5],XName.Data(), 8,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 8][ 5],XName.Data(), 9,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 9][ 5],XName.Data(),46,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[10][ 5],XName.Data(),11,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[11][ 5],XName.Data(),12,Form("Uncertainty in %s",theUncLabel.Data()), 2);
+  atributes(histoResult[12][ 5],XName.Data(),13,Form("Uncertainty in %s",theUncLabel.Data()), 3);
+  histoResult[10][ 5]->SetMinimum(0.000);
+  histoResult[10][ 5]->SetMaximum(0.149);
+  histoResult[10][ 5]->Draw();
+  histoResult[ 1][ 5]->Draw("same,hist");
+  histoResult[ 2][ 5]->Draw("same,hist");
+  histoResult[ 3][ 5]->Draw("same,hist");
+  histoResult[ 4][ 5]->Draw("same,hist");
+  histoResult[ 5][ 5]->Draw("same,hist");
+  histoResult[ 6][ 5]->Draw("same,hist");
+  histoResult[ 7][ 5]->Draw("same,hist");
+  histoResult[ 8][ 5]->Draw("same,hist");
+  histoResult[ 9][ 5]->Draw("same,hist");
+  histoResult[12][ 5]->Draw("same,hist");
+  histoResult[11][ 5]->Draw("same,hist");
+
+  CMSLabel->Draw("same");
+  _lumiLabel->Draw ("same") ;
+
+  TLegend* leg5 = new TLegend(0.20,0.63,0.50,0.91);						      
+  leg5 ->SetFillStyle(0);
+  leg5 ->SetFillColor(kWhite);
+  leg5 ->SetBorderSize(0);
+  leg5->SetTextSize(0.025);									   
+  leg5->AddEntry(histoResult[10][ 5],"Total uncertainty","l");
+  leg5->AddEntry(histoResult[ 0][ 5],"MC statistical","l");
+  leg5->AddEntry(histoResult[ 1][ 5],"Luminosity","l");
+  leg5->AddEntry(histoResult[ 2][ 5],"Jet energy scale","l");
+  leg5->AddEntry(histoResult[ 3][ 5],"Lepton efficiency","l");
+  leg5->AddEntry(histoResult[ 4][ 5],"Theory","l");
+  leg5->AddEntry(histoResult[ 5][ 5],"Lepton momentum resolution","l");
+  leg5->AddEntry(histoResult[ 6][ 5],"Pileup","l");
+  leg5->AddEntry(histoResult[ 7][ 5],"B tagging","l");
+  leg5->AddEntry(histoResult[ 8][ 5],"Background normalization","l");
+  leg5->AddEntry(histoResult[ 9][ 5],"Trigger efficiency","l");
+  leg5->AddEntry(histoResult[11][ 5],"Data statistical","l");
+  leg5->AddEntry(histoResult[12][ 5],"Total systematic","l");
+  leg5->Draw();
+  TLatex *_extralabel5 = new TLatex(0.9, 0.8, "ll channel");
+  _extralabel5->SetNDC();
+  _extralabel5->SetTextAlign(32);
+  _extralabel5->SetTextFont(42);
+  _extralabel5->SetTextSize(0.05);
+  _extralabel5->Draw("same");
+
+  TString myOutputFile5 = Form("histoXSnorm_Zll.pdf");
+  c5->SaveAs(myOutputFile5.Data());
 }
