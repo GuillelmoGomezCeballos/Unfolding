@@ -1,16 +1,47 @@
-#if !defined(__CINT__) || defined(__MAKECINT__)
-#include <TROOT.h>                  // access to gROOT, entry point to ROOT system
-#include <TSystem.h>                // interface to OS
-#include <TMath.h>                  // Math
-#include <vector>                   // STL vector class
-#include <iostream>                 // standard I/O
-#include <iomanip>                  // functions to format standard I/O
-#include <fstream>                  // functions for file I/O
-#include <string>                   // C++ string class
-#include <sstream>                  // class for parsing strings
-#include <TFile.h>                  // File handle
-#include <TH1D.h>                   // 1D histogram class
-#endif
+#include <TFile.h>
+#include <TSystem.h>
+#include <TString.h>
+#include <TH1D.h>
+#include <TH2D.h>
+#include <TMath.h>
+#include <TLegend.h>
+#include <TLatex.h>
+#include <TStyle.h>
+#include <TCanvas.h>
+#include <iostream>
+#include <fstream>
+
+void atributes(TH1D *histo, TString xtitle="", Int_t COLOR = 1, TString ytitle="Fraction", Int_t style = 1){
+
+  histo->ResetAttLine();
+  histo->ResetAttFill();
+  histo->ResetAttMarker();
+  histo->SetTitle("");
+  histo->SetMarkerStyle(kFullCircle);
+  histo->SetMarkerSize(0.8);
+  histo->SetLineWidth(4);
+  histo->GetXaxis()->SetTitle(xtitle);
+  histo->GetXaxis()->SetLabelFont  (   42);
+  histo->GetXaxis()->SetLabelOffset(0.015);
+  histo->GetXaxis()->SetLabelSize  (0.039);
+  histo->GetXaxis()->SetNdivisions (  505);
+  histo->GetXaxis()->SetTitleFont  (   42);
+  histo->GetXaxis()->SetTitleOffset( 1.20);
+  histo->GetXaxis()->SetTitleSize  (0.035);
+
+  histo->GetYaxis()->SetTitle(ytitle);
+  histo->GetYaxis()->SetLabelFont  (   42);
+  histo->GetYaxis()->SetLabelOffset(0.015);
+  histo->GetYaxis()->SetLabelSize  (0.039);
+  histo->GetYaxis()->SetNdivisions (  505);
+  histo->GetYaxis()->SetTitleFont  (   42);
+  histo->GetYaxis()->SetTitleOffset( 1.20);
+  histo->GetYaxis()->SetTitleSize  (0.055);
+  histo->SetLineColor(COLOR);
+  histo->SetMarkerStyle(kFullDotLarge);
+  histo->SetLineStyle(style);
+  histo->SetLineWidth(5);
+}
 
 void makeZnnSystHist(){
   const int nBinZpt = 5;
@@ -88,57 +119,57 @@ void makeZnnSystHist(){
   }
 
   for(int i=0; i<nBinZpt; i++) histoResult[ 0][ 0]->SetBinContent(i+1,xbins0Syst0[i]/xbins0Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 1][ 0]->SetBinContent(i+1,xbins0Syst0[i]/xbins0Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 2][ 0]->SetBinContent(i+1,xbins0Syst0[i]/xbins0Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 3][ 0]->SetBinContent(i+1,xbins0Syst0[i]/xbins0Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 4][ 0]->SetBinContent(i+1,xbins0Syst0[i]/xbins0Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 5][ 0]->SetBinContent(i+1,xbins0Syst0[i]/xbins0Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 6][ 0]->SetBinContent(i+1,xbins0Syst0[i]/xbins0Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 7][ 0]->SetBinContent(i+1,xbins0Syst0[i]/xbins0Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 8][ 0]->SetBinContent(i+1,xbins0Syst0[i]/xbins0Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 9][ 0]->SetBinContent(i+1,xbins0Syst0[i]/xbins0Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 1][ 0]->SetBinContent(i+1,xbins0Syst1[i]/xbins0Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 2][ 0]->SetBinContent(i+1,xbins0Syst2[i]/xbins0Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 3][ 0]->SetBinContent(i+1,xbins0Syst3[i]/xbins0Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 4][ 0]->SetBinContent(i+1,xbins0Syst4[i]/xbins0Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 5][ 0]->SetBinContent(i+1,xbins0Syst5[i]/xbins0Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 6][ 0]->SetBinContent(i+1,xbins0Syst6[i]/xbins0Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 7][ 0]->SetBinContent(i+1,xbins0Syst7[i]/xbins0Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 8][ 0]->SetBinContent(i+1,xbins0Syst8[i]/xbins0Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 9][ 0]->SetBinContent(i+1,xbins0Syst9[i]/xbins0Mu[i]);
   for(int i=0; i<nBinZpt; i++) histoResult[10][ 0]->SetBinContent(i+1,xbins0totalSyst[i]/xbins0Mu[i]);
   for(int i=0; i<nBinZpt; i++) histoResult[11][ 0]->SetBinContent(i+1,xbins0daSyst[i]   /xbins0Mu[i]);
   for(int i=0; i<nBinZpt; i++) histoResult[12][ 0]->SetBinContent(i+1,xbins0Syst[i]     /xbins0Mu[i]);
 
   for(int i=0; i<nBinZpt; i++) histoResult[ 0][ 1]->SetBinContent(i+1,xbins1Syst0[i]/xbins1Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 1][ 1]->SetBinContent(i+1,xbins1Syst0[i]/xbins1Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 2][ 1]->SetBinContent(i+1,xbins1Syst0[i]/xbins1Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 3][ 1]->SetBinContent(i+1,xbins1Syst0[i]/xbins1Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 4][ 1]->SetBinContent(i+1,xbins1Syst0[i]/xbins1Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 5][ 1]->SetBinContent(i+1,xbins1Syst0[i]/xbins1Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 6][ 1]->SetBinContent(i+1,xbins1Syst0[i]/xbins1Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 7][ 1]->SetBinContent(i+1,xbins1Syst0[i]/xbins1Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 8][ 1]->SetBinContent(i+1,xbins1Syst0[i]/xbins1Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 9][ 1]->SetBinContent(i+1,xbins1Syst0[i]/xbins1Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 1][ 1]->SetBinContent(i+1,xbins1Syst1[i]/xbins1Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 2][ 1]->SetBinContent(i+1,xbins1Syst2[i]/xbins1Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 3][ 1]->SetBinContent(i+1,xbins1Syst3[i]/xbins1Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 4][ 1]->SetBinContent(i+1,xbins1Syst4[i]/xbins1Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 5][ 1]->SetBinContent(i+1,xbins1Syst5[i]/xbins1Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 6][ 1]->SetBinContent(i+1,xbins1Syst6[i]/xbins1Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 7][ 1]->SetBinContent(i+1,xbins1Syst7[i]/xbins1Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 8][ 1]->SetBinContent(i+1,xbins1Syst8[i]/xbins1Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 9][ 1]->SetBinContent(i+1,xbins1Syst9[i]/xbins1Mu[i]);
   for(int i=0; i<nBinZpt; i++) histoResult[10][ 1]->SetBinContent(i+1,xbins1totalSyst[i]/xbins1Mu[i]);
   for(int i=0; i<nBinZpt; i++) histoResult[11][ 1]->SetBinContent(i+1,xbins1daSyst[i]   /xbins1Mu[i]);
   for(int i=0; i<nBinZpt; i++) histoResult[12][ 1]->SetBinContent(i+1,xbins1Syst[i]     /xbins1Mu[i]);
 
   for(int i=0; i<nBinZpt; i++) histoResult[ 0][ 2]->SetBinContent(i+1,xbins2Syst0[i]/xbins2Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 1][ 2]->SetBinContent(i+1,xbins2Syst0[i]/xbins2Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 2][ 2]->SetBinContent(i+1,xbins2Syst0[i]/xbins2Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 3][ 2]->SetBinContent(i+1,xbins2Syst0[i]/xbins2Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 4][ 2]->SetBinContent(i+1,xbins2Syst0[i]/xbins2Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 5][ 2]->SetBinContent(i+1,xbins2Syst0[i]/xbins2Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 6][ 2]->SetBinContent(i+1,xbins2Syst0[i]/xbins2Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 7][ 2]->SetBinContent(i+1,xbins2Syst0[i]/xbins2Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 8][ 2]->SetBinContent(i+1,xbins2Syst0[i]/xbins2Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 9][ 2]->SetBinContent(i+1,xbins2Syst0[i]/xbins2Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 1][ 2]->SetBinContent(i+1,xbins2Syst1[i]/xbins2Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 2][ 2]->SetBinContent(i+1,xbins2Syst2[i]/xbins2Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 3][ 2]->SetBinContent(i+1,xbins2Syst3[i]/xbins2Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 4][ 2]->SetBinContent(i+1,xbins2Syst4[i]/xbins2Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 5][ 2]->SetBinContent(i+1,xbins2Syst5[i]/xbins2Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 6][ 2]->SetBinContent(i+1,xbins2Syst6[i]/xbins2Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 7][ 2]->SetBinContent(i+1,xbins2Syst7[i]/xbins2Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 8][ 2]->SetBinContent(i+1,xbins2Syst8[i]/xbins2Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 9][ 2]->SetBinContent(i+1,xbins2Syst9[i]/xbins2Mu[i]);
   for(int i=0; i<nBinZpt; i++) histoResult[10][ 2]->SetBinContent(i+1,xbins2totalSyst[i]/xbins2Mu[i]);
   for(int i=0; i<nBinZpt; i++) histoResult[11][ 2]->SetBinContent(i+1,xbins2daSyst[i]   /xbins2Mu[i]);
   for(int i=0; i<nBinZpt; i++) histoResult[12][ 2]->SetBinContent(i+1,xbins2Syst[i]     /xbins2Mu[i]);
 
   for(int i=0; i<nBinZpt; i++) histoResult[ 0][ 3]->SetBinContent(i+1,xbins3Syst0[i]/xbins3Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 1][ 3]->SetBinContent(i+1,xbins3Syst0[i]/xbins3Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 2][ 3]->SetBinContent(i+1,xbins3Syst0[i]/xbins3Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 3][ 3]->SetBinContent(i+1,xbins3Syst0[i]/xbins3Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 4][ 3]->SetBinContent(i+1,xbins3Syst0[i]/xbins3Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 5][ 3]->SetBinContent(i+1,xbins3Syst0[i]/xbins3Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 6][ 3]->SetBinContent(i+1,xbins3Syst0[i]/xbins3Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 7][ 3]->SetBinContent(i+1,xbins3Syst0[i]/xbins3Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 8][ 3]->SetBinContent(i+1,xbins3Syst0[i]/xbins3Mu[i]);
-  for(int i=0; i<nBinZpt; i++) histoResult[ 9][ 3]->SetBinContent(i+1,xbins3Syst0[i]/xbins3Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 1][ 3]->SetBinContent(i+1,xbins3Syst1[i]/xbins3Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 2][ 3]->SetBinContent(i+1,xbins3Syst2[i]/xbins3Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 3][ 3]->SetBinContent(i+1,xbins3Syst3[i]/xbins3Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 4][ 3]->SetBinContent(i+1,xbins3Syst4[i]/xbins3Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 5][ 3]->SetBinContent(i+1,xbins3Syst5[i]/xbins3Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 6][ 3]->SetBinContent(i+1,xbins3Syst6[i]/xbins3Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 7][ 3]->SetBinContent(i+1,xbins3Syst7[i]/xbins3Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 8][ 3]->SetBinContent(i+1,xbins3Syst8[i]/xbins3Mu[i]);
+  for(int i=0; i<nBinZpt; i++) histoResult[ 9][ 3]->SetBinContent(i+1,xbins3Syst9[i]/xbins3Mu[i]);
   for(int i=0; i<nBinZpt; i++) histoResult[10][ 3]->SetBinContent(i+1,xbins3totalSyst[i]/xbins3Mu[i]);
   for(int i=0; i<nBinZpt; i++) histoResult[11][ 3]->SetBinContent(i+1,xbins3daSyst[i]   /xbins3Mu[i]);
   for(int i=0; i<nBinZpt; i++) histoResult[12][ 3]->SetBinContent(i+1,xbins3Syst[i]     /xbins3Mu[i]);
@@ -152,4 +183,243 @@ void makeZnnSystHist(){
     }
   }
   outtuple->Close();
+
+  TLatex * CMSLabel = new TLatex (0.15, 0.93, "#bf{CMS} #scale[0.75]{#it{Supplementary}}");
+  CMSLabel->SetNDC ();
+  CMSLabel->SetTextAlign (10);
+  CMSLabel->SetTextFont (42);
+  CMSLabel->SetTextSize (0.04);
+
+  TLatex * _lumiLabel = new TLatex (0.95, 0.93, "35.9 fb^{-1} (13 TeV)");
+  _lumiLabel->SetNDC ();
+  _lumiLabel->SetTextAlign (30);
+  _lumiLabel->SetTextFont (42);
+  _lumiLabel->SetTextSize (0.04);
+
+  TString XName = "p^{Z}_{T} [GeV]";
+  TString theUncLabel = "d#sigma/dp^{Z}_{T}";
+
+  TCanvas* c0 = new TCanvas("c0", "c0",5,5,500,500);
+  c0->cd();
+  atributes(histoResult[ 0][ 0],XName.Data(), 1,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 1][ 0],XName.Data(), 2,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 2][ 0],XName.Data(), 3,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 3][ 0],XName.Data(), 4,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 4][ 0],XName.Data(), 5,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 5][ 0],XName.Data(), 6,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 6][ 0],XName.Data(), 7,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 7][ 0],XName.Data(), 8,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 8][ 0],XName.Data(), 9,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 9][ 0],XName.Data(),46,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[10][ 0],XName.Data(),11,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[11][ 0],XName.Data(),12,Form("Uncertainty in %s",theUncLabel.Data()), 2);
+  atributes(histoResult[12][ 0],XName.Data(),13,Form("Uncertainty in %s",theUncLabel.Data()), 3);
+  histoResult[10][ 0]->SetMinimum(0.00);
+  histoResult[10][ 0]->SetMaximum(0.13);
+  histoResult[10][ 0]->Draw();
+  histoResult[ 1][ 0]->Draw("same,hist");
+  histoResult[ 2][ 0]->Draw("same,hist");
+  histoResult[ 3][ 0]->Draw("same,hist");
+  histoResult[ 4][ 0]->Draw("same,hist");
+  histoResult[ 5][ 0]->Draw("same,hist");
+  histoResult[ 6][ 0]->Draw("same,hist");
+  histoResult[ 7][ 0]->Draw("same,hist");
+  histoResult[ 8][ 0]->Draw("same,hist");
+  histoResult[ 9][ 0]->Draw("same,hist");
+  histoResult[12][ 0]->Draw("same,hist");
+  histoResult[11][ 0]->Draw("same,hist");
+
+  CMSLabel->Draw("same");
+  _lumiLabel->Draw ("same") ;
+
+  TLegend* leg0 = new TLegend(0.20,0.60,0.50,0.90);						      
+  leg0 ->SetFillStyle(0);
+  leg0 ->SetFillColor(kWhite);
+  leg0 ->SetBorderSize(0);
+  leg0->SetTextSize(0.025);									   
+  leg0->AddEntry(histoResult[10][ 0],"Total uncertainty","l");
+  leg0->AddEntry(histoResult[ 0][ 0],"MC statistical","l");
+  leg0->AddEntry(histoResult[ 1][ 0],"Luminosity","l");
+  leg0->AddEntry(histoResult[ 2][ 0],"Jet energy scale","l");
+  leg0->AddEntry(histoResult[ 3][ 0],"Lepton efficiency","l");
+  leg0->AddEntry(histoResult[ 4][ 0],"Theory","l");
+  leg0->AddEntry(histoResult[ 5][ 0],"Lepton momentum resolution","l");
+  leg0->AddEntry(histoResult[ 6][ 0],"Pileup","l");
+  leg0->AddEntry(histoResult[ 7][ 0],"B tagging","l");
+  leg0->AddEntry(histoResult[ 8][ 0],"Background normalization","l");
+  leg0->AddEntry(histoResult[ 9][ 0],"Trigger efficiency","l");
+  leg0->AddEntry(histoResult[11][ 0],"Data statistical","l");
+  leg0->AddEntry(histoResult[12][ 0],"Total systematic","l");
+  leg0->Draw();
+
+  TString myOutputFile0 = Form("histoXS_Znn.pdf");
+  c0->SaveAs(myOutputFile0.Data());
+
+  TCanvas* c1 = new TCanvas("c1", "c1",5,5,500,500);
+  c1->cd();
+  atributes(histoResult[ 0][ 1],XName.Data(), 1,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 1][ 1],XName.Data(), 2,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 2][ 1],XName.Data(), 3,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 3][ 1],XName.Data(), 4,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 4][ 1],XName.Data(), 5,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 5][ 1],XName.Data(), 6,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 6][ 1],XName.Data(), 7,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 7][ 1],XName.Data(), 8,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 8][ 1],XName.Data(), 9,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 9][ 1],XName.Data(),46,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[10][ 1],XName.Data(),11,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[11][ 1],XName.Data(),12,Form("Uncertainty in %s",theUncLabel.Data()), 2);
+  atributes(histoResult[12][ 1],XName.Data(),13,Form("Uncertainty in %s",theUncLabel.Data()), 3);
+  histoResult[10][ 1]->SetMinimum(0.00);
+  histoResult[10][ 1]->SetMaximum(0.13);
+  histoResult[10][ 1]->Draw();
+  histoResult[ 1][ 1]->Draw("same,hist");
+  histoResult[ 2][ 1]->Draw("same,hist");
+  histoResult[ 3][ 1]->Draw("same,hist");
+  histoResult[ 4][ 1]->Draw("same,hist");
+  histoResult[ 5][ 1]->Draw("same,hist");
+  histoResult[ 6][ 1]->Draw("same,hist");
+  histoResult[ 7][ 1]->Draw("same,hist");
+  histoResult[ 8][ 1]->Draw("same,hist");
+  histoResult[ 9][ 1]->Draw("same,hist");
+  histoResult[12][ 1]->Draw("same,hist");
+  histoResult[11][ 1]->Draw("same,hist");
+
+  CMSLabel->Draw("same");
+  _lumiLabel->Draw ("same") ;
+
+  TLegend* leg1 = new TLegend(0.20,0.60,0.50,0.90);						      
+  leg1 ->SetFillStyle(0);
+  leg1 ->SetFillColor(kWhite);
+  leg1 ->SetBorderSize(0);
+  leg1->SetTextSize(0.025);									   
+  leg1->AddEntry(histoResult[10][ 1],"Total uncertainty","l");
+  leg1->AddEntry(histoResult[ 0][ 1],"MC statistical","l");
+  leg1->AddEntry(histoResult[ 1][ 1],"Luminosity","l");
+  leg1->AddEntry(histoResult[ 2][ 1],"Jet energy scale","l");
+  leg1->AddEntry(histoResult[ 3][ 1],"Lepton efficiency","l");
+  leg1->AddEntry(histoResult[ 4][ 1],"Theory","l");
+  leg1->AddEntry(histoResult[ 5][ 1],"Lepton momentum resolution","l");
+  leg1->AddEntry(histoResult[ 6][ 1],"Pileup","l");
+  leg1->AddEntry(histoResult[ 7][ 1],"B tagging","l");
+  leg1->AddEntry(histoResult[ 8][ 1],"Background normalization","l");
+  leg1->AddEntry(histoResult[ 9][ 1],"Trigger efficiency","l");
+  leg1->AddEntry(histoResult[11][ 1],"Data statistical","l");
+  leg1->AddEntry(histoResult[12][ 1],"Total systematic","l");
+  leg1->Draw();
+
+  TString myOutputFile1 = Form("histoXS_Zll.pdf");
+  c1->SaveAs(myOutputFile1.Data());
+
+  TCanvas* c2 = new TCanvas("c2", "c2",5,5,500,500);
+  c2->cd();
+  atributes(histoResult[ 0][ 2],XName.Data(), 1,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 1][ 2],XName.Data(), 2,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 2][ 2],XName.Data(), 3,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 3][ 2],XName.Data(), 4,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 4][ 2],XName.Data(), 5,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 5][ 2],XName.Data(), 6,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 6][ 2],XName.Data(), 7,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 7][ 2],XName.Data(), 8,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 8][ 2],XName.Data(), 9,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 9][ 2],XName.Data(),46,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[10][ 2],XName.Data(),11,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[11][ 2],XName.Data(),12,Form("Uncertainty in %s",theUncLabel.Data()), 2);
+  atributes(histoResult[12][ 2],XName.Data(),13,Form("Uncertainty in %s",theUncLabel.Data()), 3);
+  histoResult[10][ 2]->SetMinimum(0.00);
+  histoResult[10][ 2]->SetMaximum(0.13);
+  histoResult[10][ 2]->Draw();
+  histoResult[ 1][ 2]->Draw("same,hist");
+  histoResult[ 2][ 2]->Draw("same,hist");
+  histoResult[ 3][ 2]->Draw("same,hist");
+  histoResult[ 4][ 2]->Draw("same,hist");
+  histoResult[ 5][ 2]->Draw("same,hist");
+  histoResult[ 6][ 2]->Draw("same,hist");
+  histoResult[ 7][ 2]->Draw("same,hist");
+  histoResult[ 8][ 2]->Draw("same,hist");
+  histoResult[ 9][ 2]->Draw("same,hist");
+  histoResult[12][ 2]->Draw("same,hist");
+  histoResult[11][ 2]->Draw("same,hist");
+
+  CMSLabel->Draw("same");
+  _lumiLabel->Draw ("same") ;
+
+  TLegend* leg2 = new TLegend(0.20,0.60,0.50,0.90);						      
+  leg2 ->SetFillStyle(0);
+  leg2 ->SetFillColor(kWhite);
+  leg2 ->SetBorderSize(0);
+  leg2->SetTextSize(0.025);									   
+  leg2->AddEntry(histoResult[10][ 2],"Total uncertainty","l");
+  leg2->AddEntry(histoResult[ 0][ 2],"MC statistical","l");
+  leg2->AddEntry(histoResult[ 1][ 2],"Luminosity","l");
+  leg2->AddEntry(histoResult[ 2][ 2],"Jet energy scale","l");
+  leg2->AddEntry(histoResult[ 3][ 2],"Lepton efficiency","l");
+  leg2->AddEntry(histoResult[ 4][ 2],"Theory","l");
+  leg2->AddEntry(histoResult[ 5][ 2],"Lepton momentum resolution","l");
+  leg2->AddEntry(histoResult[ 6][ 2],"Pileup","l");
+  leg2->AddEntry(histoResult[ 7][ 2],"B tagging","l");
+  leg2->AddEntry(histoResult[ 8][ 2],"Background normalization","l");
+  leg2->AddEntry(histoResult[ 9][ 2],"Trigger efficiency","l");
+  leg2->AddEntry(histoResult[11][ 2],"Data statistical","l");
+  leg2->AddEntry(histoResult[12][ 2],"Total systematic","l");
+  leg2->Draw();
+
+  TString myOutputFile2 = Form("histoXSnorm_Znn.pdf");
+  c2->SaveAs(myOutputFile2.Data());
+
+  TCanvas* c3 = new TCanvas("c3", "c3",5,5,500,500);
+  c3->cd();
+  atributes(histoResult[ 0][ 3],XName.Data(), 1,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 1][ 3],XName.Data(), 2,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 2][ 3],XName.Data(), 3,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 3][ 3],XName.Data(), 4,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 4][ 3],XName.Data(), 5,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 5][ 3],XName.Data(), 6,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 6][ 3],XName.Data(), 7,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 7][ 3],XName.Data(), 8,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 8][ 3],XName.Data(), 9,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[ 9][ 3],XName.Data(),46,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[10][ 3],XName.Data(),11,Form("Uncertainty in %s",theUncLabel.Data()), 1);
+  atributes(histoResult[11][ 3],XName.Data(),12,Form("Uncertainty in %s",theUncLabel.Data()), 2);
+  atributes(histoResult[12][ 3],XName.Data(),13,Form("Uncertainty in %s",theUncLabel.Data()), 3);
+  histoResult[10][ 3]->SetMinimum(0.00);
+  histoResult[10][ 3]->SetMaximum(0.13);
+  histoResult[10][ 3]->Draw();
+  histoResult[ 1][ 3]->Draw("same,hist");
+  histoResult[ 2][ 3]->Draw("same,hist");
+  histoResult[ 3][ 3]->Draw("same,hist");
+  histoResult[ 4][ 3]->Draw("same,hist");
+  histoResult[ 5][ 3]->Draw("same,hist");
+  histoResult[ 6][ 3]->Draw("same,hist");
+  histoResult[ 7][ 3]->Draw("same,hist");
+  histoResult[ 8][ 3]->Draw("same,hist");
+  histoResult[ 9][ 3]->Draw("same,hist");
+  histoResult[12][ 3]->Draw("same,hist");
+  histoResult[11][ 3]->Draw("same,hist");
+
+  CMSLabel->Draw("same");
+  _lumiLabel->Draw ("same") ;
+
+  TLegend* leg3 = new TLegend(0.20,0.60,0.50,0.90);						      
+  leg3 ->SetFillStyle(0);
+  leg3 ->SetFillColor(kWhite);
+  leg3 ->SetBorderSize(0);
+  leg3->SetTextSize(0.025);									   
+  leg3->AddEntry(histoResult[10][ 3],"Total uncertainty","l");
+  leg3->AddEntry(histoResult[ 0][ 3],"MC statistical","l");
+  leg3->AddEntry(histoResult[ 1][ 3],"Luminosity","l");
+  leg3->AddEntry(histoResult[ 2][ 3],"Jet energy scale","l");
+  leg3->AddEntry(histoResult[ 3][ 3],"Lepton efficiency","l");
+  leg3->AddEntry(histoResult[ 4][ 3],"Theory","l");
+  leg3->AddEntry(histoResult[ 5][ 3],"Lepton momentum resolution","l");
+  leg3->AddEntry(histoResult[ 6][ 3],"Pileup","l");
+  leg3->AddEntry(histoResult[ 7][ 3],"B tagging","l");
+  leg3->AddEntry(histoResult[ 8][ 3],"Background normalization","l");
+  leg3->AddEntry(histoResult[ 9][ 3],"Trigger efficiency","l");
+  leg3->AddEntry(histoResult[11][ 3],"Data statistical","l");
+  leg3->AddEntry(histoResult[12][ 3],"Total systematic","l");
+  leg3->Draw();
+
+  TString myOutputFile3 = Form("histoXSnorm_Zll.pdf");
+  c3->SaveAs(myOutputFile3.Data());
 }

@@ -119,13 +119,13 @@ void helper_function(TString theSuffix, int nsel = 0, int whichDY = 3, TString t
   histoSystPlot[ 9]->Draw("same,hist");
   histoSystPlot[10]->Draw("same,hist");
 
-  TLatex * CMSLabel = new TLatex (0.15, 0.93, "#bf{CMS} #scale[0.75]{#it{Phase-2 Projection}}");
+  TLatex * CMSLabel = new TLatex (0.15, 0.93, "#bf{CMS} #scale[0.75]{#it{Projection}}");
   CMSLabel->SetNDC ();
   CMSLabel->SetTextAlign (10);
   CMSLabel->SetTextFont (42);
   CMSLabel->SetTextSize (0.04);
   CMSLabel->Draw ("same") ;
-  TLatex * _lumiLabel = new TLatex (0.95, 0.93, "3000 fb^{-1} (14 TeV)");
+  TLatex * _lumiLabel = new TLatex (0.95, 0.93, "3000 fb^{-1} (13 TeV)");
   _lumiLabel->SetNDC ();
   _lumiLabel->SetTextAlign (30);
   _lumiLabel->SetTextFont (42);
