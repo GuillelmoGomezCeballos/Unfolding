@@ -277,6 +277,7 @@ void makeZnnSystHist(){
   histoResult[10][ 0]->SetMinimum(0.000);
   histoResult[10][ 0]->SetMaximum(0.149);
   histoResult[10][ 0]->Draw();
+  histoResult[ 0][ 0]->Draw("same,hist");
   histoResult[ 1][ 0]->Draw("same,hist");
   histoResult[ 2][ 0]->Draw("same,hist");
   histoResult[ 3][ 0]->Draw("same,hist");
@@ -340,6 +341,7 @@ void makeZnnSystHist(){
   histoResult[10][ 1]->SetMinimum(0.000);
   histoResult[10][ 1]->SetMaximum(0.149);
   histoResult[10][ 1]->Draw();
+  histoResult[ 0][ 1]->Draw("same,hist");
   histoResult[ 1][ 1]->Draw("same,hist");
   histoResult[ 2][ 1]->Draw("same,hist");
   histoResult[ 3][ 1]->Draw("same,hist");
@@ -403,6 +405,7 @@ void makeZnnSystHist(){
   histoResult[10][ 2]->SetMinimum(0.000);
   histoResult[10][ 2]->SetMaximum(0.149);
   histoResult[10][ 2]->Draw();
+  histoResult[ 0][ 2]->Draw("same,hist");
   histoResult[ 1][ 2]->Draw("same,hist");
   histoResult[ 2][ 2]->Draw("same,hist");
   histoResult[ 3][ 2]->Draw("same,hist");
@@ -466,6 +469,7 @@ void makeZnnSystHist(){
   histoResult[10][ 3]->SetMinimum(0.000);
   histoResult[10][ 3]->SetMaximum(0.149);
   histoResult[10][ 3]->Draw();
+  histoResult[ 0][ 3]->Draw("same,hist");
   histoResult[ 1][ 3]->Draw("same,hist");
   histoResult[ 2][ 3]->Draw("same,hist");
   histoResult[ 3][ 3]->Draw("same,hist");
@@ -529,6 +533,7 @@ void makeZnnSystHist(){
   histoResult[10][ 4]->SetMinimum(0.000);
   histoResult[10][ 4]->SetMaximum(0.149);
   histoResult[10][ 4]->Draw();
+  histoResult[ 0][ 4]->Draw("same,hist");
   histoResult[ 1][ 4]->Draw("same,hist");
   histoResult[ 2][ 4]->Draw("same,hist");
   histoResult[ 3][ 4]->Draw("same,hist");
@@ -592,6 +597,7 @@ void makeZnnSystHist(){
   histoResult[10][ 5]->SetMinimum(0.000);
   histoResult[10][ 5]->SetMaximum(0.149);
   histoResult[10][ 5]->Draw();
+  histoResult[ 0][ 5]->Draw("same,hist");
   histoResult[ 1][ 5]->Draw("same,hist");
   histoResult[ 2][ 5]->Draw("same,hist");
   histoResult[ 3][ 5]->Draw("same,hist");
