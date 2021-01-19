@@ -197,8 +197,8 @@ void makeZnnSystHist(){
   _lumiLabel->SetTextSize (0.04);
 
   TString XName = "p^{Z}_{T} [GeV]";
-  TString theUncLabel = "d#sigma/dp^{Z}_{T}";
 
+  TString theUncLabel = "d#sigma/dp^{Z}_{T}";
   TCanvas* c0 = new TCanvas("c0", "c0",5,5,500,500);
   c0->cd();
   atributes(histoResult[ 0][ 0],XName.Data(), 1,Form("Uncertainty in %s",theUncLabel.Data()), 1);
@@ -251,10 +251,17 @@ void makeZnnSystHist(){
   leg0->AddEntry(histoResult[11][ 0],"Data statistical","l");
   leg0->AddEntry(histoResult[12][ 0],"Total systematic","l");
   leg0->Draw();
+  TLatex *_extraLabel0 = new TLatex(0.85, 0.8, "#nu#nu channel");
+  _extraLabel0->SetNDC();
+  _extraLabel0->SetTextAlign(32);
+  _extraLabel0->SetTextFont(42);
+  _extraLabel0->SetTextSize(0.05);
+  _extraLabel0->Draw("same");
 
   TString myOutputFile0 = Form("histoXS_Znn.pdf");
   c0->SaveAs(myOutputFile0.Data());
 
+  theUncLabel = "1/#sigma d#sigma/dp^{Z}_{T}";
   TCanvas* c1 = new TCanvas("c1", "c1",5,5,500,500);
   c1->cd();
   atributes(histoResult[ 0][ 1],XName.Data(), 1,Form("Uncertainty in %s",theUncLabel.Data()), 1);
@@ -307,10 +314,17 @@ void makeZnnSystHist(){
   leg1->AddEntry(histoResult[11][ 1],"Data statistical","l");
   leg1->AddEntry(histoResult[12][ 1],"Total systematic","l");
   leg1->Draw();
+  TLatex *_extraLabel1 = new TLatex(0.85, 0.8, "#nu#nu channel");
+  _extraLabel1->SetNDC();
+  _extraLabel1->SetTextAlign(32);
+  _extraLabel1->SetTextFont(42);
+  _extraLabel1->SetTextSize(0.05);
+  _extraLabel1->Draw("same");
 
-  TString myOutputFile1 = Form("histoXS_Zll.pdf");
+  TString myOutputFile1 = Form("histoXSnorm_Znn.pdf");
   c1->SaveAs(myOutputFile1.Data());
 
+  theUncLabel = "d#sigma/dp^{Z}_{T}";
   TCanvas* c2 = new TCanvas("c2", "c2",5,5,500,500);
   c2->cd();
   atributes(histoResult[ 0][ 2],XName.Data(), 1,Form("Uncertainty in %s",theUncLabel.Data()), 1);
@@ -363,10 +377,17 @@ void makeZnnSystHist(){
   leg2->AddEntry(histoResult[11][ 2],"Data statistical","l");
   leg2->AddEntry(histoResult[12][ 2],"Total systematic","l");
   leg2->Draw();
+  TLatex *_extraLabel2 = new TLatex(0.85, 0.8, "#nu#nu+ll channel");
+  _extraLabel2->SetNDC();
+  _extraLabel2->SetTextAlign(32);
+  _extraLabel2->SetTextFont(42);
+  _extraLabel2->SetTextSize(0.05);
+  _extraLabel2->Draw("same");
 
-  TString myOutputFile2 = Form("histoXSnorm_Znn.pdf");
+  TString myOutputFile2 = Form("histoXS_Zxx.pdf");
   c2->SaveAs(myOutputFile2.Data());
 
+  theUncLabel = "1/#sigma d#sigma/dp^{Z}_{T}";
   TCanvas* c3 = new TCanvas("c3", "c3",5,5,500,500);
   c3->cd();
   atributes(histoResult[ 0][ 3],XName.Data(), 1,Form("Uncertainty in %s",theUncLabel.Data()), 1);
@@ -419,7 +440,13 @@ void makeZnnSystHist(){
   leg3->AddEntry(histoResult[11][ 3],"Data statistical","l");
   leg3->AddEntry(histoResult[12][ 3],"Total systematic","l");
   leg3->Draw();
+  TLatex *_extraLabel3 = new TLatex(0.85, 0.8, "#nu#nu+ll channel");
+  _extraLabel3->SetNDC();
+  _extraLabel3->SetTextAlign(32);
+  _extraLabel3->SetTextFont(42);
+  _extraLabel3->SetTextSize(0.05);
+  _extraLabel3->Draw("same");
 
-  TString myOutputFile3 = Form("histoXSnorm_Zll.pdf");
+  TString myOutputFile3 = Form("histoXSnorm_Zxx.pdf");
   c3->SaveAs(myOutputFile3.Data());
 }
