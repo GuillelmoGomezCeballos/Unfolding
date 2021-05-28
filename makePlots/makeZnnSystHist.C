@@ -234,6 +234,26 @@ void makeZnnSystHist(){
   for(int i=0; i<nBinZpt; i++) histoResult[11][ 5]->SetBinContent(i+1,xbins5daSyst[i]   /xbins5Mu[i]);
   for(int i=0; i<nBinZpt; i++) histoResult[12][ 5]->SetBinContent(i+1,xbins5Syst[i]     /xbins5Mu[i]);
 
+  // zxx xs and normalized
+  Float_t xbinsXSZxx[nBinZpt]     = {24.508033,4.129348,0.970488,0.145658,0.004790};
+  Float_t xbinsXSZxxUp[nBinZpt]   = { 1.024802,0.169646,0.039538,0.006483,0.000330};
+  Float_t xbinsXSZxxDown[nBinZpt] = { 0.806759,0.134946,0.033248,0.005379,0.000306};
+
+  Float_t xbinsXSZxxNorm[nBinZpt]     = {0.816289665361984,0.137489411337774,0.032309976189859,0.014541449271069,0.001116891869374};
+  Float_t xbinsXSZxxNormUp[nBinZpt]   = {0.003229632701729,0.001998807641463,0.000532399195713,0.000306458361877,0.000062321099932};
+  Float_t xbinsXSZxxNormDown[nBinZpt] = {0.003229632701729,0.002141579615853,0.000565674145446,0.000321781279971,0.000063543082284};
+
+  TH1D* histoResultXS[2];
+  for(int i=0; i<2; i++){
+    histoResultXS[i] = new TH1D(Form("histoResultXS_%d",i), Form("histoResultXS_%d",i), nBinZpt, xbinsZpt);
+  }
+
+  for(int i=0; i<nBinZpt; i++) histoResultXS[0]->SetBinContent(i+1,xbinsXSZxx[i]);
+  for(int i=0; i<nBinZpt; i++) histoResultXS[0]->SetBinError(i+1,(xbinsXSZxxUp[i]+xbinsXSZxxDown[i])/2.);
+
+  for(int i=0; i<nBinZpt; i++) histoResultXS[1]->SetBinContent(i+1,xbinsXSZxxNorm[i]);
+  for(int i=0; i<nBinZpt; i++) histoResultXS[1]->SetBinError(i+1,(xbinsXSZxxNormUp[i]+xbinsXSZxxNormDown[i])/2.);
+
   TString outNtuplename = Form("ZnnSystHist.root");
   TFile *outtuple = TFile::Open(outNtuplename.Data(),"recreate");
   outtuple->cd();
@@ -241,6 +261,9 @@ void makeZnnSystHist(){
     for(int j=0; j<6; j++){
       histoResult[i][j]->Write();
     }
+  }
+  for(int i=0; i<2; i++){
+    histoResultXS[i]->Write();
   }
   outtuple->Close();
 
