@@ -65,7 +65,7 @@ void helper_function(int me=0,int DY=3,TString theHistName = "Pt", TString theUn
 }
 
 void convert(TString theHistName = "Pt", TString theUnc = "totsum"){
-  for(int i=0;i<=1;i++){
+  for(int i=0;i<=2;i++){
     for(int j=3;j<=3;j++){
       helper_function(i,j,theHistName.Data(),theUnc.Data());
     }
